@@ -10,6 +10,9 @@ public class HexCell : MonoBehaviour
     [SerializeField]
     HexCell[] neighbors;
 
+    public int elevation;
+    public const float elevationStep = 5f;
+
     public HexCell GetNeighbor(HexDirection dirction)
     {
         return neighbors[(int)dirction];
