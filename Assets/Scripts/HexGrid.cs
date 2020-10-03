@@ -38,6 +38,7 @@ public class HexGrid : MonoBehaviour
         hexMesh.Triangulate(cells);
     }
 
+    /*
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -45,6 +46,7 @@ public class HexGrid : MonoBehaviour
             HandleInput();
         }
     }
+    */
 
     void HandleInput()
     {
@@ -62,6 +64,7 @@ public class HexGrid : MonoBehaviour
         HexCoordinates coordinates = HexCoordinates.FromPos(pos);
         int index = coordinates.X + coordinates.Z * width + coordinates.Z / 2;
         HexCell cell = cells[index];
+        if (cell.color != defaultColor && cell.color == color) return;
         cell.color = color;
         hexMesh.Triangulate(cells);
     }
@@ -73,6 +76,29 @@ public class HexGrid : MonoBehaviour
         cell.transform.localPosition = pos;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
         cell.color = defaultColor;
+        if (x > 0)
+        {
+            cell.SetNeightbor(HexDirection.W, cells[i - 1]);
+        }
+        if (z > 0)
+        {
+            if ((z & 1) == 0)
+            {
+                cell.SetNeightbor(HexDirection.SE, cells[i - width]);
+                if (x > 0)
+                {
+                    cell.SetNeightbor(HexDirection.SW, cells[i - width - 1]);
+                }
+            }
+            else
+            {
+                cell.SetNeightbor(HexDirection.SW, cells[i - width]);
+                if (x < width - 1)
+                {
+                    cell.SetNeightbor(HexDirection.SE, cells[i - width + 1]);
+                }
+            }
+        }
         //Text label = Instantiate<Text>(cellLabelPrefebs, gridCanvas.transform, false);
         //label.rectTransform.anchoredPosition = new Vector2(pos.x, pos.z);
         //label.text = cell.coordinates.ToStringOnSeparateLines();
