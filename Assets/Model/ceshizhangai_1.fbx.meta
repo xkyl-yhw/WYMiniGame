@@ -1,0 +1,926 @@
+fileFormatVersion: 2
+guid: d52800d16056dd94a8660849d87512c0
+ModelImporter:
+  serializedVersion: 19301
+  internalIDToNameTable:
+  - first:
+      74: -2821834721004555411
+    second: poddon|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -114140040062420988
+    second: poddon|pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 4731220786984648165
+    second: poddon|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -7953216232377410211
+    second: poddon|pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 2546270652149106466
+    second: poddon|pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 8166704781468056520
+    second: poddon|pasted__pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 7661712533097403613
+    second: poddon|pasted__pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 7022288311895539281
+    second: poddon|pasted__pasted__pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -3997543039365275736
+    second: poddon|pasted__pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 4057094273080499122
+    second: poddon|pasted__pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 2880757938209334879
+    second: poddon|pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 7673567204219046604
+    second: poddon|pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -6710504859579494227
+    second: poddon|pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 5412123144470816290
+    second: poddon|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -4929472760478890070
+    second: poddon|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 4610626964139532129
+    second: poddon|poddon|Take 001|BaseLayer
+  - first:
+      74: -4252379819944078637
+    second: egoza2m001|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -3984971850304841933
+    second: egoza2m001|pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: -6726908148265025598
+    second: egoza2m001|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -3301595176250711846
+    second: egoza2m001|pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 845214996738893339
+    second: egoza2m001|pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 452985349274448279
+    second: egoza2m001|pasted__pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 4315359794106676454
+    second: egoza2m001|pasted__pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 1577068505204464757
+    second: egoza2m001|pasted__pasted__pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 2001593537414992351
+    second: egoza2m001|pasted__pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -3273115540954939121
+    second: egoza2m001|pasted__pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 7686424147914936117
+    second: egoza2m001|pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -4956297886135587809
+    second: egoza2m001|pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 5307735025693138104
+    second: egoza2m001|pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 8741797239711235830
+    second: egoza2m001|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 6865491553353829333
+    second: egoza2m001|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -7623684518498562626
+    second: egoza2m001|poddon|Take 001|BaseLayer
+  - first:
+      74: 4669693983657396327
+    second: pasted__poddon|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 5692406001535220927
+    second: pasted__poddon|pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 8340189932274121666
+    second: pasted__poddon|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -5944463675324771634
+    second: pasted__poddon|pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: -6161128411716611828
+    second: pasted__poddon|pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -3883225253465936139
+    second: pasted__poddon|pasted__pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: -9205666378180526363
+    second: pasted__poddon|pasted__pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 8123641243687240962
+    second: pasted__poddon|pasted__pasted__pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 3582363975367907996
+    second: pasted__poddon|pasted__pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -6693264249130897047
+    second: pasted__poddon|pasted__pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 6555820272290099770
+    second: pasted__poddon|pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 5169644882648899077
+    second: pasted__poddon|pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -1073218701917268391
+    second: pasted__poddon|pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -373321702271028469
+    second: pasted__poddon|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -8812023374034236518
+    second: pasted__poddon|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -7105409917997745928
+    second: pasted__poddon|poddon|Take 001|BaseLayer
+  - first:
+      74: -3530658003114601122
+    second: pasted__egoza2m001|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -1927632278003439306
+    second: pasted__egoza2m001|pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: -5980839376809901961
+    second: pasted__egoza2m001|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -3324395193343886995
+    second: pasted__egoza2m001|pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: -8270690929727258641
+    second: pasted__egoza2m001|pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 3318495524761071164
+    second: pasted__egoza2m001|pasted__pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: -7285870057598167002
+    second: pasted__egoza2m001|pasted__pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 2747689247282872779
+    second: pasted__egoza2m001|pasted__pasted__pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 6593676750354047287
+    second: pasted__egoza2m001|pasted__pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -8590185510091302495
+    second: pasted__egoza2m001|pasted__pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -7768621837049747067
+    second: pasted__egoza2m001|pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 967150824460131738
+    second: pasted__egoza2m001|pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -612743283005372271
+    second: pasted__egoza2m001|pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 5341287866252587176
+    second: pasted__egoza2m001|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -1774111708377726744
+    second: pasted__egoza2m001|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -4989668556616331930
+    second: pasted__egoza2m001|poddon|Take 001|BaseLayer
+  - first:
+      74: 2733440513092333894
+    second: pasted__pasted__poddon|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 1317022019393659689
+    second: pasted__pasted__poddon|pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 343686569683138360
+    second: pasted__pasted__poddon|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 6800149574491698418
+    second: pasted__pasted__poddon|pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 4930465650875806252
+    second: pasted__pasted__poddon|pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -3111356080858460999
+    second: pasted__pasted__poddon|pasted__pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 5400773104258851134
+    second: pasted__pasted__poddon|pasted__pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 872255825296389485
+    second: pasted__pasted__poddon|pasted__pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: -8117160843912425817
+    second: pasted__pasted__poddon|pasted__pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 7285849786166991953
+    second: pasted__pasted__poddon|pasted__pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -9115492903880452734
+    second: pasted__pasted__poddon|pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 5101876366472070217
+    second: pasted__pasted__poddon|pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 1477678147246524689
+    second: pasted__pasted__poddon|pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -7983154026226600065
+    second: pasted__pasted__poddon|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 6374615726010585724
+    second: pasted__pasted__poddon|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 5376210004580301942
+    second: pasted__pasted__poddon|poddon|Take 001|BaseLayer
+  - first:
+      74: 3034691014266992033
+    second: pasted__pasted__egoza2m001|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 6522513636523694217
+    second: pasted__pasted__egoza2m001|pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: -7922366480495409837
+    second: pasted__pasted__egoza2m001|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 3599608639317089172
+    second: pasted__pasted__egoza2m001|pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 330805912250033869
+    second: pasted__pasted__egoza2m001|pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 5339727529017348122
+    second: pasted__pasted__egoza2m001|pasted__pasted__pasted__egoza2m001.001|Take
+      001|BaseLayer
+  - first:
+      74: -865583280623069817
+    second: pasted__pasted__egoza2m001|pasted__pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 4057149026304939780
+    second: pasted__pasted__egoza2m001|pasted__pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: 5217673306148463839
+    second: pasted__pasted__egoza2m001|pasted__pasted__pasted__pasted__poddon|Take
+      001|BaseLayer
+  - first:
+      74: -7737259263410130527
+    second: pasted__pasted__egoza2m001|pasted__pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -8779419690720737732
+    second: pasted__pasted__egoza2m001|pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 7083936495080426180
+    second: pasted__pasted__egoza2m001|pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -8179172853908715811
+    second: pasted__pasted__egoza2m001|pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -3950193370994135642
+    second: pasted__pasted__egoza2m001|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 1055649704664602023
+    second: pasted__pasted__egoza2m001|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 5259727793020647292
+    second: pasted__pasted__egoza2m001|poddon|Take 001|BaseLayer
+  - first:
+      74: 9119289547891070863
+    second: pasted__pasted__pasted__poddon|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 5856472003950985267
+    second: pasted__pasted__pasted__poddon|pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: -5917043358583324990
+    second: pasted__pasted__pasted__poddon|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 3866361572929122983
+    second: pasted__pasted__pasted__poddon|pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 4020770128511162333
+    second: pasted__pasted__pasted__poddon|pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 2463494048941620645
+    second: pasted__pasted__pasted__poddon|pasted__pasted__pasted__egoza2m001.001|Take
+      001|BaseLayer
+  - first:
+      74: -9104387897932103899
+    second: pasted__pasted__pasted__poddon|pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: -4810947017561884907
+    second: pasted__pasted__pasted__poddon|pasted__pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: 760425277599311794
+    second: pasted__pasted__pasted__poddon|pasted__pasted__pasted__pasted__poddon|Take
+      001|BaseLayer
+  - first:
+      74: 7767316855134962857
+    second: pasted__pasted__pasted__poddon|pasted__pasted__pasted__poddon.001|Take
+      001|BaseLayer
+  - first:
+      74: -2906648074783287732
+    second: pasted__pasted__pasted__poddon|pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 7624097144161924699
+    second: pasted__pasted__pasted__poddon|pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 3893847345530991092
+    second: pasted__pasted__pasted__poddon|pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -984281903178348978
+    second: pasted__pasted__pasted__poddon|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -5473053519197184188
+    second: pasted__pasted__pasted__poddon|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 8499323016226509967
+    second: pasted__pasted__pasted__poddon|poddon|Take 001|BaseLayer
+  - first:
+      74: -1738369166077623456
+    second: pasted__pasted__pasted__egoza2m001|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -6457975395500067668
+    second: pasted__pasted__pasted__egoza2m001|pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: -6097678089376099604
+    second: pasted__pasted__pasted__egoza2m001|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -1115140932744414046
+    second: pasted__pasted__pasted__egoza2m001|pasted__pasted__egoza2m001.001|Take
+      001|BaseLayer
+  - first:
+      74: 1225018867168800297
+    second: pasted__pasted__pasted__egoza2m001|pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 2257793971222017155
+    second: pasted__pasted__pasted__egoza2m001|pasted__pasted__pasted__egoza2m001.001|Take
+      001|BaseLayer
+  - first:
+      74: -8374909573127508280
+    second: pasted__pasted__pasted__egoza2m001|pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: -6573193405525608801
+    second: pasted__pasted__pasted__egoza2m001|pasted__pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: 5263258284251811442
+    second: pasted__pasted__pasted__egoza2m001|pasted__pasted__pasted__pasted__poddon|Take
+      001|BaseLayer
+  - first:
+      74: -6262188924847273839
+    second: pasted__pasted__pasted__egoza2m001|pasted__pasted__pasted__poddon.001|Take
+      001|BaseLayer
+  - first:
+      74: 4275223750598782047
+    second: pasted__pasted__pasted__egoza2m001|pasted__pasted__pasted__poddon|Take
+      001|BaseLayer
+  - first:
+      74: 8549220382849134187
+    second: pasted__pasted__pasted__egoza2m001|pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 697046578672458745
+    second: pasted__pasted__pasted__egoza2m001|pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 1778051317313352865
+    second: pasted__pasted__pasted__egoza2m001|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -6600223341205039809
+    second: pasted__pasted__pasted__egoza2m001|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -84663273493941601
+    second: pasted__pasted__pasted__egoza2m001|poddon|Take 001|BaseLayer
+  - first:
+      74: -8319436825289939575
+    second: pasted__poddon.001|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 3972521119472468558
+    second: pasted__poddon.001|pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: -4747238904955748495
+    second: pasted__poddon.001|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -1809411305155950656
+    second: pasted__poddon.001|pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 6175666130374049768
+    second: pasted__poddon.001|pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -7893713998632338255
+    second: pasted__poddon.001|pasted__pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: -4696566922405909948
+    second: pasted__poddon.001|pasted__pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -4346591279495545575
+    second: pasted__poddon.001|pasted__pasted__pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 8605672473112471995
+    second: pasted__poddon.001|pasted__pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 3417334068924017550
+    second: pasted__poddon.001|pasted__pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -4051282545501269788
+    second: pasted__poddon.001|pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 5547958796355997454
+    second: pasted__poddon.001|pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -7232269344725736553
+    second: pasted__poddon.001|pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -6934202751573857915
+    second: pasted__poddon.001|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -1525321377054227277
+    second: pasted__poddon.001|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 1790223412328773326
+    second: pasted__poddon.001|poddon|Take 001|BaseLayer
+  - first:
+      74: 8209838098415263158
+    second: pasted__egoza2m001.001|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -4761715077121082248
+    second: pasted__egoza2m001.001|pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 6896927236806279522
+    second: pasted__egoza2m001.001|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 5575969778519058951
+    second: pasted__egoza2m001.001|pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: -7352087433937137073
+    second: pasted__egoza2m001.001|pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -8513844555736968706
+    second: pasted__egoza2m001.001|pasted__pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: -6700693995110517478
+    second: pasted__egoza2m001.001|pasted__pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -3640974579872535215
+    second: pasted__egoza2m001.001|pasted__pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: 8894591371033908670
+    second: pasted__egoza2m001.001|pasted__pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -1502634708502727265
+    second: pasted__egoza2m001.001|pasted__pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 2221225192826272509
+    second: pasted__egoza2m001.001|pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -7764124982469849338
+    second: pasted__egoza2m001.001|pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 861398494802529093
+    second: pasted__egoza2m001.001|pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -3311782541769831709
+    second: pasted__egoza2m001.001|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -8980064502453661809
+    second: pasted__egoza2m001.001|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -4549590484714899460
+    second: pasted__egoza2m001.001|poddon|Take 001|BaseLayer
+  - first:
+      74: 4080013114109239825
+    second: pasted__pasted__poddon.001|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -4395354167212624569
+    second: pasted__pasted__poddon.001|pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 90147404524332897
+    second: pasted__pasted__poddon.001|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -7242573176686566091
+    second: pasted__pasted__poddon.001|pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 271021042313064771
+    second: pasted__pasted__poddon.001|pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 6275592114899220658
+    second: pasted__pasted__poddon.001|pasted__pasted__pasted__egoza2m001.001|Take
+      001|BaseLayer
+  - first:
+      74: 3339418570346859705
+    second: pasted__pasted__poddon.001|pasted__pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 2917633818700251818
+    second: pasted__pasted__poddon.001|pasted__pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: -8567148948150227490
+    second: pasted__pasted__poddon.001|pasted__pasted__pasted__pasted__poddon|Take
+      001|BaseLayer
+  - first:
+      74: 7943726868846093013
+    second: pasted__pasted__poddon.001|pasted__pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -8074949409429908552
+    second: pasted__pasted__poddon.001|pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -5276765896475977389
+    second: pasted__pasted__poddon.001|pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 1795273100461446185
+    second: pasted__pasted__poddon.001|pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 7282412008092652408
+    second: pasted__pasted__poddon.001|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 6145327665862774499
+    second: pasted__pasted__poddon.001|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -3029305693277085318
+    second: pasted__pasted__poddon.001|poddon|Take 001|BaseLayer
+  - first:
+      74: 4833939364429728879
+    second: pasted__pasted__egoza2m001.001|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -4609405701878432302
+    second: pasted__pasted__egoza2m001.001|pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 8915863866195491510
+    second: pasted__pasted__egoza2m001.001|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 6279996770330952835
+    second: pasted__pasted__egoza2m001.001|pasted__pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 4154381582394513731
+    second: pasted__pasted__egoza2m001.001|pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 6031714146201472602
+    second: pasted__pasted__egoza2m001.001|pasted__pasted__pasted__egoza2m001.001|Take
+      001|BaseLayer
+  - first:
+      74: 5199509174831516182
+    second: pasted__pasted__egoza2m001.001|pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: -8283948130212965830
+    second: pasted__pasted__egoza2m001.001|pasted__pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: 1470967153382281413
+    second: pasted__pasted__egoza2m001.001|pasted__pasted__pasted__pasted__poddon|Take
+      001|BaseLayer
+  - first:
+      74: -4617464028927649283
+    second: pasted__pasted__egoza2m001.001|pasted__pasted__pasted__poddon.001|Take
+      001|BaseLayer
+  - first:
+      74: -4047832007100843700
+    second: pasted__pasted__egoza2m001.001|pasted__pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -3546231460163552835
+    second: pasted__pasted__egoza2m001.001|pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -3730315705861183019
+    second: pasted__pasted__egoza2m001.001|pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -2754414392576136319
+    second: pasted__pasted__egoza2m001.001|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 2452876064146139057
+    second: pasted__pasted__egoza2m001.001|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -7878773781493720498
+    second: pasted__pasted__egoza2m001.001|poddon|Take 001|BaseLayer
+  - first:
+      74: -6941894096736480584
+    second: pasted__pasted__pasted__poddon.001|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -831593752651473501
+    second: pasted__pasted__pasted__poddon.001|pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: -4865190281491945075
+    second: pasted__pasted__pasted__poddon.001|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -6783185671421677440
+    second: pasted__pasted__pasted__poddon.001|pasted__pasted__egoza2m001.001|Take
+      001|BaseLayer
+  - first:
+      74: 2240362055536598776
+    second: pasted__pasted__pasted__poddon.001|pasted__pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 1938870931076955079
+    second: pasted__pasted__pasted__poddon.001|pasted__pasted__pasted__egoza2m001.001|Take
+      001|BaseLayer
+  - first:
+      74: -1709885729078868628
+    second: pasted__pasted__pasted__poddon.001|pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: 5158777563199543565
+    second: pasted__pasted__pasted__poddon.001|pasted__pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: -6883895823655728340
+    second: pasted__pasted__pasted__poddon.001|pasted__pasted__pasted__pasted__poddon|Take
+      001|BaseLayer
+  - first:
+      74: -1394799189046641459
+    second: pasted__pasted__pasted__poddon.001|pasted__pasted__pasted__poddon.001|Take
+      001|BaseLayer
+  - first:
+      74: 5262382856356556736
+    second: pasted__pasted__pasted__poddon.001|pasted__pasted__pasted__poddon|Take
+      001|BaseLayer
+  - first:
+      74: 140470113297207259
+    second: pasted__pasted__pasted__poddon.001|pasted__pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 3933250217033306919
+    second: pasted__pasted__pasted__poddon.001|pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 7173203531027754282
+    second: pasted__pasted__pasted__poddon.001|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: -7233123688006793123
+    second: pasted__pasted__pasted__poddon.001|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -6175742286479701844
+    second: pasted__pasted__pasted__poddon.001|poddon|Take 001|BaseLayer
+  - first:
+      74: 550487545154872785
+    second: pasted__pasted__pasted__egoza2m001.001|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -6895971237776626172
+    second: pasted__pasted__pasted__egoza2m001.001|pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: -7292478054997388512
+    second: pasted__pasted__pasted__egoza2m001.001|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 5612729201338779924
+    second: pasted__pasted__pasted__egoza2m001.001|pasted__pasted__egoza2m001.001|Take
+      001|BaseLayer
+  - first:
+      74: -7956456158012080738
+    second: pasted__pasted__pasted__egoza2m001.001|pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: 5035585169356541025
+    second: pasted__pasted__pasted__egoza2m001.001|pasted__pasted__pasted__egoza2m001.001|Take
+      001|BaseLayer
+  - first:
+      74: 5179536076542297977
+    second: pasted__pasted__pasted__egoza2m001.001|pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: -4399298220981826266
+    second: pasted__pasted__pasted__egoza2m001.001|pasted__pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: -1161832152845718268
+    second: pasted__pasted__pasted__egoza2m001.001|pasted__pasted__pasted__pasted__poddon|Take
+      001|BaseLayer
+  - first:
+      74: 7193376738931169999
+    second: pasted__pasted__pasted__egoza2m001.001|pasted__pasted__pasted__poddon.001|Take
+      001|BaseLayer
+  - first:
+      74: -7480905695762174425
+    second: pasted__pasted__pasted__egoza2m001.001|pasted__pasted__pasted__poddon|Take
+      001|BaseLayer
+  - first:
+      74: 8784865825409059904
+    second: pasted__pasted__pasted__egoza2m001.001|pasted__pasted__poddon.001|Take
+      001|BaseLayer
+  - first:
+      74: 1212511693030249928
+    second: pasted__pasted__pasted__egoza2m001.001|pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 8449569720833909595
+    second: pasted__pasted__pasted__egoza2m001.001|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 2127183546061227786
+    second: pasted__pasted__pasted__egoza2m001.001|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -7310887056559755091
+    second: pasted__pasted__pasted__egoza2m001.001|poddon|Take 001|BaseLayer
+  - first:
+      74: -194537577787436957
+    second: pasted__pasted__pasted__pasted__poddon|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 8736375745399237105
+    second: pasted__pasted__pasted__pasted__poddon|pasted__egoza2m001.001|Take 001|BaseLayer
+  - first:
+      74: 2254696581688016304
+    second: pasted__pasted__pasted__pasted__poddon|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -2175491848526987811
+    second: pasted__pasted__pasted__pasted__poddon|pasted__pasted__egoza2m001.001|Take
+      001|BaseLayer
+  - first:
+      74: -2064282412298783266
+    second: pasted__pasted__pasted__pasted__poddon|pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: -6700693410902405307
+    second: pasted__pasted__pasted__pasted__poddon|pasted__pasted__pasted__egoza2m001.001|Take
+      001|BaseLayer
+  - first:
+      74: 94710294513462062
+    second: pasted__pasted__pasted__pasted__poddon|pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: -2545640927518261123
+    second: pasted__pasted__pasted__pasted__poddon|pasted__pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: -699273835834672097
+    second: pasted__pasted__pasted__pasted__poddon|pasted__pasted__pasted__pasted__poddon|Take
+      001|BaseLayer
+  - first:
+      74: 8276720304085056943
+    second: pasted__pasted__pasted__pasted__poddon|pasted__pasted__pasted__poddon.001|Take
+      001|BaseLayer
+  - first:
+      74: -6923008119102404119
+    second: pasted__pasted__pasted__pasted__poddon|pasted__pasted__pasted__poddon|Take
+      001|BaseLayer
+  - first:
+      74: 6736185897137678344
+    second: pasted__pasted__pasted__pasted__poddon|pasted__pasted__poddon.001|Take
+      001|BaseLayer
+  - first:
+      74: 1425994391887831088
+    second: pasted__pasted__pasted__pasted__poddon|pasted__pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -179996028873307772
+    second: pasted__pasted__pasted__pasted__poddon|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 2589159990101349024
+    second: pasted__pasted__pasted__pasted__poddon|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: 6226541492586717096
+    second: pasted__pasted__pasted__pasted__poddon|poddon|Take 001|BaseLayer
+  - first:
+      74: -3571610246717304383
+    second: pasted__pasted__pasted__pasted__egoza2m001|egoza2m001|Take 001|BaseLayer
+  - first:
+      74: 5883846523355357907
+    second: pasted__pasted__pasted__pasted__egoza2m001|pasted__egoza2m001.001|Take
+      001|BaseLayer
+  - first:
+      74: 1981929553144969735
+    second: pasted__pasted__pasted__pasted__egoza2m001|pasted__egoza2m001|Take 001|BaseLayer
+  - first:
+      74: -1657346049228473560
+    second: pasted__pasted__pasted__pasted__egoza2m001|pasted__pasted__egoza2m001.001|Take
+      001|BaseLayer
+  - first:
+      74: 6642147383987028508
+    second: pasted__pasted__pasted__pasted__egoza2m001|pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: -8130275362896412205
+    second: pasted__pasted__pasted__pasted__egoza2m001|pasted__pasted__pasted__egoza2m001.001|Take
+      001|BaseLayer
+  - first:
+      74: 3508876440340091542
+    second: pasted__pasted__pasted__pasted__egoza2m001|pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: -8111050794423605920
+    second: pasted__pasted__pasted__pasted__egoza2m001|pasted__pasted__pasted__pasted__egoza2m001|Take
+      001|BaseLayer
+  - first:
+      74: 5217001530137897601
+    second: pasted__pasted__pasted__pasted__egoza2m001|pasted__pasted__pasted__pasted__poddon|Take
+      001|BaseLayer
+  - first:
+      74: -5813949205575965278
+    second: pasted__pasted__pasted__pasted__egoza2m001|pasted__pasted__pasted__poddon.001|Take
+      001|BaseLayer
+  - first:
+      74: 8207641347318270351
+    second: pasted__pasted__pasted__pasted__egoza2m001|pasted__pasted__pasted__poddon|Take
+      001|BaseLayer
+  - first:
+      74: -401877457625487380
+    second: pasted__pasted__pasted__pasted__egoza2m001|pasted__pasted__poddon.001|Take
+      001|BaseLayer
+  - first:
+      74: 5130236985224875615
+    second: pasted__pasted__pasted__pasted__egoza2m001|pasted__pasted__poddon|Take
+      001|BaseLayer
+  - first:
+      74: -2199108763736647692
+    second: pasted__pasted__pasted__pasted__egoza2m001|pasted__poddon.001|Take 001|BaseLayer
+  - first:
+      74: 1960943853911380019
+    second: pasted__pasted__pasted__pasted__egoza2m001|pasted__poddon|Take 001|BaseLayer
+  - first:
+      74: -84402171471400520
+    second: pasted__pasted__pasted__pasted__egoza2m001|poddon|Take 001|BaseLayer
+  externalObjects: {}
+  materials:
+    materialImportMode: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,41 +1,73 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 //using UnityEngine.UI;
 
 public class HexGrid : MonoBehaviour
 {
-    public int width = 6;
-    public int height = 6;
+    public HexGridChunk chunkPrefebs;
+    public int chunkCountX = 4, chunkCountZ = 3;
+    int cellCountX, cellCountZ;
     public HexCell cellPrefeb;
 
-    //public Text cellLabelPrefebs;
-    //Canvas gridCanvas;
-
-    HexCell[] cells;
-
-    HexMesh hexMesh;
+    public HexCell[] cells;
 
     public Color defaultColor = Color.white;
     public Color touchedColor = Color.magenta;
 
+    int activeElevation;
+
+    HexGridChunk[] chunks;
+
     private void Awake()
     {
-        //gridCanvas = GetComponentInChildren<Canvas>();
-        hexMesh = GetComponentInChildren<HexMesh>();
-        cells = new HexCell[width * height];
-        for (int i = 0, x = 0; i < height; i++)
-        {
-            for (int j = 0; j < width; j++)
-            {
-                CreateCell(j, i, x++);
-            }
-        }
+        cellCountX = chunkCountX * HexMetrics.chunkSizeX;
+        cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
+        CreateChunks();
+        LoadFile();
     }
 
-    private void Start()
+    void LoadFile()
     {
-        hexMesh.Triangulate(cells);
+        if (File.Exists(Application.dataPath + "/terraceMeg.txt"))
+        {
+            StreamReader sr = new StreamReader(Application.dataPath + "/terraceMeg.txt");
+            string temp = sr.ReadToEnd();
+            HexCellMsgArray tempMeg = JsonUtility.FromJson<HexCellMsgArray>(temp);
+            cells = new HexCell[cellCountX * cellCountZ];
+            for (int i = 0; i < cellCountX * cellCountZ; i++)
+            {
+                CreateCell(tempMeg.cellArray[i].x, tempMeg.cellArray[i].y, i, tempMeg.cellArray[i].color, tempMeg.cellArray[i].Elevation);
+            }
+        }
+        else CreateCells();
+    }
+
+    public void SaveFile()
+    {
+        HexCellMsgArray tempCell = CreateCellMsg();
+        string jsonStr = JsonUtility.ToJson(tempCell);
+        StreamWriter sw = new StreamWriter(Application.dataPath + "/terraceMeg.txt");
+        sw.Write(jsonStr);
+        sw.Close();
+    }
+
+    HexCellMsgArray CreateCellMsg()
+    {
+        HexCellMsgArray tempCell = new HexCellMsgArray() {
+            cellArray = new List<HexCellMsg>()
+        };
+        for (int i = 0; i < cellCountX*cellCountZ; i++)
+        {
+            HexCellMsg temp = new HexCellMsg();
+            temp.x = cells[i].x;
+            temp.y = cells[i].z;
+            temp.color = cells[i].Color;
+            temp.Elevation = cells[i].Elevation;
+            tempCell.cellArray.Add(temp);
+        }
+        return tempCell;
     }
 
     /*
@@ -47,6 +79,31 @@ public class HexGrid : MonoBehaviour
         }
     }
     */
+
+    void CreateChunks()
+    {
+        chunks = new HexGridChunk[chunkCountX * chunkCountZ];
+        for (int z = 0, i = 0; z < chunkCountZ; z++)
+        {
+            for (int x = 0; x < chunkCountX; x++)
+            {
+                HexGridChunk chunk = chunks[i++] = Instantiate(chunkPrefebs);
+                chunk.transform.SetParent(transform);
+            }
+        }
+    }
+
+    void CreateCells()
+    {
+        cells = new HexCell[cellCountX * cellCountZ];
+        for (int z = 0, i=0; z < cellCountZ; z++)
+        {
+            for (int x = 0; x < cellCountX; x++)
+            {
+                CreateCell(x, z, i++, defaultColor, 0);
+            }
+        }
+    }
 
     void HandleInput()
     {
@@ -62,20 +119,22 @@ public class HexGrid : MonoBehaviour
     {
         pos = transform.InverseTransformPoint(pos);
         HexCoordinates coordinates = HexCoordinates.FromPos(pos);
-        int index = coordinates.X + coordinates.Z * width + coordinates.Z / 2;
+        int index = coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
         HexCell cell = cells[index];
-        if (cell.color != defaultColor && cell.color == color) return;
-        cell.color = color;
-        hexMesh.Triangulate(cells);
+        if (cell.Color != defaultColor && cell.Color == color) return;
+        cell.Color = color;
+        //hexMesh.Triangulate(cells);
     }
 
-    void CreateCell(int x, int z, int i)
+    void CreateCell(int x, int z, int i,Color color,int elevation)
     {
         Vector3 pos = new Vector3((x + z * 0.5f - z / 2) * (HexMetrics.innerRadius * 2f), 0, z * (HexMetrics.outRadius * 1.5f));
-        HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefeb, transform, false);
+        HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefeb);
         cell.transform.localPosition = pos;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
-        cell.color = defaultColor;
+        cell.Color = color;
+        cell.x = x;
+        cell.z = z;
         if (x > 0)
         {
             cell.SetNeightbor(HexDirection.W, cells[i - 1]);
@@ -84,23 +143,48 @@ public class HexGrid : MonoBehaviour
         {
             if ((z & 1) == 0)
             {
-                cell.SetNeightbor(HexDirection.SE, cells[i - width]);
+                cell.SetNeightbor(HexDirection.SE, cells[i - cellCountX]);
                 if (x > 0)
                 {
-                    cell.SetNeightbor(HexDirection.SW, cells[i - width - 1]);
+                    cell.SetNeightbor(HexDirection.SW, cells[i - cellCountX - 1]);
                 }
             }
             else
             {
-                cell.SetNeightbor(HexDirection.SW, cells[i - width]);
-                if (x < width - 1)
+                cell.SetNeightbor(HexDirection.SW, cells[i - cellCountX]);
+                if (x < cellCountX - 1)
                 {
-                    cell.SetNeightbor(HexDirection.SE, cells[i - width + 1]);
+                    cell.SetNeightbor(HexDirection.SE, cells[i - cellCountX + 1]);
                 }
             }
         }
         //Text label = Instantiate<Text>(cellLabelPrefebs, gridCanvas.transform, false);
         //label.rectTransform.anchoredPosition = new Vector2(pos.x, pos.z);
         //label.text = cell.coordinates.ToStringOnSeparateLines();
+        cell.Elevation = elevation;
+        AddCellToChunk(x, z, cell);
+        HexCellMsg tempMsg = new HexCellMsg();
+        tempMsg.x = x;
+        tempMsg.y = z;
+        tempMsg.color = color;
+        tempMsg.Elevation = elevation;
+    }
+
+    void AddCellToChunk(int x, int z, HexCell cell)
+    {
+        int chunkX = x / HexMetrics.chunkSizeX;
+        int chunkZ = z / HexMetrics.chunkSizeZ;
+        HexGridChunk chunk = chunks[chunkX + chunkZ * chunkCountX];
+        int localX = x - chunkX * HexMetrics.chunkSizeX;
+        int localZ = z - chunkZ * HexMetrics.chunkSizeZ;
+        chunk.AddCell(localX + localZ * HexMetrics.chunkSizeX, cell);
+    }
+
+    public HexCell GetCell(Vector3 position)
+    {
+        position = transform.InverseTransformPoint(position);
+        HexCoordinates coordinates = HexCoordinates.FromPos(position);
+        int index = coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
+        return cells[index];
     }
 }
