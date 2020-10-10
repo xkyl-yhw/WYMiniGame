@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.SceneManagement;
 //using UnityEngine.UI;
 
 public class HexGrid : MonoBehaviour
@@ -20,8 +21,11 @@ public class HexGrid : MonoBehaviour
 
     HexGridChunk[] chunks;
 
+    private string ScenesName;
+
     private void Awake()
     {
+        ScenesName = SceneManager.GetActiveScene().name;
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
         CreateChunks();
@@ -30,9 +34,9 @@ public class HexGrid : MonoBehaviour
 
     void LoadFile()
     {
-        if (File.Exists(Application.dataPath + "/terraceMeg.txt"))
+        if (File.Exists(Application.dataPath + "/" + ScenesName + ".txt"))
         {
-            StreamReader sr = new StreamReader(Application.dataPath + "/terraceMeg.txt");
+            StreamReader sr = new StreamReader(Application.dataPath + "/" + ScenesName + ".txt");
             string temp = sr.ReadToEnd();
             HexCellMsgArray tempMeg = JsonUtility.FromJson<HexCellMsgArray>(temp);
             cells = new HexCell[cellCountX * cellCountZ];
@@ -48,17 +52,18 @@ public class HexGrid : MonoBehaviour
     {
         HexCellMsgArray tempCell = CreateCellMsg();
         string jsonStr = JsonUtility.ToJson(tempCell);
-        StreamWriter sw = new StreamWriter(Application.dataPath + "/terraceMeg.txt");
+        StreamWriter sw = new StreamWriter(Application.dataPath + "/" + ScenesName + ".txt");
         sw.Write(jsonStr);
         sw.Close();
     }
 
     HexCellMsgArray CreateCellMsg()
     {
-        HexCellMsgArray tempCell = new HexCellMsgArray() {
+        HexCellMsgArray tempCell = new HexCellMsgArray()
+        {
             cellArray = new List<HexCellMsg>()
         };
-        for (int i = 0; i < cellCountX*cellCountZ; i++)
+        for (int i = 0; i < cellCountX * cellCountZ; i++)
         {
             HexCellMsg temp = new HexCellMsg();
             temp.x = cells[i].x;
@@ -96,7 +101,7 @@ public class HexGrid : MonoBehaviour
     void CreateCells()
     {
         cells = new HexCell[cellCountX * cellCountZ];
-        for (int z = 0, i=0; z < cellCountZ; z++)
+        for (int z = 0, i = 0; z < cellCountZ; z++)
         {
             for (int x = 0; x < cellCountX; x++)
             {
@@ -126,7 +131,7 @@ public class HexGrid : MonoBehaviour
         //hexMesh.Triangulate(cells);
     }
 
-    void CreateCell(int x, int z, int i,Color color,int elevation)
+    void CreateCell(int x, int z, int i, Color color, int elevation)
     {
         Vector3 pos = new Vector3((x + z * 0.5f - z / 2) * (HexMetrics.innerRadius * 2f), 0, z * (HexMetrics.outRadius * 1.5f));
         HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefeb);
