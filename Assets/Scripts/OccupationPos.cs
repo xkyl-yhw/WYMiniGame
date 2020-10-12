@@ -77,7 +77,7 @@ public class OccupationPos : MonoBehaviour
 
     public void showNums()
     {
-        GameObject[] PlayerArray = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] PlayerArray = GameObject.FindGameObjectsWithTag("PlayerController");
         for (int i = 0; i < PlayerArray.Length; i++)
         {
             TeamTag tag = PlayerArray[i].GetComponent<TeamSetup>().teamTag;
