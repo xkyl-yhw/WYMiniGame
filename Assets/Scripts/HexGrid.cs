@@ -9,7 +9,8 @@ public class HexGrid : MonoBehaviour
 {
     public HexGridChunk chunkPrefebs;
     public int chunkCountX = 4, chunkCountZ = 3;
-    int cellCountX, cellCountZ;
+    [HideInInspector]
+    public int cellCountX, cellCountZ;
     public HexCell cellPrefeb;
 
     public HexCell[] cells;
