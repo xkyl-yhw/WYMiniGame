@@ -4,23 +4,39 @@ using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 
-public class playController : MonoBehaviour
+public class PlayController : MonoBehaviour
 {
+    private float time = 0;
+
+    private Animator thisAnimator;
+
     public float moveSpeed = 0;
     public float roatSpeed = 0;
     public float jumpSpeed = 0;
     public float runSpeed = 0;
     public float gravity = 0;
     public string maskName = "Ground"; //输入地面层的Layer名字
-    public float dashDuration;// 控制冲刺时间
+
+    public float dashDuration = 0.5f;// 控制冲刺时间
     public float dashSpeed;// 冲刺速度
-    private bool isDash = false;
+    private bool isDash = false; //是否在冲刺
     private float dashTime; //临时变量
-    private float dashCoefficient = 1;
     public float dashCD;// 冲刺CD
     private float dashCDtime = 0;// 临时变量
 
+    private float endurance; //耐力值临时变量
+    private float enduranceMAX; //耐力值最大值
+    public float enduranceCoefficient = 5; //耐力系数
+    public float enduranceCoefficient2 = 10f; //耐力恢复系数
+    public float enduranceDashConsume = 30f; //翻滚消耗耐力
+
+    private float essenceRate; //负重比率
+    private float dashCoefficient = 1; //负重影响冲刺系数
+
+    public bool isDefended = false; //是否无敌
+
     private CharacterController controller;
+    private PlayerAttribute playerAttribute;
 
     private Vector3 moveDirection = Vector3.zero;//角色移动
 
@@ -33,26 +49,25 @@ public class playController : MonoBehaviour
         groundLayerIndex = LayerMask.GetMask(maskName); //初始化地面layer的序列
 
         dashTime = dashDuration;//初始化冲刺时间
+
+        playerAttribute = GetComponent<PlayerAttribute>();
+        enduranceMAX = playerAttribute.enduranceMax; //初始化耐力值
+        endurance = enduranceMAX;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Vector3 forward = Input.GetAxis("Vertical") * transform.TransformDirection(Vector3.forward) * moveSpeed;//向前移动
-        //Vector3 move = new Vector3(Input.GetAxis("Vertical"), 0, -Input.GetAxis("Horizontal")) * moveSpeed;//移动位置
-        //controller.Move(move * Time.deltaTime); //移动
-        //transform.Rotate(new Vector3(0, Input.GetAxis("Horizontal") * roatSpeed * Time.deltaTime, 0));//旋转
-
-
         this.Rotating(); //角色旋转-朝向鼠标
 
-        if (dashCDtime <= 0 && Input.GetButtonDown("Jump"))
+        if (dashCDtime <= 0 && Input.GetButtonDown("Jump") && endurance > enduranceDashConsume)
         {
             isDash = true;
             moveDirection = transform.forward;// forward 指向物体当前的前方
             moveDirection.y = 0f;// 只做平面的上下移动和水平移动，不做高度上的上下移动
             dashCDtime = dashCD;
             dashControll();
+            endurance -= enduranceDashConsume;
         }
 
         if (isDash)
@@ -64,27 +79,39 @@ public class playController : MonoBehaviour
             this.Moving(); //角色移动-WASD
         }
 
-        if (dashCDtime>0)
+        if (dashCDtime > 0)
             dashCDtime = TimeCount(dashCDtime);
+
+
+        SetPlayerAttributeValue();
+
+        time = TimeCount(time);
+        if (time <= 0)
+        {
+            time = 1;
+        }
     }
 
     //移动
     void Moving()
     {
         float speed = moveSpeed;//速度赋值默认速度
-
-        ////跳跃
-        //if (controller.isGrounded) 
-        //{
-        //    if (Input.GetButton("Jump"))
-        //        moveDirection.y = jumpSpeed;
-        //}
-
+               
         //跑步
-        if (controller.isGrounded &&(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)))
+        if (controller.isGrounded && (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)))
         {
-            speed = runSpeed;
+            if (endurance > enduranceCoefficient) //耐力足够时
+            {
+                speed = runSpeed;
+            }
+            enduranceController(true);
         }
+        else
+        {
+            enduranceController(false);
+        }
+
+
         //移动
         moveDirection.x = Input.GetAxis("Horizontal") * speed;
         moveDirection.z = Input.GetAxis("Vertical") * speed;
@@ -126,15 +153,34 @@ public class playController : MonoBehaviour
         else
         {
             dashTime -= Time.deltaTime;
-            controller.Move(moveDirection * dashSpeed * Time.deltaTime);
+            controller.Move(moveDirection * dashSpeed * Time.deltaTime * dashCoefficient);
         }
     }
 
-    //获取系数
+    //获取负重系数
     private void dashControll()
     {
-        //dashCoefficient = this.GetComponent<>; //获取人物属性脚本中的人物负重并且进行计算
-        dashSpeed *= dashCoefficient;
-        dashDuration *= dashCoefficient;
+        essenceRate = playerAttribute.essenceRate;
+        float a = (1 - essenceRate) / 0.25f;
+        dashCoefficient = Mathf.Floor(a) * 0.25f; //获取人物属性脚本中的人物负重并且进行计算
     }
+
+    //耐力增减
+    public void enduranceController(bool isDecrease)
+    {
+        if (isDecrease && endurance > 0)
+            endurance -= Time.deltaTime * enduranceCoefficient;
+        if (endurance < 0)
+            endurance = 0;
+        if (!isDecrease && endurance <= enduranceMAX)
+            endurance += Time.deltaTime * enduranceCoefficient2;
+        if (endurance > enduranceMAX)
+            endurance = enduranceMAX;
+    }
+
+    private void SetPlayerAttributeValue()
+    {
+        playerAttribute.endurance = endurance;
+    }
+
 }

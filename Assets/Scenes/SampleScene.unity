@@ -384,6 +384,7 @@ GameObject:
   - component: {fileID: 577867683}
   - component: {fileID: 577867682}
   - component: {fileID: 577867678}
+  - component: {fileID: 577867684}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -428,7 +429,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 577867676}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -501,6 +502,10 @@ MonoBehaviour:
   dashDuration: 0.3
   dashSpeed: 30
   dashCD: 5
+  enduranceCoefficient: 5
+  enduranceCoefficient2: 10
+  enduranceDashConsume: 30
+  isDefended: 0
 --- !u!143 &577867683
 CharacterController:
   m_ObjectHideFlags: 0
@@ -519,6 +524,23 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &577867684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 577867676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeb999f12688ca2419085299c7689f38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  endurance: 100
+  enduranceMax: 100
+  essencePickNum: 10
+  essenceRate: 0
 --- !u!1001 &607662268
 PrefabInstance:
   m_ObjectHideFlags: 0
