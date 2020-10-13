@@ -1682,6 +1682,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 548036076216811219, guid: 8a92ee9d20fcf9149bc1e46caa747b67,
+        type: 3}
+      propertyPath: altitudeMap
+      value: 
+      objectReference: {fileID: 2800000, guid: 7f3c2812bdb92b644baf05e1b0c10347, type: 3}
+    - target: {fileID: 548036076216811219, guid: 8a92ee9d20fcf9149bc1e46caa747b67,
+        type: 3}
+      propertyPath: perHeight
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 548036076216811219, guid: 8a92ee9d20fcf9149bc1e46caa747b67,
+        type: 3}
+      propertyPath: drawAltitude
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 548036076216811220, guid: 8a92ee9d20fcf9149bc1e46caa747b67,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1774,7 +1789,7 @@ PrefabInstance:
     - target: {fileID: 3949776634061699235, guid: 726da8f2000a96347b6872e0ec46e1d9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.25
+      value: 4.2
       objectReference: {fileID: 0}
     - target: {fileID: 3949776634061699235, guid: 726da8f2000a96347b6872e0ec46e1d9,
         type: 3}

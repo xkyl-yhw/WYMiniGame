@@ -66,7 +66,26 @@ public class HexCell : MonoBehaviour
         }
     }
 
+    //public float Height
+    //{
+    //    get
+    //    {
+    //        return height;
+    //    }
+    //    set
+    //    {
+    //        if (height == value)
+    //            return;
+    //        height = value;
+    //        Vector3 position = transform.localPosition;
+    //        position.y = value;
+    //        transform.localPosition = position;
+    //        Refresh();
+    //    }
+    //}
+
     int elevation = int.MinValue;
+    //float height = float.MinValue;
     public HexGridChunk chunk;
 
     public HexCell GetNeighbor(HexDirection dirction)

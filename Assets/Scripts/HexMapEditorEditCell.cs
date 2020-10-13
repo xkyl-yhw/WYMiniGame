@@ -13,8 +13,8 @@ public class HexMapEditorEditCell : MonoBehaviour
     public bool drawBtn;
 
     public Texture2D altitudeMap;
-    public float maxHeight;
-    public float minHeight = 0f;
+    public float perHeight = 0.2f;
+    public bool drawAltitude = false;
 
     private void Update()
     {
@@ -25,6 +25,13 @@ public class HexMapEditorEditCell : MonoBehaviour
         }
         if (Input.GetMouseButton(0))
             HandleInput();
+
+        if (drawAltitude)
+        {
+            drawAltitude = false;
+            LoadAltitudeMap();
+        }
+            
     }
 
     void HandleInput()
@@ -69,12 +76,15 @@ public class HexMapEditorEditCell : MonoBehaviour
         Vector3 pos = new Vector3((width + height * 0.5f - height / 2) * (HexMetrics.innerRadius * 2f), 0, height * (HexMetrics.outRadius * 1.5f));
         int texwidthPer = altitudeMap.width / (int)pos.x;
         int texheightPer = altitudeMap.height / (int)pos.z;
-        for (int i = 0; i < pos.x; i++)
+        for (int i = 0; i < width; i++)
         {
-            for (int j = 0; j < pos.z; j++)
+            for (int j = 0; j < height; j++)
             {
                 Color color = altitudeMap.GetPixel(i * texwidthPer, j * texheightPer);
-                
+                int h = (int)(color.r / perHeight);
+                Vector3 tempPos = new Vector3((i + j * 0.5f - j / 2) * (HexMetrics.innerRadius * 2f), 0, j * (HexMetrics.outRadius * 1.5f));
+                //hexGrid.GetCell(tempPos).Height = h;
+                hexGrid.GetCell(tempPos).Elevation = h;
             }
         }
     }
