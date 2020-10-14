@@ -692,7 +692,7 @@ GameObject:
   - component: {fileID: 1160079498}
   m_Layer: 0
   m_Name: OccupyPos
-  m_TagString: Untagged
+  m_TagString: OccupyPos
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -709,7 +709,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64ed3f616b5c0d345aab2c46073b4a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  occupyMode: 0
+  occupyMode: 1
+  radius: 10
+  PointCount: 32
+  teamTextList:
+  - {fileID: 1851822065}
+  - {fileID: 1277097387}
+  - {fileID: 1043758317}
   teamNumAddRate:
   - 0
   - 1
@@ -717,16 +723,12 @@ MonoBehaviour:
   - 5
   OccupyRate: 0
   teamOccupyPerson: []
-  radius: 10
-  PointCount: 32
-  teamTextList:
-  - {fileID: 1851822065}
-  - {fileID: 1277097387}
-  - {fileID: 1043758317}
   precentOccTeam: 0
   OccupySlider: {fileID: 1659454643}
   SliderBack: {fileID: 2065354915}
   prevTime: 0
+  hexGrid: {fileID: 548041741}
+  AreaCells: []
 --- !u!4 &1160079497
 Transform:
   m_ObjectHideFlags: 0
@@ -735,7 +737,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1160079495}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 47, y: 0, z: 21}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1686,7 +1688,7 @@ PrefabInstance:
         type: 3}
       propertyPath: altitudeMap
       value: 
-      objectReference: {fileID: 2800000, guid: 7f3c2812bdb92b644baf05e1b0c10347, type: 3}
+      objectReference: {fileID: 2800000, guid: 4f22dfac578a8b24c97a672ae72e7202, type: 3}
     - target: {fileID: 548036076216811219, guid: 8a92ee9d20fcf9149bc1e46caa747b67,
         type: 3}
       propertyPath: perHeight
@@ -1695,6 +1697,11 @@ PrefabInstance:
     - target: {fileID: 548036076216811219, guid: 8a92ee9d20fcf9149bc1e46caa747b67,
         type: 3}
       propertyPath: drawAltitude
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 548036076216811219, guid: 8a92ee9d20fcf9149bc1e46caa747b67,
+        type: 3}
+      propertyPath: offset
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 548036076216811220, guid: 8a92ee9d20fcf9149bc1e46caa747b67,

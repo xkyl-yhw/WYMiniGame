@@ -15,6 +15,7 @@ public class HexMapEditorEditCell : MonoBehaviour
     public Texture2D altitudeMap;
     public float perHeight = 0.2f;
     public bool drawAltitude = false;
+    public int offset;
 
     private void Update()
     {
@@ -74,8 +75,9 @@ public class HexMapEditorEditCell : MonoBehaviour
         int width = hexGrid.cellCountX;
         int height = hexGrid.cellCountZ;
         Vector3 pos = new Vector3((width + height * 0.5f - height / 2) * (HexMetrics.innerRadius * 2f), 0, height * (HexMetrics.outRadius * 1.5f));
-        int texwidthPer = altitudeMap.width / (int)pos.x;
-        int texheightPer = altitudeMap.height / (int)pos.z;
+        int texwidthPer = altitudeMap.width / (int)pos.x - offset;
+        int texheightPer = altitudeMap.height / (int)pos.z - offset;
+        Debug.Log(pos.x + " " + pos.z);
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)

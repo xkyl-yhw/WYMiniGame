@@ -24,4 +24,13 @@ public class TeamSetup : MonoBehaviour
             default: return Color.white;
         }
     }
+
+    public static TeamTag returnTeam(Color color)
+    {
+        if (color == Color.red)
+            return TeamTag.red;
+        else if (color == Color.blue)
+            return TeamTag.blue;
+        else return TeamTag.green;
+    }
 }

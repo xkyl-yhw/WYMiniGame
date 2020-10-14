@@ -124,6 +124,9 @@ public class HexCell : MonoBehaviour
                     neighbor.chunk.Refresh();
                 }
             }
-        }   
+        }
+        GameObject[] poss = GameObject.FindGameObjectsWithTag("OccupyPos");
+        for (int i = 0; i < poss.Length; i++)
+            poss[i].GetComponent<OccupationPos>().AreaCountMethod();
     }
 }
