@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - OccupyPos
+  - HexGrid
   layers:
   - Default
   - TransparentFX

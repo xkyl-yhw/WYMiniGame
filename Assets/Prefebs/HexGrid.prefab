@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 548036076216811219}
   m_Layer: 8
   m_Name: HexGrid
-  m_TagString: Untagged
+  m_TagString: HexGrid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,8 +46,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chunkPrefebs: {fileID: 5326191267172116548, guid: 03f87425d9d0de147b8ace7195c251e1,
     type: 3}
-  chunkCountX: 20
+  chunkCountX: 17
   chunkCountZ: 20
+  cellCountX: 0
+  cellCountZ: 0
   cellPrefeb: {fileID: 8624693946818689702, guid: 0d57adfd4e625ca49aecf7f905f167ae,
     type: 3}
   cells: []
@@ -69,3 +71,7 @@ MonoBehaviour:
   touchedColor: {r: 1, g: 0, b: 1, a: 1}
   circleCenter: {fileID: 0}
   drawBtn: 0
+  altitudeMap: {fileID: 2800000, guid: 4f22dfac578a8b24c97a672ae72e7202, type: 3}
+  perHeight: 0.1
+  drawAltitude: 1
+  offset: 1

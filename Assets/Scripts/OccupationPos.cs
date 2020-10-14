@@ -31,7 +31,8 @@ public class OccupationPos : MonoBehaviour
     //Area
     public HexGrid hexGrid;
     public List<HexCell> AreaCells;
-    Dictionary<TeamTag, int> TeamAreaCount=new Dictionary<TeamTag, int>();
+    Dictionary<TeamTag, int> TeamAreaCount = new Dictionary<TeamTag, int>();
+    public Image[] barList;
 
     private void Start()
     {
@@ -61,10 +62,6 @@ public class OccupationPos : MonoBehaviour
         {
             showNums();
             TimeOccupyMethod();
-        }
-        else
-        {
-
         }
     }
 
@@ -159,16 +156,23 @@ public class OccupationPos : MonoBehaviour
 
     public void AreaCountMethod()
     {
-        TeamTag temp=TeamTag.red;
+        if (AreaCells.Count == 0) return;
+        TeamTag temp = TeamTag.red;
         for (int i = 0; i < 3; i++)
         {
             TeamAreaCount[temp++] = 0;
         }
-        for(int i = 0; i < AreaCells.Count; i++)
+        for (int i = 0; i < AreaCells.Count; i++)
         {
             if (AreaCells[i].Color != hexGrid.defaultColor)
                 TeamAreaCount[TeamSetup.returnTeam(AreaCells[i].Color)] += 1;
         }
-
+        float redRate = TeamAreaCount[TeamTag.red] / (float)AreaCells.Count;
+        float greenRate = TeamAreaCount[TeamTag.green] / (float)AreaCells.Count;
+        float blueRate = TeamAreaCount[TeamTag.blue] / (float)AreaCells.Count;
+        //Debug.Log(TeamAreaCount[TeamTag.red] + " " + TeamAreaCount[TeamTag.green] + " " + TeamAreaCount[TeamTag.blue]);
+        barList[0].fillAmount = redRate + blueRate + greenRate;
+        barList[1].fillAmount = greenRate + blueRate;
+        barList[2].fillAmount = greenRate;
     }
 }
