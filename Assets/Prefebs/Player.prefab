@@ -130,7 +130,9 @@ GameObject:
   - component: {fileID: 3949776634061699229}
   - component: {fileID: 3949776634061699228}
   - component: {fileID: 3949776634061699232}
+  - component: {fileID: 326526123196813708}
   - component: {fileID: 3949776634061699226}
+  - component: {fileID: 3081368167085107203}
   - component: {fileID: 3949776634061699224}
   - component: {fileID: 3949776634061699227}
   m_Layer: 0
@@ -272,6 +274,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapon: {fileID: 3949776633851847733}
+--- !u!114 &326526123196813708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3949776634061699234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a32d7ab28e94f44e9daf98a4fa0833b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
+  startTime: 0
+  time: 0
 --- !u!114 &3949776634061699226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,6 +306,20 @@ MonoBehaviour:
   enduranceMax: 100
   essencePickNum: 10
   essenceRate: 0
+--- !u!114 &3081368167085107203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3949776634061699234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b2ca5c083b6f149ae1c409741af239, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dieTime: 0
+  playerAttribute: {fileID: 0}
 --- !u!114 &3949776634061699224
 MonoBehaviour:
   m_ObjectHideFlags: 0

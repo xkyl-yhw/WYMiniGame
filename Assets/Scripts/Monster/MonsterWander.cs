@@ -2,23 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAttribute : MonoBehaviour
+public class NewBehaviourScript : MonoBehaviour
 {
     // Start is called before the first frame update
-    public float health;
-
-    public float endurance;
-
-    public int enduranceMax;
-
-    public int essencePickNum;
-
-    public float essenceRate;
-
-
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
