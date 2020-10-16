@@ -79,5 +79,15 @@ public  abstract class Monster : MonoBehaviour
             }
 
         }
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            if (this.health > 0)
+            {
+                BulletObject bulletObject = other.gameObject.GetComponent<BulletObject>();
+                //Debug.Log(playerHealth.health);
+                this.TakeDamage((int)Mathf.Floor(bulletObject.damage));
+                GameObject.Destroy(other.gameObject);
+            }
+        }
     }
 }

@@ -6,7 +6,6 @@ public class WeaponController : MonoBehaviour
 {
     public GameObject weapon;
     private WeaponObject weaponObject;
-    private float strikingDistance;
 
     private int weaponIndex;
     public int weaponNum = 10;
@@ -42,7 +41,6 @@ public class WeaponController : MonoBehaviour
             Debug.Log("射击");
         }
 
-        strikingDistance = weaponObject.strikingDistance;
 
         float MouseScrollWheel = Input.GetAxis("Mouse ScrollWheel"); // 滚轮角度
         if (Input.GetAxis("Mouse ScrollWheel") != 0 && !isScroll && !isScrollCD)
@@ -73,7 +71,17 @@ public class WeaponController : MonoBehaviour
     // 提供攻击距离
     public float getStrikingDistance()
     {
+        float strikingDistance;
+        strikingDistance = weaponObject.strikingDistance;
         return strikingDistance;
+    }
+
+    // 提供武器伤害
+    public float getDamage()
+    {
+        float weaponDamage;
+        weaponDamage = weaponObject.damage;
+        return weaponDamage;
     }
 
     // 滚轮控制武器切换

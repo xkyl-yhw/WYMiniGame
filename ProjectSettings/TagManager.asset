@@ -6,6 +6,7 @@ TagManager:
   tags:
   - OccupyPos
   - HexGrid
+  - Bullet
   layers:
   - Default
   - TransparentFX

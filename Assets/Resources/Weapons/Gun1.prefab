@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponName: "\u624B\u67AA2\u53F7"
-  damage: 0
+  damage: 15
   strikingDistance: 10
   maxNumOfAmmo: 10
   reloadCD: 2
