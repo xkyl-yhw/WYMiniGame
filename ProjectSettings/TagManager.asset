@@ -6,7 +6,11 @@ TagManager:
   tags:
   - OccupyPos
   - HexGrid
+<<<<<<< HEAD
   - Monster
+=======
+  - Bullet
+>>>>>>> ed9ddede83916180bd7392bdb08b46b394b8b309
   layers:
   - Default
   - TransparentFX

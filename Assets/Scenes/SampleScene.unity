@@ -2964,6 +2964,21 @@ PrefabInstance:
       propertyPath: hexGrid
       value: 
       objectReference: {fileID: 548041741}
+    - target: {fileID: 3949776634061699232, guid: 726da8f2000a96347b6872e0ec46e1d9,
+        type: 3}
+      propertyPath: weaponPosition.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3949776634061699232, guid: 726da8f2000a96347b6872e0ec46e1d9,
+        type: 3}
+      propertyPath: weaponPosition.z
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3949776634061699232, guid: 726da8f2000a96347b6872e0ec46e1d9,
+        type: 3}
+      propertyPath: weaponNum
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3949776634061699234, guid: 726da8f2000a96347b6872e0ec46e1d9,
         type: 3}
       propertyPath: m_Name
