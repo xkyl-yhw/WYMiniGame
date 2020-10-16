@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public  abstract class Monster : MonoBehaviour
+public abstract class Monster : MonoBehaviour
 {
     public int health;
     public int damage;
@@ -10,7 +10,7 @@ public  abstract class Monster : MonoBehaviour
     private PlayerHealth playerHealth;
     public GameObject objectMachine;//所属复苏机器体
     public RecoveryMachine attachedMachine;//所属复苏机器
-  
+
     public GameObject dropSingleEssence;  //掉落精华
 
     public GameObject dropFiftyEssence;
@@ -18,19 +18,19 @@ public  abstract class Monster : MonoBehaviour
     public GameObject dropFiveEssence;
 
     public GameObject dropTwentyEssence;
-   
+
     public int dropNum; //掉落数量
- 
+
     public Transform dropRange;//掉落范围
 
     public void Start()
     {
-        if (dropRange==null)
+        if (dropRange == null)
         {
             dropRange = transform;
         }
         playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
-        
+
     }
 
     // Update is called once per frame
@@ -46,7 +46,7 @@ public  abstract class Monster : MonoBehaviour
             Drop(dropNum);
             Destroy(gameObject);
         }
- 
+
     }
     //精华掉落
     void Drop(int dropNum)
@@ -80,7 +80,7 @@ public  abstract class Monster : MonoBehaviour
             Instantiate(essenceType, dropRange.TransformPoint(pos2), Quaternion.identity);
         }
     }
-    
+
     //怪物受伤
     public void TakeDamage(int damage)
     {
@@ -88,19 +88,29 @@ public  abstract class Monster : MonoBehaviour
 
     }
 
- 
+
     //触发造成伤害
     public void OnTriggerEnter(Collider other)
     {
         //碰撞并且类型是胶囊体碰撞，因为player可能存在多个Collider
-        if (other.gameObject.CompareTag("Player")&&other.GetType().ToString()== "UnityEngine.CapsuleCollider")
+        if (other.gameObject.CompareTag("Player") && other.GetType().ToString() == "UnityEngine.CapsuleCollider")
         {
-            if (playerHealth!=null)
+            if (playerHealth != null)
             {
                 //Debug.Log(playerHealth.health);
                 playerHealth.DamagePlayer(damage);
             }
 
+        }
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            if (this.health > 0)
+            {
+                BulletObject bulletObject = other.gameObject.GetComponent<BulletObject>();
+                //Debug.Log(playerHealth.health);
+                this.TakeDamage((int)Mathf.Floor(bulletObject.damage));
+                GameObject.Destroy(other.gameObject);
+            }
         }
     }
 }
