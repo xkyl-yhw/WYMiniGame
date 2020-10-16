@@ -56,6 +56,7 @@ public class HexGrid : MonoBehaviour
         StreamWriter sw = new StreamWriter(Application.dataPath + "/" + ScenesName + ".txt");
         sw.Write(jsonStr);
         sw.Close();
+        Debug.Log(1);
     }
 
     HexCellMsgArray CreateCellMsg()
