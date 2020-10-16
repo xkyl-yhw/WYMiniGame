@@ -10,6 +10,8 @@ public class RecoveryMachine : MonoBehaviour
     public float recoveryRadius; //复苏以及处死怪物范围
     public bool canTransfer;//能够传输
     public bool canRecovery;//能够复苏
+    public float timer;
+    public float recoveryTimer;//复苏需要时间
     public bool isInSphere; //是否在范围
     public Transform player;//检测玩家
     public GameObject machine;//复苏机器本身位置
@@ -25,6 +27,14 @@ public class RecoveryMachine : MonoBehaviour
         if (currentEssence >= essenceRequired)
         {
             canTransfer = false;
+            timer += Time.deltaTime;
+            if (timer >= recoveryTimer)
+            {
+                canRecovery = true;
+                timer = 0;
+            }
+
+
         }
         else
         {
