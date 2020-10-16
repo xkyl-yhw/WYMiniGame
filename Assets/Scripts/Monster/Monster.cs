@@ -31,7 +31,7 @@ public  abstract class Monster : MonoBehaviour
         }
  
     }
-
+    //精华掉落
     void Drop(int dropNum)
     {
         int fiftyNum = 0;

@@ -8,7 +8,7 @@ public class Endurance : MonoBehaviour
 {
     public Image img;
     // Use this for initialization
-    public Text enText;
+    //public Text enText;
     public int enduranceMax;
     public GameObject player;
     public PlayerAttribute playerAttribute;
@@ -19,7 +19,7 @@ public class Endurance : MonoBehaviour
         currentEndurance = enduranceMax;
         playerAttribute = player.GetComponent<PlayerAttribute>();
         img = GetComponentInChildren<Image>();    //获取Image组件
-        enText = GetComponentInChildren<Text>();
+        //enText = GetComponentInChildren<Text>();
     }
 
     // Update is called once per frame
@@ -28,7 +28,7 @@ public class Endurance : MonoBehaviour
         enduranceMax = playerAttribute.enduranceMax;
        currentEndurance = Convert.ToInt64(playerAttribute.endurance);
         img.fillAmount = currentEndurance / enduranceMax;
-        enText.text = currentEndurance.ToString() + "/" + enduranceMax.ToString(); ;
+        //enText.text = currentEndurance.ToString() + "/" + enduranceMax.ToString(); ;
 
     }
 

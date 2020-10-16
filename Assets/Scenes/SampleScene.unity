@@ -566,7 +566,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   img: {fileID: 343644371}
-  enText: {fileID: 1081818538}
   enduranceMax: 0
   player: {fileID: 459571946}
   playerAttribute: {fileID: 459571949}
@@ -1007,18 +1006,6 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3153725092663402259, guid: 8fb4257c3105cd146baab37ba3467f7a,
     type: 3}
   m_PrefabInstance: {fileID: 1556499695}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1081818538 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3153725092663402259, guid: 8fb4257c3105cd146baab37ba3467f7a,
-    type: 3}
-  m_PrefabInstance: {fileID: 1626321458}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -2189,6 +2176,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1851822063}
   m_CullTransparentMesh: 0
+--- !u!114 &1880788942 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8325617588840740369, guid: f8542e2055972544599816537bbb512e,
+    type: 3}
+  m_PrefabInstance: {fileID: 6209136458422099416}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 254350b06e76fdb4d9e4b77aa0a87251, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1896016132
 GameObject:
   m_ObjectHideFlags: 0
@@ -2484,12 +2483,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66afba94a28afa346b2abcc0772422df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 459571946}
+  player: {fileID: 459571958}
   playerAttribute: {fileID: 459571949}
-  machine: {fileID: 0}
-  radius: 0
+  machine: {fileID: 1880788942}
   timer: 0
-  canRecovery: 0
+  canTransfer: 0
   essenceTransferNum: 2
   transferToggle: {fileID: 2029482969}
 --- !u!1 &2065354915
@@ -3095,10 +3093,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3842866495409339939, guid: f8542e2055972544599816537bbb512e,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8325617588840740369, guid: f8542e2055972544599816537bbb512e,
         type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 459571958}
+    - target: {fileID: 8325617588840740369, guid: f8542e2055972544599816537bbb512e,
+        type: 3}
+      propertyPath: transferRadius
+      value: 5.44
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8542e2055972544599816537bbb512e, type: 3}
