@@ -24,8 +24,8 @@ public class HexMapEditorEditCell : MonoBehaviour
             drawBtn = false;
             drawCircle();
         }
-        if (Input.GetMouseButton(0))
-            HandleInput();
+        //if (Input.GetMouseButton(0))
+            //HandleInput();
 
         if (drawAltitude)
         {
