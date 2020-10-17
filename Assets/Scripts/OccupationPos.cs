@@ -14,7 +14,7 @@ public class OccupationPos : MonoBehaviour
     private LineRenderer lineRenderer;
     private float angle;
     Dictionary<TeamTag, List<GameObject>> TeamCount = new Dictionary<TeamTag, List<GameObject>>();
-    public Text[] teamTextList;
+    //public Text[] teamTextList;
 
 
     //Time
@@ -69,10 +69,12 @@ public class OccupationPos : MonoBehaviour
     {
         OccupyRate = Mathf.Clamp(OccupyRate, 0, 100);
         if (OccupyRate == 0) precentOccTeam = lastOccTeam;
-
-        OccupySlider.value = OccupyRate / 100f;
-        SliderBack.GetComponent<Image>().color = TeamSetup.returnColor(precentOccTeam);
-
+        if (OccupySlider != null)
+        {
+            OccupySlider.value = OccupyRate / 100f;
+            SliderBack.GetComponent<Image>().color = TeamSetup.returnColor(precentOccTeam);
+        }
+           
         if ((Time.time - prevTime) > 1)
         {
             prevTime = Time.time;
@@ -127,13 +129,13 @@ public class OccupationPos : MonoBehaviour
                 }
             }
         }
-        TeamTag tempTag = TeamTag.red;
-        for (int i = 0; i < teamTextList.Length; i++)
-        {
-            teamTextList[i].text = TeamCount[tempTag].Count.ToString();
-            teamTextList[i].color = TeamSetup.returnColor(tempTag);
-            tempTag++;
-        }
+        //TeamTag tempTag = TeamTag.red;
+        //for (int i = 0; i < teamTextList.Length; i++)
+        //{
+        //    teamTextList[i].text = TeamCount[tempTag].Count.ToString();
+        //    teamTextList[i].color = TeamSetup.returnColor(tempTag);
+        //    tempTag++;
+        //}
     }
 
     private void drawCircle()
