@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 [RequireComponent(typeof(CharacterController))]
 
-public class PlayController : MonoBehaviour
+public class PlayController : MonoBehaviourPun
 {
     private float time = 0;
 
@@ -58,6 +59,10 @@ public class PlayController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!photonView.IsMine && PhotonNetwork.IsConnected)//如果观察不是当前角色以及网络连接上
+        {
+            return;
+        }
         this.Rotating(); //角色旋转-朝向鼠标
 
         if (dashCDtime <= 0 && Input.GetButtonDown("Jump") && endurance > enduranceDashConsume)
