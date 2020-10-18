@@ -40,7 +40,7 @@ public class OccupationPos : MonoBehaviour
         TeamCount.Add(TeamTag.blue, new List<GameObject>());
         TeamCount.Add(TeamTag.red, new List<GameObject>());
         TeamCount.Add(TeamTag.green, new List<GameObject>());
-        CountCellInArea();
+        //CountCellInArea();
     }
 
     public void CountCellInArea()
