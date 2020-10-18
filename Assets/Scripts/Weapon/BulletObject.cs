@@ -42,5 +42,4 @@ public class BulletObject : MonoBehaviour
             GameObject.Destroy(gameObject);
         }
     }
-
 }

@@ -17,7 +17,7 @@ public static class HexMetrics
     public const float solidFactor = 0.75f;
     public const float blendFactor = 1f - solidFactor;
 
-    public const float elevationStep = 0.5f;
+    public const float elevationStep = 0.1f;
 
     public const int terracesPerSlope = 2;
     public const int terraceSteps = terracesPerSlope * 2 + 1;

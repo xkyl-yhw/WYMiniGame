@@ -57,6 +57,7 @@ public class WeaponObject : MonoBehaviour
             isShoot = true;
 
             GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity) as GameObject;
+            hitGround();
         }
         else
         {
@@ -84,5 +85,18 @@ public class WeaponObject : MonoBehaviour
     {
         timeUse -= Time.deltaTime;
         return timeUse;
+    }
+
+    public void hitGround()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if(Physics.Raycast(ray,out hit,200, 1 << LayerMask.NameToLayer("Ground")))
+        {
+            if (Vector3.Distance(hit.point, transform.parent.transform.position) < strikingDistance)
+            {
+                hit.collider.gameObject.GetComponentInParent<HexGrid>().GetCell(hit.point).Color = transform.parent.GetComponent<TeamSetup>().teamColor;
+            }
+        }
     }
 }

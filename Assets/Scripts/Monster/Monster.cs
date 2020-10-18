@@ -23,12 +23,17 @@ public abstract class Monster : MonoBehaviour
 
     public Transform dropRange;//掉落范围
 
+    public Animator m_animator;
+
+    public float radius;//测试离玩家半径
+
     public void Start()
     {
         if (dropRange == null)
         {
             dropRange = transform;
         }
+        m_animator = GetComponent<Animator>();
         playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
 
     }
@@ -36,15 +41,16 @@ public abstract class Monster : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
+        if (health <= 0)
+        {
+            Drop(dropNum);
+            m_animator.SetTrigger("die");
+            //Destroy(gameObject);
+        }
         attachedMachine = objectMachine.GetComponent<RecoveryMachine>();
         if (attachedMachine.canRecovery)
         {
             health = 0;
-        }
-        if (health <= 0)
-        {
-            Drop(dropNum);
-            Destroy(gameObject);
         }
 
     }
@@ -113,4 +119,12 @@ public abstract class Monster : MonoBehaviour
             }
         }
     }
+    //范围可视化
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, radius);
+
+    }
+
 }
