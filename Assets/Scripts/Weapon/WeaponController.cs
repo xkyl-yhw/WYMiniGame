@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class WeaponController : MonoBehaviour
+public class WeaponController : MonoBehaviourPun
 {
     public GameObject weapon;
     private WeaponObject weaponObject;
@@ -40,6 +41,10 @@ public class WeaponController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!photonView.IsMine && PhotonNetwork.IsConnected)//如果观察不是当前角色以及网络连接上
+        {
+            return;
+        }
         if (weaponObject.isShoot)
         {
             Debug.Log("射击");

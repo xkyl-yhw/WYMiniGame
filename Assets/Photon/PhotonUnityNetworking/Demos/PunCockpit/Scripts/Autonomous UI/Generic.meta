@@ -1,8 +1,14 @@
 fileFormatVersion: 2
 guid: c6ff6c1b4167dd340a8b3aaae892b377
 folderAsset: yes
+<<<<<<< HEAD
 DefaultImporter:
   externalObjects: {}
+=======
+timeCreated: 1519216796
+licenseType: Store
+DefaultImporter:
+>>>>>>> mxlin
   userData: 
   assetBundleName: 
   assetBundleVariant: 

@@ -90,6 +90,7 @@ public class PlayController : MonoBehaviour
         {
             time = 1;
         }
+
     }
 
     //移动
