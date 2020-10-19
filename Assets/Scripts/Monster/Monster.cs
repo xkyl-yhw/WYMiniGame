@@ -108,7 +108,7 @@ public abstract class Monster : MonoBehaviour
             }
 
         }
-        if (other.gameObject.CompareTag("Bullet"))
+        if (other.gameObject.CompareTag("Bullet") || other.gameObject.CompareTag("Machete"))
         {
             if (this.health > 0)
             {
@@ -116,6 +116,18 @@ public abstract class Monster : MonoBehaviour
                 //Debug.Log(playerHealth.health);
                 this.TakeDamage((int)Mathf.Floor(bulletObject.damage));
                 GameObject.Destroy(other.gameObject);
+            }
+        }
+        if (other.gameObject.CompareTag("Machete"))
+        {
+            if (this.health > 0)
+            {
+                MachetesObject machetesObject = other.gameObject.GetComponent<MachetesObject>();
+                if (machetesObject.isDamage)
+                {
+                    this.TakeDamage((int)Mathf.Floor(machetesObject.damage));
+                    machetesObject.isDamage = false;
+                }
             }
         }
     }

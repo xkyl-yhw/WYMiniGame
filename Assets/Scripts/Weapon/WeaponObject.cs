@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class WeaponObject : MonoBehaviour
 {
+    private Animator anim;
+
     public string weaponName; //名字
     public int damage; //伤害值
     //public bool isRanged = false; //是否是远程，是=远程，否=近战

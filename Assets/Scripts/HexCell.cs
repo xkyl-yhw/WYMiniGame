@@ -125,14 +125,14 @@ public class HexCell : MonoBehaviour
                 }
             }
         }
-        GameObject[] poss = GameObject.FindGameObjectsWithTag("OccupyPos");
+        //GameObject[] poss = GameObject.FindGameObjectsWithTag("OccupyPos");
 
-        for (int i = 0; i < poss.Length; i++)
-        {
-            if (poss[i].GetComponent<OccupationPos>().occupyMode == OccupyMode.area)
-            {
-                poss[i].GetComponent<OccupationPos>().AreaCountMethod();
-            }
-        }    
+        //for (int i = 0; i < poss.Length; i++)
+        //{
+        //    if (poss[i].GetComponent<OccupationPos>().occupyMode == OccupyMode.area)
+        //    {
+        //        poss[i].GetComponent<OccupationPos>().AreaCountMethod();
+        //    }
+        //}
     }
 }

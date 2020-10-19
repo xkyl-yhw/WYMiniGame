@@ -8,7 +8,10 @@ public class WeaponController : MonoBehaviour
     private WeaponObject weaponObject;
 
     private int weaponIndex;
-    public int weaponNum = 10;
+    private string weaponType;
+    //public int weaponNum = 10;
+    public int gunNum = 10;
+    public int macheteNum = 10;
 
     public float SwitchWeaponCD = 1f;
     public float SwitchWeaponCD2 = 0.5f;
@@ -18,7 +21,7 @@ public class WeaponController : MonoBehaviour
     private bool isScroll;
     private bool isScrollCD;
 
-    public Vector3 weaponPosition = new Vector3(1.8f, 0f, 1.0f);
+    public Vector3 weaponPosition = new Vector3(0.7f, 0f, 0.5f);
 
     //public GameObject bulletPrefab;
 
@@ -31,6 +34,7 @@ public class WeaponController : MonoBehaviour
         AxisCounts = 0;
         isScroll = false;
         isScrollCD = false;
+        weaponType = "Gun";
     }
 
     // Update is called once per frame
@@ -96,7 +100,7 @@ public class WeaponController : MonoBehaviour
         if (MouseScrollWheel < 0)
             PreviousWeapon();
 
-        GameObject weaponResource = Resources.Load<GameObject>("Weapons/Gun" + weaponIndex);
+        GameObject weaponResource = Resources.Load<GameObject>("Weapons/" + weaponType + weaponIndex);
         if (weaponResource != null)
         {
             weapon = Instantiate(weaponResource);
@@ -110,16 +114,48 @@ public class WeaponController : MonoBehaviour
 
     public void NextWeapon()//下一个武器
     {
-        weaponIndex++;
-        if (weaponIndex > weaponNum - 1)
-            weaponIndex = 0;
+        Debug.Log("1111");
+        if (weaponType == "Gun")
+        {
+            weaponIndex++;
+            if (weaponIndex > gunNum - 1)
+            {
+                weaponIndex = 0;
+                weaponType = "Machete";
+            }
+        }
+        else if (weaponType == "Machete")
+        {
+            weaponIndex++;
+            if (weaponIndex > macheteNum - 1)
+            {
+                weaponIndex = 0;
+                weaponType = "Gun";
+            }
+        }
     }
 
     public void PreviousWeapon()//上一个武器
     {
-        weaponIndex--;
-        if (weaponIndex < 0)
-            weaponIndex = weaponNum - 1;
+        Debug.Log("222");
+        if (weaponType == "Gun")
+        {
+            weaponIndex--;
+            if (weaponIndex < 0)
+            {
+                weaponIndex = macheteNum - 1;
+                weaponType = "Machete";
+            }
+        }
+        else if (weaponType == "Machete")
+        {
+            weaponIndex--;
+            if (weaponIndex < 0)
+            {
+                weaponIndex = gunNum - 1;
+                weaponType = "Gun";
+            }
+        }
     }
 
     // 计算每次开始滚滚轮，一秒内鼠标滚轮的角度
