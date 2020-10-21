@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class WeaponController : MonoBehaviour
+public class NetWeaponController : MonoBehaviourPun
 {
     public GameObject weapon;
-    private WeaponObject weaponObject;
+    private NetWeaponObject weaponObject;
 
     private int weaponIndex;
     private string weaponType;
@@ -28,7 +29,7 @@ public class WeaponController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        weaponObject = weapon.GetComponent<WeaponObject>();
+        weaponObject = weapon.GetComponent<NetWeaponObject>();
         mSwitchWeapon = 0;
         mSwitchWeapon2 = 0;
         AxisCounts = 0;
@@ -40,6 +41,10 @@ public class WeaponController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!photonView.IsMine&& PhotonNetwork.IsConnected)//如果观察不是当前角色以及网络连接上
+        {
+            return;
+        }
         if (weaponObject.isShoot)
         {
             Debug.Log("射击");
@@ -73,7 +78,7 @@ public class WeaponController : MonoBehaviour
     }
 
     // 提供攻击距离
-    public float getStrikingDistance()
+    public float GetStrikingDistance()
     {
         float strikingDistance;
         strikingDistance = weaponObject.strikingDistance;
@@ -81,7 +86,7 @@ public class WeaponController : MonoBehaviour
     }
 
     // 提供武器伤害
-    public float getDamage()
+    public float GetDamage()
     {
         float weaponDamage;
         weaponDamage = weaponObject.damage;
@@ -104,11 +109,10 @@ public class WeaponController : MonoBehaviour
         if (weaponResource != null)
         {
             weapon = Instantiate(weaponResource);
-
             weapon.transform.parent = this.transform;
             weapon.transform.localPosition = weaponPosition;
             weapon.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
-            //weapon.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            weapon.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         }
     }
 

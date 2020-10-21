@@ -37,7 +37,7 @@ public class NetPlayController : MonoBehaviourPun
     public bool isDefended = false; //是否无敌
 
     private CharacterController controller;
-    private PlayerAttribute playerAttribute;
+    private NetPlayerAttribute playerAttribute;
 
     private Vector3 moveDirection = Vector3.zero;//角色移动
 
@@ -46,14 +46,21 @@ public class NetPlayController : MonoBehaviourPun
     // Start is called before the first frame update
     void Start()
     {
+        if (!photonView.IsMine && PhotonNetwork.IsConnected)//如果观察不是当前角色以及网络连接上
+        {
+            return;
+        }
+        transform.Find("HUDCanvas").gameObject.SetActive(true);
         controller = GetComponent<CharacterController>();
         groundLayerIndex = LayerMask.GetMask(maskName); //初始化地面layer的序列
 
         dashTime = dashDuration;//初始化冲刺时间
 
-        playerAttribute = GetComponent<PlayerAttribute>();
+        playerAttribute = GetComponent<NetPlayerAttribute>();
         enduranceMAX = playerAttribute.enduranceMax; //初始化耐力值
         endurance = enduranceMAX;
+
+
     }
 
     // Update is called once per frame
@@ -113,11 +120,11 @@ public class NetPlayController : MonoBehaviourPun
             {
                 speed = runSpeed;
             }
-            enduranceController(true);
+            EnduranceController(true);
         }
         else
         {
-            enduranceController(false);
+            EnduranceController(false);
         }
 
 
@@ -175,7 +182,7 @@ public class NetPlayController : MonoBehaviourPun
     }
 
     //耐力增减
-    public void enduranceController(bool isDecrease)
+    public void EnduranceController(bool isDecrease)
     {
         if (isDecrease && endurance > 0)
             endurance -= Time.deltaTime * enduranceCoefficient;
