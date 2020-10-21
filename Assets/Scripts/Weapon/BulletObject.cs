@@ -4,42 +4,80 @@ using UnityEngine;
 
 public class BulletObject : MonoBehaviour
 {
-    public float speed = 50;
+    private float speed = 50;
+    private float ySpeed = 50;
+    public float time = 0.5f;
 
     private float usefulDistance = 0;
     private WeaponController weaponController;
     private GameObject player;
 
     private Vector3 moveDirection = Vector3.zero;//角色移动
-    //private CharacterController controller;
 
     public float damage;
+
+    private Vector3 destination;
+    private float distance = 0;
+    private Vector3 hitInfoPoint;
 
     // Start is called before the first frame update
     void Start()
     {
+        GetRayPosition();
+
         player = GameObject.FindGameObjectWithTag("Player");
         weaponController = player.GetComponent<WeaponController>();
-        usefulDistance = weaponController.getStrikingDistance();
-        damage = weaponController.getDamage();
-        Debug.Log(damage);
+        usefulDistance = weaponController.weapon.GetComponent<WeaponObject>().strikingDistance;
+        damage = weaponController.weapon.GetComponent<WeaponObject>().damage;
 
-        //controller = GetComponent<CharacterController>();
+        destination.y = this.transform.position.y;
+        distance = Vector3.Distance(destination, this.transform.position);
+        if (distance >= usefulDistance)
+        {
+            distance = usefulDistance;
+        }
+        speed = distance / time;
+        ySpeed = Vector3.Distance(new Vector3(this.transform.position.x, hitInfoPoint.y, 
+            this.transform.position.z), this.transform.position) / time;
 
-        moveDirection = weaponController.transform.forward;// forward 指向物体当前的前方
-        moveDirection.y = 0f;// 只做平面的上下移动和水平移动，不做高度上的上下移动
     }
 
     // Update is called once per frame
     void Update()
     {
-        usefulDistance -= Time.deltaTime * speed;
-        //controller.Move(moveDirection * Time.deltaTime * speed);
-        this.transform.position += (moveDirection * Time.deltaTime * speed);
 
-        if (usefulDistance <= 0)
+    }
+
+    void FixedUpdate()
+    {
+        distance -= Time.deltaTime * speed;
+        this.transform.position += (moveDirection * Time.fixedDeltaTime * speed) - new Vector3(0, ySpeed, 0) * Time.fixedDeltaTime;
+
+        if (distance <= 0)
         {
             GameObject.Destroy(gameObject);
         }
     }
+
+
+    private void GetRayPosition()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitInfo;//存储射线信息
+        int groundLayerIndex = LayerMask.GetMask("Ground"); //初始化地面layer的序列
+        if (Physics.Raycast(ray, out hitInfo, 200, groundLayerIndex))//生成射线
+        {
+            Vector3 playerToMouse = hitInfo.point - transform.position;
+            playerToMouse.y = 0;
+            Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
+            this.transform.rotation = newRotation;
+            moveDirection = this.transform.forward;
+            moveDirection.y = 0;
+
+            hitInfoPoint = hitInfo.point;
+            destination = hitInfoPoint;
+            destination.y = 0;
+        }
+    }
+
 }
