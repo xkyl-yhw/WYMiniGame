@@ -1,18 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
+using System.Text.RegularExpressions;
 
-public class WeaponController : MonoBehaviourPun
+public class WeaponController : MonoBehaviour
 {
     public GameObject weapon;
-    private WeaponObject weaponObject;
 
     private int weaponIndex;
-    private string weaponType;
-    //public int weaponNum = 10;
-    public int gunNum = 10;
-    public int macheteNum = 10;
+    private string weaponType; //Gun,Machete,Bomb
+    //public int gunNum = 10;
+    //public int macheteNum = 10;
+    //public int bombNum = 10;
 
     public float SwitchWeaponCD = 1f;
     public float SwitchWeaponCD2 = 0.5f;
@@ -22,33 +21,31 @@ public class WeaponController : MonoBehaviourPun
     private bool isScroll;
     private bool isScrollCD;
 
-    public Vector3 weaponPosition = new Vector3(0.7f, 0f, 0.5f);
+    public Vector3 weaponPosition = new Vector3(1.8f, 0f, 1.0f);
 
-    //public GameObject bulletPrefab;
+    public List<GameObject> mList = new List<GameObject>(); //武器列表
+
 
     // Start is called before the first frame update
     void Start()
     {
-        weaponObject = weapon.GetComponent<WeaponObject>();
         mSwitchWeapon = 0;
         mSwitchWeapon2 = 0;
         AxisCounts = 0;
         isScroll = false;
         isScrollCD = false;
+
         weaponType = "Gun";
+        weaponIndex = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!photonView.IsMine && PhotonNetwork.IsConnected)//如果观察不是当前角色以及网络连接上
-        {
-            return;
-        }
-        if (weaponObject.isShoot)
-        {
-            Debug.Log("射击");
-        }
+        //if (weaponObject.isShoot)
+        //{
+        //    Debug.Log("射击");
+        //}
 
 
         float MouseScrollWheel = Input.GetAxis("Mouse ScrollWheel"); // 滚轮角度
@@ -63,6 +60,7 @@ public class WeaponController : MonoBehaviourPun
             {
                 isScroll = false;
                 isScrollCD = true;
+                Destroy(weapon);
                 SwitchWeapon(AxisCounts);
             }
         }
@@ -75,29 +73,22 @@ public class WeaponController : MonoBehaviourPun
                 mSwitchWeapon2 = 0;
             }
         }
+
+        //当炸弹投出去的时候切换武器
+        if (weaponType == "Bomb")
+        {
+            BombObject bombObject = weapon.GetComponent<BombObject>();
+            if (bombObject.isSwitchWeapon)
+            {
+                SwitchWeapon(1);
+            }
+        }
     }
 
-    // 提供攻击距离
-    public float getStrikingDistance()
-    {
-        float strikingDistance;
-        strikingDistance = weaponObject.strikingDistance;
-        return strikingDistance;
-    }
-
-    // 提供武器伤害
-    public float getDamage()
-    {
-        float weaponDamage;
-        weaponDamage = weaponObject.damage;
-        return weaponDamage;
-    }
 
     // 滚轮控制武器切换
     private void SwitchWeapon(float MouseScrollWheel)
     {
-        Destroy(weapon);
-
         AxisCounts = 0;
 
         if (MouseScrollWheel > 0)
@@ -105,61 +96,29 @@ public class WeaponController : MonoBehaviourPun
         if (MouseScrollWheel < 0)
             PreviousWeapon();
 
-        GameObject weaponResource = Resources.Load<GameObject>("Weapons/" + weaponType + weaponIndex);
-        if (weaponResource != null)
-        {
-            weapon = Instantiate(weaponResource);
+        weapon = Instantiate(mList[weaponIndex]);
+        weaponType = GetWeaponType(weaponIndex);
 
-            weapon.transform.parent = this.transform;
-            weapon.transform.localPosition = weaponPosition;
-            weapon.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
-            //weapon.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-        }
+        weapon.transform.parent = this.transform;
+        weapon.transform.localPosition = weaponPosition;
+        weapon.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
     }
 
     public void NextWeapon()//下一个武器
     {
-        Debug.Log("1111");
-        if (weaponType == "Gun")
+        weaponIndex++;
+        if (weaponIndex > mList.Count - 1)
         {
-            weaponIndex++;
-            if (weaponIndex > gunNum - 1)
-            {
-                weaponIndex = 0;
-                weaponType = "Machete";
-            }
-        }
-        else if (weaponType == "Machete")
-        {
-            weaponIndex++;
-            if (weaponIndex > macheteNum - 1)
-            {
-                weaponIndex = 0;
-                weaponType = "Gun";
-            }
+            weaponIndex = 0;
         }
     }
 
     public void PreviousWeapon()//上一个武器
     {
-        Debug.Log("222");
-        if (weaponType == "Gun")
+        weaponIndex--;
+        if (weaponIndex < 0)
         {
-            weaponIndex--;
-            if (weaponIndex < 0)
-            {
-                weaponIndex = macheteNum - 1;
-                weaponType = "Machete";
-            }
-        }
-        else if (weaponType == "Machete")
-        {
-            weaponIndex--;
-            if (weaponIndex < 0)
-            {
-                weaponIndex = gunNum - 1;
-                weaponType = "Gun";
-            }
+            weaponIndex = mList.Count - 1;
         }
     }
 
@@ -177,5 +136,17 @@ public class WeaponController : MonoBehaviourPun
             mSwitchWeapon += Time.deltaTime;
             AxisCounts += MouseScrollWheel;
         }
+    }
+
+    private string GetWeaponType(int i)
+    {
+        // 获取GameObject名称
+        string name = mList[i].name;
+        Regex re = new Regex(@"[a-zA-Z]+");
+        Match m = re.Match(name);
+        string fixtype = m.Value;
+
+        Debug.Log(fixtype);
+        return fixtype;
     }
 }

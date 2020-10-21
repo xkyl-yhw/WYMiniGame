@@ -27,8 +27,8 @@ public class BulletObject : MonoBehaviour
 
         player = GameObject.FindGameObjectWithTag("Player");
         weaponController = player.GetComponent<WeaponController>();
-        usefulDistance = weaponController.getStrikingDistance();
-        damage = weaponController.getDamage();
+        usefulDistance = weaponController.weapon.GetComponent<WeaponObject>().strikingDistance;
+        damage = weaponController.weapon.GetComponent<WeaponObject>().damage;
 
         destination.y = this.transform.position.y;
         distance = Vector3.Distance(destination, this.transform.position);
@@ -51,7 +51,6 @@ public class BulletObject : MonoBehaviour
     void FixedUpdate()
     {
         distance -= Time.deltaTime * speed;
-        Debug.Log(distance);
         this.transform.position += (moveDirection * Time.fixedDeltaTime * speed) - new Vector3(0, ySpeed, 0) * Time.fixedDeltaTime;
 
         if (distance <= 0)
