@@ -30,6 +30,7 @@ public class NetRecoveryMachine : MonoBehaviourPun, IPunObservable
 
     void Update()
     {
+        player = GameObject.FindWithTag("Player").transform;
         if (currentEssence >= essenceRequired)
         {
             canTransfer = false;

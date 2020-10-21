@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 public class NetPlayerAttribute : MonoBehaviourPun, IPunObservable
-{
+{sss
     [SerializeField]
     public float health;
     [SerializeField]
