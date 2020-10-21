@@ -12,9 +12,10 @@ public class NetEssence : MonoBehaviourPun, IPunObservable
     public GameObject player;
     [SerializeField]
     public NetPlayerAttribute playerAttribute;
-    public float upEssence;
     [SerializeField]
     public float currentEssence;
+    [SerializeField]
+    public float EssenceMax;
     void Start()
     {
         playerAttribute = player.GetComponent<NetPlayerAttribute>();
@@ -25,9 +26,10 @@ public class NetEssence : MonoBehaviourPun, IPunObservable
     // Update is called once per frame
     void Update()
     {
+        EssenceMax = playerAttribute.essenceMax;
         currentEssence = playerAttribute.essencePickNum;
-        img.fillAmount = currentEssence / upEssence;
-        essenceText.text = currentEssence.ToString() + "/" + upEssence.ToString();
+        img.fillAmount = currentEssence / EssenceMax;
+        essenceText.text = currentEssence.ToString() + "/" + EssenceMax.ToString();
 
     }
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -36,14 +38,16 @@ public class NetEssence : MonoBehaviourPun, IPunObservable
         {
             // We own this player: send the others our data
             stream.SendNext(currentEssence);
+            stream.SendNext(EssenceMax);
             //stream.SendNext(essenceText);
-            stream.SendNext(img.fillAmount);
+            //stream.SendNext(img.fillAmount);
         }
         else
         {
             // Network player, receive data
             currentEssence = (float)stream.ReceiveNext();
-            img.fillAmount = (float)stream.ReceiveNext();
+            EssenceMax = (float)stream.ReceiveNext();
+            //img.fillAmount = (float)stream.ReceiveNext();
             //essenceText = (Text)stream.ReceiveNext();
         }
     }

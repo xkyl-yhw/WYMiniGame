@@ -6,13 +6,17 @@ public class NetPlayerAttribute : MonoBehaviourPun, IPunObservable
 {
     [SerializeField]
     public float health;
-
+    [SerializeField]
+    public float healthMax;
+    [SerializeField]
     public float endurance;
-
+    [SerializeField]
     public int enduranceMax;
     [SerializeField]
     public int essencePickNum;
-
+    [SerializeField]
+    public int essenceMax;
+    [SerializeField]
     public float essenceRate;
 
 
@@ -37,11 +41,19 @@ public class NetPlayerAttribute : MonoBehaviourPun, IPunObservable
         {
             stream.SendNext(health);
             stream.SendNext(essencePickNum);
+            stream.SendNext(healthMax);
+            stream.SendNext(endurance);
+            stream.SendNext(enduranceMax);
+            stream.SendNext(essenceRate);
         }
         else
         {
             health = (float)stream.ReceiveNext();
             essencePickNum = (int)stream.ReceiveNext();
+            healthMax = (float)stream.ReceiveNext();
+            endurance = (float)stream.ReceiveNext();
+            enduranceMax = (int)stream.ReceiveNext();
+            essenceRate = (float)stream.ReceiveNext();
         }
     }
 }

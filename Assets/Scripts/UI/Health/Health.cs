@@ -24,6 +24,7 @@ public class Health : MonoBehaviour
 
     void Update()
     {
+        healthMax = playerAttribute.healthMax;
         currentHealth = playerAttribute.health;
         img.fillAmount = currentHealth / healthMax;
         hpText.text =currentHealth.ToString()+ "/"+ healthMax.ToString();

@@ -28,6 +28,7 @@ public class Launchar : MonoBehaviourPunCallbacks
     {
         //base.OnJoinedRoom();
         PhotonNetwork.Instantiate("NetPlayer", new Vector3(125, -20, 124), Quaternion.identity, 0, instantiationData);
+        PhotonNetwork.Instantiate("NetMechanics", new Vector3(142, -20, 167), Quaternion.identity, 0, instantiationData);
     }
 
     // Update is called once per frame
