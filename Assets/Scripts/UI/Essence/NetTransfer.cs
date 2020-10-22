@@ -9,7 +9,9 @@ public class NetTransfer : MonoBehaviourPun, IPunObservable
 {
     public Transform player;
     public NetPlayerAttribute playerAttribute;
-    public NetRecoveryMachine machine;//己方复苏机器
+    public GameObject machine;//己方复苏机器
+    public NetRecoveryMachine netRecoveryMachine;
+    public float transferRadius; //传输需要范围
     [SerializeField]
     public float timer;
     [SerializeField]
@@ -22,13 +24,17 @@ public class NetTransfer : MonoBehaviourPun, IPunObservable
     void Start()
     {
         //需要加一个出生点机器的初始化
+        machine = GameObject.FindGameObjectWithTag("RecoveryMachine");
+        netRecoveryMachine = machine.GetComponent<NetRecoveryMachine>();
         transferToggle.enabled = false;
-        canTransfer = machine.canTransfer;
+        canTransfer = netRecoveryMachine.canTransfer;
         transferToggle.onValueChanged.AddListener(TouchButton);
     }
 
     void Update()
     {
+        Debug.Log(transferToggle.enabled);
+        transferRadius = netRecoveryMachine.transferRadius;
 
         if (playerAttribute.essencePickNum <= 0)
         {
@@ -38,7 +44,7 @@ public class NetTransfer : MonoBehaviourPun, IPunObservable
         }
         else
         {
-            canTransfer = machine.canTransfer;
+            canTransfer = CanTransfer( player.transform,  machine.transform, transferRadius) && netRecoveryMachine.canTransfer;
         }
         if (canTransfer)
         {
@@ -54,6 +60,18 @@ public class NetTransfer : MonoBehaviourPun, IPunObservable
 
     }
 
+
+    //判断玩家能够进行传输的范围
+    public bool CanTransfer(Transform player, Transform machine, float radius)
+    {
+        float distance = Vector3.Distance(player.position, machine.position);
+        if (distance <= radius)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public void TouchTransferButton(bool isOn)
     {
         if (isOn)
@@ -62,15 +80,15 @@ public class NetTransfer : MonoBehaviourPun, IPunObservable
             if (timer >= 1)
             {
 
-                if (machine.essenceRequired - machine.currentEssence >= essenceTransferNum)
+                if (netRecoveryMachine.essenceRequired - netRecoveryMachine.currentEssence >= essenceTransferNum)
                 {
                     playerAttribute.essencePickNum -= essenceTransferNum;
-                    machine.currentEssence += essenceTransferNum;
+                    netRecoveryMachine.currentEssence += essenceTransferNum;
                 }
                 else
                 {
-                    playerAttribute.essencePickNum -= machine.essenceRequired - machine.currentEssence;
-                    machine.currentEssence += machine.essenceRequired - machine.currentEssence;
+                    playerAttribute.essencePickNum -= netRecoveryMachine.essenceRequired - netRecoveryMachine.currentEssence;
+                    netRecoveryMachine.currentEssence += netRecoveryMachine.essenceRequired - netRecoveryMachine.currentEssence;
                 }
                 //精华为0时或者复苏机器精华量已满，传输按钮失效
                 timer = 0;

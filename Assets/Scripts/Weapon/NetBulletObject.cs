@@ -4,61 +4,112 @@ using UnityEngine;
 using Photon.Pun;
 public class NetBulletObject : MonoBehaviourPun,IPunObservable
 {
-    public float speed = 50;
-
+    [SerializeField]
+    private float speed = 50;
+    [SerializeField]
+    private float ySpeed = 50;
+    public float time = 0.5f;
+    [SerializeField]
     private float usefulDistance = 0;
     private NetWeaponController weaponController;
     private GameObject player;
-
+    [SerializeField]
     private Vector3 moveDirection = Vector3.zero;//角色移动
-    //private CharacterController controller;
-
+    [SerializeField]
     public float damage;
+    [SerializeField]
+    private Vector3 destination;
+    [SerializeField]
+    private float distance = 0;
+    [SerializeField]
+    private Vector3 hitInfoPoint;
 
     // Start is called before the first frame update
     void Start()
     {
+        GetRayPosition();
+
         player = GameObject.FindGameObjectWithTag("Player");
         weaponController = player.GetComponent<NetWeaponController>();
-        usefulDistance = weaponController.GetStrikingDistance();
-        damage = weaponController.GetDamage();
-        Debug.Log(damage);
+        usefulDistance = weaponController.weapon.GetComponent<NetWeaponObject>().strikingDistance;
+        damage = weaponController.weapon.GetComponent<NetWeaponObject>().damage;
 
-        //controller = GetComponent<CharacterController>();
+        destination.y = this.transform.position.y;
+        distance = Vector3.Distance(destination, this.transform.position);
+        if (distance >= usefulDistance)
+        {
+            distance = usefulDistance;
+        }
+        speed = distance / time;
+        ySpeed = Vector3.Distance(new Vector3(this.transform.position.x, hitInfoPoint.y,
+            this.transform.position.z), this.transform.position) / time;
 
-        moveDirection = weaponController.transform.forward;// forward 指向物体当前的前方
-        moveDirection.y = 0f;// 只做平面的上下移动和水平移动，不做高度上的上下移动
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!photonView.IsMine && PhotonNetwork.IsConnected)//如果观察不是当前角色以及网络连接上
-        {
-            return;
-        }
-        usefulDistance -= Time.deltaTime * speed;
-        //controller.Move(moveDirection * Time.deltaTime * speed);
-        this.transform.position += (moveDirection * Time.deltaTime * speed);
 
-        if (usefulDistance <= 0)
+    }
+
+    void FixedUpdate()
+    {
+        distance -= Time.deltaTime * speed;
+        this.transform.position += (moveDirection * Time.fixedDeltaTime * speed) - new Vector3(0, ySpeed, 0) * Time.fixedDeltaTime;
+
+        if (distance <= 0)
         {
-            //GameObject.Destroy(gameObject);
-            PhotonNetwork.Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
 
+
+    private void GetRayPosition()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitInfo;//存储射线信息
+        int groundLayerIndex = LayerMask.GetMask("Ground"); //初始化地面layer的序列
+        if (Physics.Raycast(ray, out hitInfo, 200, groundLayerIndex))//生成射线
+        {
+            Vector3 playerToMouse = hitInfo.point - transform.position;
+            playerToMouse.y = 0;
+            Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
+            this.transform.rotation = newRotation;
+            moveDirection = this.transform.forward;
+            moveDirection.y = 0;
+
+            hitInfoPoint = hitInfo.point;
+            destination = hitInfoPoint;
+            destination.y = 0;
+        }
+    }
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
             // We own this player: send the others our data
+            stream.SendNext(speed);
+            stream.SendNext(ySpeed);
+            stream.SendNext(usefulDistance);
+            stream.SendNext(damage);
             stream.SendNext(moveDirection);
+            stream.SendNext(destination);
+            stream.SendNext(distance);
+            stream.SendNext(hitInfoPoint);
+
         }
         else
         {
             // Network player, receive data
+            speed = (float)stream.ReceiveNext();
+            ySpeed = (float)stream.ReceiveNext();
+            usefulDistance = (float)stream.ReceiveNext();
+            damage = (float)stream.ReceiveNext();
             moveDirection = (Vector3)stream.ReceiveNext();
+            destination = (Vector3)stream.ReceiveNext();
+            distance= (float)stream.ReceiveNext();
+            hitInfoPoint = (Vector3)stream.ReceiveNext();
+
         }
     }
 }

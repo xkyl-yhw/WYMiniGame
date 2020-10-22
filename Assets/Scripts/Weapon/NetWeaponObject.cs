@@ -6,17 +6,20 @@ public class NetWeaponObject : MonoBehaviourPun,IPunObservable
 {
 
     private Animator anim;
-
+    [SerializeField]
     public string weaponName; //名字
     public int damage; //伤害值
     //public bool isRanged = false; //是否是远程，是=远程，否=近战
+    [SerializeField]
     public int strikingDistance; //攻击距离
     public int maxNumOfAmmo; //弹药数量上限
     private int currentAmmo; //现存弹药数量
     private bool isReload = false; //是否在装填弹药
     public float reloadCD; //装填时间
     private float reloadTime;
+    [SerializeField]
     private bool canShoot = true; //是否可以开火
+    [SerializeField]
     public bool isShoot = true; //是否正在开火
     public bool isBasy = false; //鼠标左键是否用来点击道具了；是=用了；否=没用，可以开抢
 
@@ -25,7 +28,10 @@ public class NetWeaponObject : MonoBehaviourPun,IPunObservable
     // Start is called before the first frame update
     void Start()
     {
-
+        if (!photonView.IsMine && PhotonNetwork.IsConnected)//如果观察不是当前角色以及网络连接上
+        {
+            return;
+        }
         currentAmmo = maxNumOfAmmo;
         reloadTime = reloadCD;
     }
@@ -66,7 +72,7 @@ public class NetWeaponObject : MonoBehaviourPun,IPunObservable
             isShoot = true;
 
             GameObject grenade = PhotonNetwork.Instantiate(bulletPrefab.name, transform.position, Quaternion.identity,0) as GameObject;
-            HitGround();
+            //HitGround();
         }
         else
         {
@@ -96,28 +102,34 @@ public class NetWeaponObject : MonoBehaviourPun,IPunObservable
         return timeUse;
     }
 
-    public void HitGround()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 200, 1 << LayerMask.NameToLayer("Ground")))
-        {
-            if (Vector3.Distance(hit.point, transform.parent.transform.position) < strikingDistance)
-            {
-                hit.collider.gameObject.GetComponentInParent<HexGrid>().GetCell(hit.point).Color = transform.parent.GetComponent<TeamSetup>().teamColor;
-            }
-        }
-    }
+    //public void HitGround()
+    //{
+    //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    //    RaycastHit hit;
+    //    if (Physics.Raycast(ray, out hit, 200, 1 << LayerMask.NameToLayer("Ground")))
+    //    {
+    //        if (Vector3.Distance(hit.point, transform.parent.transform.position) < strikingDistance)
+    //        {
+    //            hit.collider.gameObject.GetComponentInParent<HexGrid>().GetCell(hit.point).Color = transform.parent.GetComponent<TeamSetup>().teamColor;
+    //        }
+    //    }
+    //}
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
             // We own this player: send the others our data
+            stream.SendNext(weaponName);
+            stream.SendNext(strikingDistance);
+            stream.SendNext(canShoot);
             stream.SendNext(isShoot);
         }
         else
         {
             // Network player, receive data
+            weaponName = (string)stream.ReceiveNext();
+            strikingDistance = (int)stream.ReceiveNext();
+            canShoot = (bool)stream.ReceiveNext();
             isShoot = (bool)stream.ReceiveNext();
         }
     }
