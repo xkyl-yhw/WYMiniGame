@@ -60,7 +60,7 @@ void Update()
 
 
     CameraMoveAndLock();//视角移动和锁定  
-    SightDistance();//视距的缩放  
+    //SightDistance();//视距的缩放  
 
 }
 //视角移动  

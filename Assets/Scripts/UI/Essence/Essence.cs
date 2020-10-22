@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class Essence : MonoBehaviour
 {
     public Image img;
@@ -27,4 +26,5 @@ public class Essence : MonoBehaviour
         essenceText.text = currentEssence.ToString() + "/" + upEssence.ToString();
 
     }
+
 }

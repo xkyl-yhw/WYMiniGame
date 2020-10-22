@@ -6,7 +6,7 @@ public class PlayerAttribute : MonoBehaviour
 {
     // Start is called before the first frame update
     public float health;
-
+    public float healthMax;
     public float endurance;
 
     public int enduranceMax;
