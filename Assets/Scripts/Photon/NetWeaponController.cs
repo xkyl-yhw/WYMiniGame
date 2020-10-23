@@ -41,7 +41,7 @@ public class NetWeaponController : MonoBehaviourPun
     // Update is called once per frame
     void Update()
     {
-<<<<<<< HEAD:Assets/Scripts/Weapon/NetWeaponController.cs
+
         if (!photonView.IsMine&& PhotonNetwork.IsConnected)//如果观察不是当前角色以及网络连接上
         {
             return;
@@ -51,12 +51,12 @@ public class NetWeaponController : MonoBehaviourPun
             Debug.Log("射击");
         }
 
-=======
+
         if (!photonView.IsMine && PhotonNetwork.IsConnected)//如果观察不是当前角色以及网络连接上
         {
             return;
         }
->>>>>>> 783a2d7fdb58da56bd560b326351937e38c10d23:Assets/Scripts/Photon/NetWeaponController.cs
+
 
         float MouseScrollWheel = Input.GetAxis("Mouse ScrollWheel"); // 滚轮角度
         if (Input.GetAxis("Mouse ScrollWheel") != 0 && !isScroll && !isScrollCD)
@@ -70,10 +70,8 @@ public class NetWeaponController : MonoBehaviourPun
             {
                 isScroll = false;
                 isScrollCD = true;
-<<<<<<< HEAD:Assets/Scripts/Weapon/NetWeaponController.cs
-=======
+
                 Destroy(weapon);
->>>>>>> 783a2d7fdb58da56bd560b326351937e38c10d23:Assets/Scripts/Photon/NetWeaponController.cs
                 SwitchWeapon(AxisCounts);
             }
         }
@@ -116,7 +114,7 @@ public class NetWeaponController : MonoBehaviourPun
         if (MouseScrollWheel < 0)
             PreviousWeapon();
 
-<<<<<<< HEAD:Assets/Scripts/Weapon/NetWeaponController.cs
+
         GameObject weaponResource = Resources.Load<GameObject>("Weapons/" + weaponType + weaponIndex);
         if (weaponResource != null)
         {
@@ -126,17 +124,17 @@ public class NetWeaponController : MonoBehaviourPun
             weapon.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
             weapon.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         }
-=======
+
         //weapon = Instantiate(mList[weaponIndex]);
        
-        weaponType = GetWeaponType(weaponIndex);
+        //weaponType = GetWeaponType(weaponIndex);
 
-        weapon = PhotonNetwork.Instantiate(mList[weaponIndex].name, this.transform.position+ weaponPosition, Quaternion.Euler(0f, 0f, 0f), 0);
+        //weapon = PhotonNetwork.Instantiate(mList[weaponIndex].name, this.transform.position+ weaponPosition, Quaternion.Euler(0f, 0f, 0f), 0);
 
         weapon.transform.parent = this.transform;
         //weapon.transform.localPosition = weaponPosition;
         //weapon.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
->>>>>>> 783a2d7fdb58da56bd560b326351937e38c10d23:Assets/Scripts/Photon/NetWeaponController.cs
+
     }
 
     public void NextWeapon()//下一个武器

@@ -29,7 +29,9 @@ public class Transfer : MonoBehaviour
 
     void Update()
     {
-        
+        Debug.Log(transferToggle.enabled);
+        //recoveryMachine = occupyMachine.GetComponent<RecoveryMachine>();
+        transferRadius = recoveryMachine.transferRadius;
         if (playerAttribute.essencePickNum <= 0)
         {
             transferToggle.isOn = false;
@@ -38,7 +40,7 @@ public class Transfer : MonoBehaviour
         }
         else
         {
-            canTransfer = CanTransfer(player.transform, recoveryMachine.transform, transferRadius) && recoveryMachine.canTransfer;
+            canTransfer = CanTransfer(player.transform, occupyMachine.transform, transferRadius) && recoveryMachine.canTransfer;
         }
         if (canTransfer)
         {

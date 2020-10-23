@@ -17,7 +17,7 @@ public class Health : MonoBehaviour
         //healthMax = 100;
         currentHealth = healthMax;
         playerAttribute = player.GetComponent<PlayerAttribute>();
-        img = GetComponentInChildren<Image>();    //获取Image组件
+        img = GetComponent<Image>();    //获取Image组件
         hpText = GetComponentInChildren<Text>();
     }
 
