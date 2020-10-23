@@ -53,12 +53,16 @@ public class PlayController : MonoBehaviour
         playerAttribute = GetComponent<PlayerAttribute>();
         enduranceMAX = playerAttribute.enduranceMax; //初始化耐力值
         endurance = enduranceMAX;
+        thisAnimator = GetComponent<Animator>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         this.Rotating(); //角色旋转-朝向鼠标
+
+        thisAnimator.SetBool("isWalking", false);
 
         if (dashCDtime <= 0 && Input.GetButtonDown("Jump") && endurance > enduranceDashConsume)
         {
@@ -97,23 +101,35 @@ public class PlayController : MonoBehaviour
     void Moving()
     {
         float speed = moveSpeed;//速度赋值默认速度
-               
+
         //跑步
-        if (controller.isGrounded && (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)))
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
-            if (endurance > enduranceCoefficient) //耐力足够时
-            {
-                speed = runSpeed;
-            }
+            thisAnimator.SetBool("isWalking", true);
+            thisAnimator.SetBool("isIdle", false);
+        }else
+        {
+            thisAnimator.SetBool("isIdle", true);
+        }
+        if ((Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) &&
+               controller.isGrounded && (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+               && (endurance > enduranceCoefficient))
+        {
+            speed = runSpeed;
             enduranceController(true);
+            thisAnimator.SetBool("isWalking", false);
+            thisAnimator.SetBool("isRunning", true);
         }
         else
         {
             enduranceController(false);
+            thisAnimator.SetBool("isRunning", false);
         }
 
 
+
         //移动
+
         moveDirection.x = Input.GetAxis("Horizontal") * speed;
         moveDirection.z = Input.GetAxis("Vertical") * speed;
         moveDirection.y -= gravity * Time.deltaTime;
@@ -150,12 +166,15 @@ public class PlayController : MonoBehaviour
         {
             isDash = false;
             dashTime = dashDuration;
+            thisAnimator.SetBool("isDashing", false);
         }
         else
         {
             dashTime -= Time.deltaTime;
             controller.Move(moveDirection * dashSpeed * Time.deltaTime * dashCoefficient);
+            thisAnimator.SetBool("isDashing", true);
         }
+
     }
 
     //获取负重系数
