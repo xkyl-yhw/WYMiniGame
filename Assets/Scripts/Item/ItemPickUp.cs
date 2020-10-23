@@ -22,7 +22,7 @@ public class ItemPickUp : MonoBehaviourPun
     private void OnTriggerEnter(Collider other)
     {
         //匹配玩家tag,不能搞isMine
-        if (other.gameObject.CompareTag("Player") )
+        if (other.gameObject.CompareTag("Player"))
         {
             Debug.Log(netJingHua.name);
             playerAttribute = other.GetComponent<NetPlayerAttribute>();
