@@ -11,21 +11,22 @@ public class Essence : MonoBehaviour
     public Text essenceText;
     public GameObject player;
     public PlayerAttribute playerAttribute;
-    public float upEssence;
+    public float essenceMax;
     public float currentEssence;
     void Start()
     {
         playerAttribute = player.GetComponent<PlayerAttribute>();
-        img = GetComponentInChildren<Image>();    //获取Image组件
+        img = GetComponent<Image>();    //获取Image组件
         essenceText = GetComponentInChildren<Text>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        essenceMax = playerAttribute.essenceMax;
         currentEssence =playerAttribute.essencePickNum;
-        img.fillAmount = currentEssence / upEssence;
-        essenceText.text = currentEssence.ToString() + "/" + upEssence.ToString();
+        img.fillAmount = currentEssence / essenceMax;
+        essenceText.text = currentEssence.ToString() + "/" + essenceMax.ToString();
 
     }
 

@@ -12,7 +12,7 @@ public class PlayerAttribute : MonoBehaviour
     public int enduranceMax;
 
     public int essencePickNum;
-
+    public int essenceMax;
     public float essenceRate;
 
 
