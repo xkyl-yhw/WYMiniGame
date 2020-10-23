@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Photon/PhotonUnityNetworking/Resources/Weapons.meta
+guid: c74c065f479c9114a8d4726e9d587a4a
+folderAsset: yes
+=======
 guid: aa6f66fc563d33c4591d606ebc3c9487
+>>>>>>> 783a2d7fdb58da56bd560b326351937e38c10d23:Assets/Scenes/NetLocalTest.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

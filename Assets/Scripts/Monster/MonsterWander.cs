@@ -75,7 +75,8 @@ public class MonsterWander: MonoBehaviour
         if (stateInfo.fullPathHash == Animator.StringToHash("Base Layer.idle") && !m_animator.IsInTransition(0))
         {
             //此时把Idle状态设为false  (此时把状态设置为false 一方面Unity 动画设置里面has exit time已经取消  另一方面为了避免和后面的动画冲突 )
-            m_animator.SetBool("IldeToWalk", true);
+            m_animator.SetBool("isWalk", true);
+            m_animator.SetBool("isIdle", false);
 
             //待机一定时间后(Timer)  之所以有这个Timer 是因为在动画播放期间 无需对下面的语句进行判断(判断也没有用) 从而起到优化的作用
             m_timer -= Time.deltaTime;
@@ -89,7 +90,8 @@ public class MonsterWander: MonoBehaviour
             //如果距离主角小于3米 把攻击动画的Bool值设为true  (激活指向Attack的通道)
             if (Vector3.Distance(m_transform.position, m_player.transform.position) < 3f)
             {
-                m_animator.SetBool("IdleToAttack",true);
+                m_animator.SetBool("isAttack",true);
+                m_animator.SetBool("isIdle",false);
             }
             //如果距离主角不小于3米
             else
@@ -99,7 +101,8 @@ public class MonsterWander: MonoBehaviour
                 //重新获取自动寻路的位置
                 m_agent.SetDestination(m_player.transform.position);
                 //激活指向Run的通道
-                m_animator.SetBool("AttackToIdle",true);
+                m_animator.SetBool("isAttack",false);
+                m_animator.SetBool("isIdle",true);
             }
         }
 
@@ -108,7 +111,7 @@ public class MonsterWander: MonoBehaviour
         if (stateInfo.fullPathHash == Animator.StringToHash("Base Layer.walk") && !m_animator.IsInTransition(0))
         {
             //关闭指向Run的通道
-            m_animator.SetBool("IdleToWalk", false);
+            m_animator.SetBool("isWalk", false);
             //计时器时间随帧减少
             m_timer -= Time.deltaTime;
             //计时器时间小于0时 重新获取自动寻路的位置  重置计时器时间为1
@@ -127,7 +130,7 @@ public class MonsterWander: MonoBehaviour
                 //清楚当前路径 当路径被清除  代理不会开始寻找新路径直到SetDestination 被调用
                 m_agent.ResetPath();
                 //激活指向Attack的通道
-                m_animator.SetBool("WalkToAttack", true);
+                m_animator.SetBool("isAttack", true);
 
             }
         }
@@ -140,13 +143,13 @@ public class MonsterWander: MonoBehaviour
             RotationTo();
 
             //关闭指向Attack的通道
-            m_animator.SetBool("WalkToAttack", false);
+            m_animator.SetBool("isAttack", false);
 
             //当播放过一次动画后  normalizedTime 实现状态的归1化(1就是整体和全部)  整数部分是时间状态的已循环数  小数部分是当前循环的百分比进程(0-1)
             if (stateInfo.normalizedTime >= 1.0f)
             {
                 //激活指向Idle的通道
-                m_animator.SetBool("AttackToIdle", true);
+                m_animator.SetBool("isIdle", true);
 
                 //计时器时间重置为2
                 m_timer = 2;
@@ -170,6 +173,7 @@ public class MonsterWander: MonoBehaviour
             //死亡动画播放一遍后 角色死亡
             if (stateInfo.normalizedTime >=2.0f)
             {
+                m_animator.SetBool("die", true);
                 //OnDeath()
             }
 

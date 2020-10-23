@@ -1,64 +1,62 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Text.RegularExpressions;
 using Photon.Pun;
 
-public class NetWeaponController : MonoBehaviourPun, IPunObservable
+public class NetWeaponController : MonoBehaviourPun
 {
-
     public GameObject weapon;
-    [SerializeField]
+    private NetWeaponObject weaponObject;
+
     private int weaponIndex;
-    [SerializeField]
-    private string weaponType; //Gun,Machete,Bomb
-    //public int gunNum = 10;
-    //public int macheteNum = 10;
-    //public int bombNum = 10;
-    [SerializeField]
+    private string weaponType;
+    //public int weaponNum = 10;
+    public int gunNum = 10;
+    public int macheteNum = 10;
+
     public float SwitchWeaponCD = 1f;
-    [SerializeField]
     public float SwitchWeaponCD2 = 0.5f;
-    [SerializeField]
     private float mSwitchWeapon;
-    [SerializeField]
     private float mSwitchWeapon2;
-    [SerializeField]
     private float AxisCounts;
-    [SerializeField]
     private bool isScroll;
-    [SerializeField]
     private bool isScrollCD;
 
-    public Vector3 weaponPosition = new Vector3(1.8f, 0f, 1.0f);
+    public Vector3 weaponPosition = new Vector3(0.7f, 0f, 0.5f);
 
-    public List<GameObject> mList = new List<GameObject>(); //武器列表
-
+    //public GameObject bulletPrefab;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (!photonView.IsMine && PhotonNetwork.IsConnected)//如果观察不是当前角色以及网络连接上
-        {
-            return;
-        }
+        weaponObject = weapon.GetComponent<NetWeaponObject>();
         mSwitchWeapon = 0;
         mSwitchWeapon2 = 0;
         AxisCounts = 0;
         isScroll = false;
         isScrollCD = false;
-
         weaponType = "Gun";
-        weaponIndex = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+<<<<<<< HEAD:Assets/Scripts/Weapon/NetWeaponController.cs
+        if (!photonView.IsMine&& PhotonNetwork.IsConnected)//如果观察不是当前角色以及网络连接上
+        {
+            return;
+        }
+        if (weaponObject.isShoot)
+        {
+            Debug.Log("射击");
+        }
+
+=======
         if (!photonView.IsMine && PhotonNetwork.IsConnected)//如果观察不是当前角色以及网络连接上
         {
             return;
         }
+>>>>>>> 783a2d7fdb58da56bd560b326351937e38c10d23:Assets/Scripts/Photon/NetWeaponController.cs
 
         float MouseScrollWheel = Input.GetAxis("Mouse ScrollWheel"); // 滚轮角度
         if (Input.GetAxis("Mouse ScrollWheel") != 0 && !isScroll && !isScrollCD)
@@ -72,7 +70,10 @@ public class NetWeaponController : MonoBehaviourPun, IPunObservable
             {
                 isScroll = false;
                 isScrollCD = true;
+<<<<<<< HEAD:Assets/Scripts/Weapon/NetWeaponController.cs
+=======
                 Destroy(weapon);
+>>>>>>> 783a2d7fdb58da56bd560b326351937e38c10d23:Assets/Scripts/Photon/NetWeaponController.cs
                 SwitchWeapon(AxisCounts);
             }
         }
@@ -85,22 +86,29 @@ public class NetWeaponController : MonoBehaviourPun, IPunObservable
                 mSwitchWeapon2 = 0;
             }
         }
-
-        //当炸弹投出去的时候切换武器
-        if (weaponType == "Bomb")
-        {
-            BombObject bombObject = weapon.GetComponent<BombObject>();
-            if (bombObject.isSwitchWeapon)
-            {
-                SwitchWeapon(1);
-            }
-        }
     }
 
+    // 提供攻击距离
+    public float GetStrikingDistance()
+    {
+        float strikingDistance;
+        strikingDistance = weaponObject.strikingDistance;
+        return strikingDistance;
+    }
+
+    // 提供武器伤害
+    public float GetDamage()
+    {
+        float weaponDamage;
+        weaponDamage = weaponObject.damage;
+        return weaponDamage;
+    }
 
     // 滚轮控制武器切换
     private void SwitchWeapon(float MouseScrollWheel)
     {
+        Destroy(weapon);
+
         AxisCounts = 0;
 
         if (MouseScrollWheel > 0)
@@ -108,6 +116,17 @@ public class NetWeaponController : MonoBehaviourPun, IPunObservable
         if (MouseScrollWheel < 0)
             PreviousWeapon();
 
+<<<<<<< HEAD:Assets/Scripts/Weapon/NetWeaponController.cs
+        GameObject weaponResource = Resources.Load<GameObject>("Weapons/" + weaponType + weaponIndex);
+        if (weaponResource != null)
+        {
+            weapon = Instantiate(weaponResource);
+            weapon.transform.parent = this.transform;
+            weapon.transform.localPosition = weaponPosition;
+            weapon.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+            weapon.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        }
+=======
         //weapon = Instantiate(mList[weaponIndex]);
        
         weaponType = GetWeaponType(weaponIndex);
@@ -117,23 +136,52 @@ public class NetWeaponController : MonoBehaviourPun, IPunObservable
         weapon.transform.parent = this.transform;
         //weapon.transform.localPosition = weaponPosition;
         //weapon.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+>>>>>>> 783a2d7fdb58da56bd560b326351937e38c10d23:Assets/Scripts/Photon/NetWeaponController.cs
     }
 
     public void NextWeapon()//下一个武器
     {
-        weaponIndex++;
-        if (weaponIndex > mList.Count - 1)
+        Debug.Log("1111");
+        if (weaponType == "Gun")
         {
-            weaponIndex = 0;
+            weaponIndex++;
+            if (weaponIndex > gunNum - 1)
+            {
+                weaponIndex = 0;
+                weaponType = "Machete";
+            }
+        }
+        else if (weaponType == "Machete")
+        {
+            weaponIndex++;
+            if (weaponIndex > macheteNum - 1)
+            {
+                weaponIndex = 0;
+                weaponType = "Gun";
+            }
         }
     }
 
     public void PreviousWeapon()//上一个武器
     {
-        weaponIndex--;
-        if (weaponIndex < 0)
+        Debug.Log("222");
+        if (weaponType == "Gun")
         {
-            weaponIndex = mList.Count - 1;
+            weaponIndex--;
+            if (weaponIndex < 0)
+            {
+                weaponIndex = macheteNum - 1;
+                weaponType = "Machete";
+            }
+        }
+        else if (weaponType == "Machete")
+        {
+            weaponIndex--;
+            if (weaponIndex < 0)
+            {
+                weaponIndex = gunNum - 1;
+                weaponType = "Gun";
+            }
         }
     }
 
@@ -150,51 +198,6 @@ public class NetWeaponController : MonoBehaviourPun, IPunObservable
         {
             mSwitchWeapon += Time.deltaTime;
             AxisCounts += MouseScrollWheel;
-        }
-    }
-
-    private string GetWeaponType(int i)
-    {
-        // 获取GameObject名称
-        string name = mList[i].name;
-        Regex re = new Regex(@"[a-zA-Z]+");
-        Match m = re.Match(name);
-        string fixtype = m.Value;
-
-        Debug.Log(fixtype);
-        return fixtype;
-    }
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            // We own this player: send the others our data
-            //stream.SendNext(weapon);
-            stream.SendNext(weaponIndex);
-            stream.SendNext(weaponType);
-            stream.SendNext(SwitchWeaponCD);
-            stream.SendNext(SwitchWeaponCD2);
-            stream.SendNext(mSwitchWeapon);
-            stream.SendNext(mSwitchWeapon2);
-            stream.SendNext(AxisCounts);
-            stream.SendNext(isScroll);
-            stream.SendNext(isScrollCD);
-        }
-        else
-        {
-            // Network player, receive data
-            //weapon=(GameObject)stream.ReceiveNext();
-            weaponIndex = (int)stream.ReceiveNext();
-            weaponType = (string)stream.ReceiveNext();
-            SwitchWeaponCD = (float)stream.ReceiveNext();
-            SwitchWeaponCD2 = (float)stream.ReceiveNext();
-            mSwitchWeapon= (float)stream.ReceiveNext();
-            mSwitchWeapon2 = (float)stream.ReceiveNext();
-            AxisCounts = (float)stream.ReceiveNext();
-            isScroll = (bool)stream.ReceiveNext();
-            isScrollCD = (bool)stream.ReceiveNext();
-
         }
     }
 }

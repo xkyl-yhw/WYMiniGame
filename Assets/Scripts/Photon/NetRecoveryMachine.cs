@@ -30,7 +30,7 @@ public class NetRecoveryMachine : MonoBehaviourPun, IPunObservable
 
     void Update()
     {
-        //player = GameObject.FindWithTag("Player").transform;
+        player = GameObject.FindWithTag("Player").transform;
         if (currentEssence >= essenceRequired)
         {
             canTransfer = false;
@@ -40,17 +40,15 @@ public class NetRecoveryMachine : MonoBehaviourPun, IPunObservable
                 canRecovery = true;
                 timer = 0;
             }
-            currentEssence = 0;
 
 
         }
-        canTransfer = true;
-       //else
-       //{
-       //    cantransfer = cantransfer(player, machine.transform, transferradius);
-       //}
+        else
+        {
+            canTransfer = CanTransfer(player, machine.transform, transferRadius);
+        }
 
-       monsters = (Monster[])GameObject.FindObjectsOfType(typeof(Monster));
+        monsters = (Monster[])GameObject.FindObjectsOfType(typeof(Monster));
 
         for (int i = 0; i < monsters.Length; i++)
         {
@@ -69,6 +67,16 @@ public class NetRecoveryMachine : MonoBehaviourPun, IPunObservable
     }
 
 
+    //判断玩家能够进行传输的范围
+    public bool CanTransfer(Transform player, Transform machine, float radius)
+    {
+        float distance = Vector3.Distance(player.position, machine.position);
+        if (distance <= radius)
+        {
+            return true;
+        }
+        return false;
+    }
     public bool InRecoverySphere(Transform monster, Transform machine, float radius)
     {
         float distance = Vector3.Distance(monster.position, machine.position);
@@ -92,7 +100,6 @@ public class NetRecoveryMachine : MonoBehaviourPun, IPunObservable
         {
             stream.SendNext(essenceRequired);
             stream.SendNext(currentEssence);
-            stream.SendNext(transferRadius);
             stream.SendNext(canTransfer);
             stream.SendNext(canRecovery);
             stream.SendNext(timer);
@@ -101,7 +108,6 @@ public class NetRecoveryMachine : MonoBehaviourPun, IPunObservable
         {
             essenceRequired = (int)stream.ReceiveNext();
             currentEssence = (int)stream.ReceiveNext();
-            transferRadius = (float)stream.ReceiveNext();
             canTransfer = (bool)stream.ReceiveNext();
             canRecovery = (bool)stream.ReceiveNext();
             timer = (float)stream.ReceiveNext();
