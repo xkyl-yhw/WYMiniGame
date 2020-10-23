@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Text.RegularExpressions;
 
+
 public class WeaponController : MonoBehaviour
 {
     public GameObject weapon;
@@ -42,12 +43,6 @@ public class WeaponController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (weaponObject.isShoot)
-        //{
-        //    Debug.Log("射击");
-        //}
-
-
         float MouseScrollWheel = Input.GetAxis("Mouse ScrollWheel"); // 滚轮角度
         if (Input.GetAxis("Mouse ScrollWheel") != 0 && !isScroll && !isScrollCD)
         {

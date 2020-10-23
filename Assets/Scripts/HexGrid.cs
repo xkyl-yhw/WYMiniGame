@@ -24,6 +24,10 @@ public class HexGrid : MonoBehaviour
 
     private string ScenesName;
 
+    public GameObject grassCellPrefebs;
+    public List<GameObject> grassCellList = new List<GameObject>();
+    public Transform grassCellTran;
+
     private void Awake()
     {
         ScenesName = SceneManager.GetActiveScene().name;
@@ -131,6 +135,11 @@ public class HexGrid : MonoBehaviour
         if (cell.Color != defaultColor && cell.Color == color) return;
         cell.Color = color;
         //hexMesh.Triangulate(cells);
+        if (color != defaultColor || cell.Color != color)
+        {
+            GameObject go = GameObject.Instantiate(grassCellPrefebs, pos, Quaternion.identity, grassCellTran);
+            grassCellList.Add(go);
+        }
     }
 
     void CreateCell(int x, int z, int i, Color color, int elevation)
