@@ -55,6 +55,10 @@ public class NetWeaponController : MonoBehaviourPun, IPunObservable
     // Update is called once per frame
     void Update()
     {
+        if (!photonView.IsMine && PhotonNetwork.IsConnected)//如果观察不是当前角色以及网络连接上
+        {
+            return;
+        }
 
         float MouseScrollWheel = Input.GetAxis("Mouse ScrollWheel"); // 滚轮角度
         if (Input.GetAxis("Mouse ScrollWheel") != 0 && !isScroll && !isScrollCD)
@@ -68,7 +72,7 @@ public class NetWeaponController : MonoBehaviourPun, IPunObservable
             {
                 isScroll = false;
                 isScrollCD = true;
-                PhotonNetwork.Destroy(weapon);
+                Destroy(weapon);
                 SwitchWeapon(AxisCounts);
             }
         }
@@ -110,7 +114,7 @@ public class NetWeaponController : MonoBehaviourPun, IPunObservable
 
         weapon = PhotonNetwork.Instantiate(mList[weaponIndex].name, this.transform.position+ weaponPosition, Quaternion.Euler(0f, 0f, 0f), 0);
 
-        //weapon.transform.parent = this.transform;
+        weapon.transform.parent = this.transform;
         //weapon.transform.localPosition = weaponPosition;
         //weapon.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
     }
