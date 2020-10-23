@@ -18,7 +18,7 @@ public class RecoveryMachine : MonoBehaviour
     public Monster[] monsters;//被杀死的怪物
     void Start()
     {
-
+        machine = gameObject;
 
     }
 
@@ -33,13 +33,9 @@ public class RecoveryMachine : MonoBehaviour
                 canRecovery = true;
                 timer = 0;
             }
-
-
+            currentEssence = 0;
         }
-        else
-        {
-            canTransfer = CanTransfer(player, machine.transform, transferRadius);
-        }
+        canTransfer = true;
 
         monsters = (Monster[])GameObject.FindObjectsOfType(typeof(Monster));
 
@@ -60,16 +56,16 @@ public class RecoveryMachine : MonoBehaviour
     }
 
 
-    //判断玩家能够进行传输的范围
-    public bool CanTransfer(Transform player, Transform machine, float radius)
-    {
-        float distance = Vector3.Distance(player.position, machine.position);
-        if (distance <= radius)
-        {
-            return true;
-        }
-        return false;
-    }
+    ////判断玩家能够进行传输的范围
+    //public bool CanTransfer(Transform player, Transform machine, float radius)
+    //{
+    //    float distance = Vector3.Distance(player.position, machine.position);
+    //    if (distance <= radius)
+    //    {
+    //        return true;
+    //    }
+    //    return false;
+    //}
     public bool InRecoverySphere(Transform monster, Transform machine, float radius)
     {
         float distance = Vector3.Distance(monster.position, machine.position);

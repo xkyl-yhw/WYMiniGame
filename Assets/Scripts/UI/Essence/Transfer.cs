@@ -8,9 +8,11 @@ public class Transfer : MonoBehaviour
 {
     public Transform player;
     public PlayerAttribute playerAttribute;
-    public RecoveryMachine machine;//己方复苏机器
+    public GameObject occupyMachine;//己方复苏机器
+    public RecoveryMachine recoveryMachine;
     public float timer;
     public bool canTransfer;
+    public float transferRadius; //传输需要范围
     public int essenceTransferNum; //每秒传输的精华量
     public Toggle transferToggle;
 
@@ -18,13 +20,16 @@ public class Transfer : MonoBehaviour
     void Start()
     {
         transferToggle.enabled = false;
-        canTransfer = machine.canTransfer;
+        canTransfer = false;
+        recoveryMachine = occupyMachine.GetComponent<RecoveryMachine>();
+
+        transferRadius = recoveryMachine.transferRadius;
         transferToggle.onValueChanged.AddListener(TouchButton);
     }
 
     void Update()
     {
-      
+        
         if (playerAttribute.essencePickNum <= 0)
         {
             transferToggle.isOn = false;
@@ -33,7 +38,7 @@ public class Transfer : MonoBehaviour
         }
         else
         {
-            canTransfer = machine.canTransfer;
+            canTransfer = CanTransfer(player.transform, recoveryMachine.transform, transferRadius) && recoveryMachine.canTransfer;
         }
         if (canTransfer)
         {
@@ -48,6 +53,15 @@ public class Transfer : MonoBehaviour
         TouchTransferButton(transferToggle.isOn);
 
     }
+    public bool CanTransfer(Transform player, Transform machine, float radius)
+    {
+        float distance = Vector3.Distance(player.position, machine.position);
+        if (distance <= radius)
+        {
+            return true;
+        }
+        return false;
+    }
 
     public void TouchTransferButton(bool isOn)
     {
@@ -57,15 +71,15 @@ public class Transfer : MonoBehaviour
             if (timer >= 1)
             {
                 
-                if(machine.essenceRequired- machine.currentEssence>=essenceTransferNum)
+                if(recoveryMachine.essenceRequired- recoveryMachine.currentEssence>=essenceTransferNum)
                 {
                     playerAttribute.essencePickNum -= essenceTransferNum;
-                    machine.currentEssence += essenceTransferNum;
+                    recoveryMachine.currentEssence += essenceTransferNum;
                 }
                 else
                 {
-                    playerAttribute.essencePickNum -= machine.essenceRequired - machine.currentEssence;
-                    machine.currentEssence += machine.essenceRequired - machine.currentEssence;
+                    playerAttribute.essencePickNum -= recoveryMachine.essenceRequired - recoveryMachine.currentEssence;
+                    recoveryMachine.currentEssence += recoveryMachine.essenceRequired - recoveryMachine.currentEssence;
                 }
                 //精华为0时或者复苏机器精华量已满，传输按钮失效
                 timer = 0;

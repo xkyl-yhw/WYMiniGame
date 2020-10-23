@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.SceneManagement;
-//using UnityEngine.UI;
 
 public class HexGrid : MonoBehaviour
 {
@@ -25,8 +24,9 @@ public class HexGrid : MonoBehaviour
     private string ScenesName;
 
     public GameObject grassCellPrefebs;
-    public List<GameObject> grassCellList = new List<GameObject>();
     public Transform grassCellTran;
+
+    public Dictionary<int, GameObject> grassCastDict = new Dictionary<int, GameObject>();
 
     private void Awake()
     {
@@ -80,16 +80,7 @@ public class HexGrid : MonoBehaviour
         }
         return tempCell;
     }
-
-    /*
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            HandleInput();
-        }
-    }
-    */
+    
 
     void CreateChunks()
     {
@@ -132,14 +123,22 @@ public class HexGrid : MonoBehaviour
         HexCoordinates coordinates = HexCoordinates.FromPos(pos);
         int index = coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
         HexCell cell = cells[index];
+        Debug.Log(1);
         if (cell.Color != defaultColor && cell.Color == color) return;
         cell.Color = color;
         //hexMesh.Triangulate(cells);
-        if (color != defaultColor || cell.Color != color)
+        if (color != defaultColor)
         {
-            GameObject go = GameObject.Instantiate(grassCellPrefebs, pos, Quaternion.identity, grassCellTran);
-            grassCellList.Add(go);
+            if (cell.Color != color) grassCastDict.Remove(index);
+            if (cell.Color == color) return;
+            CreateGrass(index, pos);
         }
+    }
+
+    public void CreateGrass(int index, Vector3 pos)
+    {
+        GameObject go = GameObject.Instantiate(grassCellPrefebs, pos, Quaternion.identity, grassCellTran);
+        grassCastDict.Add(index, go);
     }
 
     void CreateCell(int x, int z, int i, Color color, int elevation)

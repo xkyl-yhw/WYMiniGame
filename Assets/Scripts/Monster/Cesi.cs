@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cesi : Monster
+public class Cesi : NetMonster
 {
     public float speed;
     public float startWaitTime;

@@ -9,7 +9,7 @@ public abstract class Monster : MonoBehaviour
     public bool inRecoverySphere;
     private PlayerHealth playerHealth;
     public GameObject objectMachine;//所属复苏机器体
-    public RecoveryMachine attachedMachine;//所属复苏机器
+    public NetRecoveryMachine attachedMachine;//所属复苏机器
 
     public GameObject dropSingleEssence;  //掉落精华
 
@@ -47,7 +47,7 @@ public abstract class Monster : MonoBehaviour
             m_animator.SetTrigger("die");
             //Destroy(gameObject);
         }
-        attachedMachine = objectMachine.GetComponent<RecoveryMachine>();
+        attachedMachine = objectMachine.GetComponent<NetRecoveryMachine>();
         if (attachedMachine.canRecovery)
         {
             health = 0;
