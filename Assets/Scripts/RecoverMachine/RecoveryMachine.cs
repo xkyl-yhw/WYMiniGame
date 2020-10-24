@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RecoveryMachine : MonoBehaviour
 {
+    public OccupationPos occupationPos;//对应出生点
     public int essenceRequired; //复苏需要的量
     public int currentEssence; //现在的量
     public float transferRadius; //传输需要范围

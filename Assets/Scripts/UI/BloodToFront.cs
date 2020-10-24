@@ -9,6 +9,7 @@ public class BloodToFront : MonoBehaviour
     public Image img;
     public float currentHealth;
     public float healthMax;
+    public Camera cam;
     void Start()
     {
         currentHealth = healthMax;
@@ -19,7 +20,7 @@ public class BloodToFront : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.rotation = Camera.main.transform.rotation;
+        transform.rotation =cam.transform.rotation;
         currentHealth = playerAttribute.health;
         img.fillAmount = currentHealth / healthMax;
     }
