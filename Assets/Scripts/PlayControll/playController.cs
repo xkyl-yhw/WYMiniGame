@@ -43,6 +43,8 @@ public class PlayController : MonoBehaviour
     private int groundLayerIndex; //地面层
 
     // Start is called before the first frame update
+
+    public Camera player_Camera;
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -54,7 +56,6 @@ public class PlayController : MonoBehaviour
         enduranceMAX = playerAttribute.enduranceMax; //初始化耐力值
         endurance = enduranceMAX;
         thisAnimator = GetComponent<Animator>();
-        
     }
 
     // Update is called once per frame
@@ -140,7 +141,7 @@ public class PlayController : MonoBehaviour
     //旋转
     void Rotating()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = player_Camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;//存储射线信息
         if (Physics.Raycast(ray, out hitInfo, 200, groundLayerIndex))//生成射线
         {
