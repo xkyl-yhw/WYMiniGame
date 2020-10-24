@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour
     public float LockDistanceX = 0f; //相机锁定时距离物体的位置
     private float RectSize = 50f; //矩形大小  
     public float CameraMoveSpeed = 1f; //相机移动速度  
-    private Transform Player; //player的Transform  
+    public Transform Player; //player的Transform  
     private float CamerafieldOfView = 60; //相机的锥形视野范围  
     private Camera camera; //相机  
     private float a= 0.05f ;//倍数
@@ -34,7 +34,7 @@ public class CameraController : MonoBehaviour
 
 
         //在场景内查找Tag为Player的物体  
-        Player = GameObject.FindGameObjectWithTag("Player").transform;  
+        //Player = GameObject.FindGameObjectWithTag("Player").transform;  
            
           
         camera = this.GetComponent<Camera>();
