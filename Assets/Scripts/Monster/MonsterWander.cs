@@ -1,215 +1,378 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
-public class MonsterWander: MonoBehaviour
+public class MonsterWander : MonoBehaviour
 {
 
-    //定义敌人的Transform
-    Transform m_transform;
-    //CharacterController m_ch;
+    private GameObject playerUnit;          //获取玩家单位
+    private Animator thisAnimator;          //自身动画组件
+    private Vector3 initialPosition;            //初始位置
 
-    //定义动画组件
-    public Animator m_animator;
+    private float wanderRadius;          //游走半径，移动状态下，如果超出游走半径会返回出生位置
+    public float alertRadius;         //警戒半径，玩家进入后怪物会发出警告，并一直面朝玩家
+    public float defendRadius;          //自卫半径，玩家进入后怪物会追击玩家，当距离<攻击距离则会发动攻击（或者触发战斗）
+    public float chaseRadius;            //追击半径，当怪物超出追击半径后会放弃追击，返回追击起始位置
 
-    //定义寻路组件
-    NavMeshAgent m_agent;
+    public float attackRange;            //攻击距离
+    public float walkSpeed;          //移动速度
+    public float runSpeed;          //跑动速度
+    public float turnSpeed;         //转身速度，建议0.1
+    
+    private RecoveryMachine attachedMachine;//所属复苏机器
+    private enum MonsterState
+    {
+        STAND,      //原地呼吸
+        CHECK,       //原地观察
+        WALK,       //移动
+        WARN,       //盯着玩家
+        CHASE,      //追击玩家
+        RETURN,     //超出追击范围后返回
+        ATTACK
+    }
+    private MonsterState currentState = MonsterState.STAND;          //默认状态为原地呼吸
 
-    //定义一个主角类的对象
-    public PlayController m_player;
+    public float[] actionWeight = { 3000, 3000, 4000 };         //设置待机时各种动作的权重，顺序依次为呼吸、观察、移动
+    public float actRestTme;            //更换待机指令的间隔时间
+    private float lastActTime;          //最近一次指令时间
 
-    PlayerAttribute playerAttribute;
-    //角色移动速度
-    float m_moveSpeed = 0.5f;
-    //角色旋转速度
-    float m_rotSpeed = 120;
-    //定义生命值
-    int m_life = 15;
+    private float diatanceToPlayer;         //怪物与玩家的距离
+    private float diatanceToInitial;         //怪物与初始位置的距离
+    private Quaternion targetRotation;         //怪物的目标朝向
 
-    //定义计时器
-    float m_timer = 2;
-    //定义生成点
-    //protected EnemySpawn m_spawn;
+    private bool is_Warned = false;
+    private bool is_Running = false;
 
 
-    // Use this for initialization
+    private float lastAttackTime;          //最近一次攻击时间
+    private string lastTrigger;
+
+    //在setTrigger前重置上个trigger
+    void SetTrigger(string trigger)
+    {
+        if (!string.IsNullOrEmpty(lastTrigger))
+            thisAnimator.ResetTrigger(lastTrigger);
+
+        thisAnimator.SetTrigger(trigger);
+        lastTrigger = trigger;
+    }
+
     void Start()
     {
-        //初始化m_transform 为物体本身的tranform
-        m_transform = this.transform;
+        getPlayer();
+        thisAnimator = GetComponent<Animator>();
+        //保存初始位置信息
+        initialPosition = gameObject.GetComponent<Transform>().position;
 
-        //初始化动画m_ani 为物体的动画组件
-        m_animator = this.GetComponent<Animator>();
+        //检查并修正怪物设置
+        //1. 自卫半径不大于警戒半径，否则就无法触发警戒状态，直接开始追击了
+        defendRadius = Mathf.Min(alertRadius, defendRadius);
+        //2. 攻击距离不大于自卫半径，否则就无法触发追击状态，直接开始战斗了
+        attackRange = Mathf.Min(defendRadius, attackRange);
+        //3. 游走半径不大于追击半径，否则怪物可能刚刚开始追击就返回出生点
+        wanderRadius = Mathf.Min(chaseRadius, wanderRadius);
 
-        //初始化寻路组件m_agent 为物体的寻路组件
-        m_agent = GetComponent<NavMeshAgent>();
+        //随机一个待机动作
+        RandomAction();
 
-        //初始化主角
-        m_player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayController>();
-        playerAttribute= GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerAttribute>();
-
-
+        AnimationEvent aniEvt = new AnimationEvent();
+        aniEvt.functionName = "AttackOver";
+        aniEvt.time = 1f;
+        foreach(AnimationClip clip in thisAnimator.runtimeAnimatorController.animationClips)
+        {
+            Debug.Log(clip);
+            if(clip.name=="Attack")
+            {
+                Debug.Log("Attack长度"+clip.length);
+                clip.AddEvent(aniEvt);
+            }
+        }
+        attachedMachine = GetComponent<Monster>().attachedMachine;
+        wanderRadius = attachedMachine.recoveryRadius;
     }
 
-    // Update is called once per frame
+    void AttackOver()
+    {
+        Debug.Log("怪物造成了伤害");
+        this.GetComponent<Monster>().hitPlayer(playerUnit);
+        //造成伤害的代码
+    }
+
+    /// <summary>
+    /// 根据权重随机待机指令
+    /// </summary>
+    void RandomAction()
+    {
+        //更新行动时间
+        lastActTime = Time.time;
+        //根据权重随机
+        float number = Random.Range(0, actionWeight[0] + actionWeight[1] + actionWeight[2]);
+        if (number <= actionWeight[0])
+        {
+            currentState = MonsterState.STAND;
+            SetTrigger("Stand");
+        }
+        else if (actionWeight[0] < number && number <= actionWeight[0] + actionWeight[1])
+        {
+            currentState = MonsterState.CHECK;
+            SetTrigger("Check");
+        }
+        else if (actionWeight[0] + actionWeight[1] < number && number <= actionWeight[0] + actionWeight[1] + actionWeight[2])
+        {
+            currentState = MonsterState.WALK;
+            //随机一个朝向
+            targetRotation = Quaternion.Euler(0, Random.Range(1, 5) * 90, 0);
+            SetTrigger("Walk");
+        }
+    }
+
     void Update()
     {
-        ////设置敌人的寻路目标
-        //m_agent.SetDestination(m_player.m_transform.position);
-
-        ////调用寻路函数实现寻路移动
-        //MoveTo();
-
-        //敌人动画的播放与转换
-        //如果玩家的生命值小于等于0时,什么都不做 (主角死后 敌人无需再有动作)
-        if (playerAttribute.health <= 0)
+        getPlayer();
+        //Debug.Log(currentState.ToString());
+        switch (currentState)
         {
-            return;
+
+            //待机状态，等待actRestTme后重新随机指令
+            case MonsterState.STAND:
+                if (Time.time - lastActTime > actRestTme)
+                {
+                    RandomAction();         //随机切换指令
+                }
+                //该状态下的检测指令
+                EnemyDistanceCheck();
+                break;
+
+            //待机状态，由于观察动画时间较长，并希望动画完整播放，故等待时间是根据一个完整动画的播放长度，而不是指令间隔时间
+            case MonsterState.CHECK:
+                if (Time.time - lastActTime > thisAnimator.GetCurrentAnimatorStateInfo(0).length)
+                {
+                    RandomAction();         //随机切换指令
+                }
+                //该状态下的检测指令
+                EnemyDistanceCheck();
+                break;
+
+            //游走，根据状态随机时生成的目标位置修改朝向，并向前移动
+            case MonsterState.WALK:
+                transform.Translate(Vector3.forward * Time.deltaTime * walkSpeed);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
+
+                if (Time.time - lastActTime > actRestTme)
+                {
+                    RandomAction();         //随机切换指令
+                }
+                //该状态下的检测指令
+                WanderRadiusCheck();
+                break;
+
+            //警戒状态，播放一次警告动画和声音，并持续朝向玩家位置
+            case MonsterState.WARN:
+                if (!is_Warned)
+                {
+                    SetTrigger("Warn");
+                    //gameObject.GetComponent<AudioSource>().Play();
+                    is_Warned = true;
+                }
+                //持续朝向玩家位置
+                targetRotation = Quaternion.LookRotation(playerUnit.transform.position - transform.position, Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
+                //该状态下的检测指令
+                WarningCheck();
+                break;
+
+            //追击状态，朝着玩家跑去
+            case MonsterState.CHASE:
+                if (!is_Running)
+                {
+                    SetTrigger("Run");
+                    is_Running = true;
+                }
+                transform.Translate(Vector3.forward * Time.deltaTime * runSpeed);
+                //朝向玩家位置
+                targetRotation = Quaternion.LookRotation(playerUnit.transform.position - transform.position, Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
+                //该状态下的检测指令
+                ChaseRadiusCheck();
+                break;
+
+            //返回状态，超出追击范围后返回出生位置
+            case MonsterState.RETURN:
+                //朝向初始位置移动
+                targetRotation = Quaternion.LookRotation(initialPosition - transform.position, Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
+                transform.Translate(Vector3.forward * Time.deltaTime * runSpeed);
+                //该状态下的检测指令
+                ReturnCheck();
+                break;
+
+            //怪物攻击状态
+            case MonsterState.ATTACK:
+                AttackCheck();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 原地呼吸、观察状态的检测
+    /// </summary>
+    void EnemyDistanceCheck()
+    {
+        diatanceToPlayer = Vector3.Distance(playerUnit.transform.position, transform.position);
+        if (diatanceToPlayer < attackRange)
+        {
+            //SceneManager.LoadScene("Battle");
+            SetTrigger("Attack");
+            lastAttackTime = Time.time;
+            currentState = MonsterState.ATTACK;
+        }
+        else if (diatanceToPlayer < defendRadius)
+        {
+            currentState = MonsterState.CHASE;
+        }
+        else if (diatanceToPlayer < alertRadius)
+        {
+            currentState = MonsterState.WARN;
+        }
+    }
+
+    /// <summary>
+    /// 警告状态下的检测，用于启动追击及取消警戒状态
+    /// </summary>
+    void WarningCheck()
+    {
+        diatanceToPlayer = Vector3.Distance(playerUnit.transform.position, transform.position);
+        if (diatanceToPlayer < defendRadius)
+        {
+            is_Warned = false;
+            currentState = MonsterState.CHASE;
         }
 
-        //获取当前动画状态(Idle Run Attack Death 中的一种)
-        AnimatorStateInfo stateInfo = m_animator.GetCurrentAnimatorStateInfo(0);
-
-        //Idle   如果角色在等待状态条 并且 没有处于转换状态  (0代表的是Base Layer)
-        if (stateInfo.fullPathHash == Animator.StringToHash("Base Layer.idle") && !m_animator.IsInTransition(0))
+        if (diatanceToPlayer > alertRadius)
         {
-            //此时把Idle状态设为false  (此时把状态设置为false 一方面Unity 动画设置里面has exit time已经取消  另一方面为了避免和后面的动画冲突 )
-            m_animator.SetBool("isWalk", true);
-            m_animator.SetBool("isIdle", false);
+            is_Warned = false;
+            RandomAction();
+        }
+    }
 
-            //待机一定时间后(Timer)  之所以有这个Timer 是因为在动画播放期间 无需对下面的语句进行判断(判断也没有用) 从而起到优化的作用
-            m_timer -= Time.deltaTime;
+    /// <summary>
+    /// 游走状态检测，检测敌人距离及游走是否越界
+    /// </summary>
+    void WanderRadiusCheck()
+    {
+        diatanceToPlayer = Vector3.Distance(playerUnit.transform.position, transform.position);
+        diatanceToInitial = Vector3.Distance(playerUnit.transform.position, attachedMachine.transform.position);
 
-            //如果计时器Timer大于0  返回 (什么也不干,作用是优化 优化 优化)
-            if (m_timer > 0)
+        if (diatanceToPlayer < attackRange)
+        {
+            //SceneManager.LoadScene("Battle");
+            SetTrigger("Attack");
+            lastAttackTime = Time.time;
+            currentState = MonsterState.ATTACK;
+        }
+        else if (diatanceToPlayer < defendRadius)
+        {
+            currentState = MonsterState.CHASE;
+        }
+        else if (diatanceToPlayer < alertRadius)
+        {
+            currentState = MonsterState.WARN;
+        }
+
+        if (diatanceToInitial > wanderRadius)
+        {
+            //朝向调整为初始方向
+            targetRotation = Quaternion.LookRotation(initialPosition - transform.position, Vector3.up);
+        }
+    }
+
+    /// <summary>
+    /// 追击状态检测，检测敌人是否进入攻击范围以及是否离开警戒范围
+    /// </summary>
+    void ChaseRadiusCheck()
+    {
+        diatanceToPlayer = Vector3.Distance(playerUnit.transform.position, transform.position);
+        diatanceToInitial = Vector3.Distance(transform.position, initialPosition);
+
+        if (diatanceToPlayer < attackRange)
+        {
+            //SceneManager.LoadScene("Battle");
+            SetTrigger("Attack");
+            lastAttackTime = Time.time;
+            currentState = MonsterState.ATTACK;
+        }
+        //如果超出追击范围或者敌人的距离超出警戒距离就返回
+        if (diatanceToInitial > chaseRadius || diatanceToPlayer > alertRadius)
+        {
+            currentState = MonsterState.RETURN;
+        }
+    }
+
+    /// <summary>
+    /// 超出追击半径，返回状态的检测，不再检测敌人距离
+    /// </summary>
+    void ReturnCheck()
+    {
+        diatanceToInitial = Vector3.Distance(transform.position, initialPosition);
+        //如果已经接近初始位置，则随机一个待机状态
+        if (diatanceToInitial < 0.5f)
+        {
+            is_Running = false;
+            RandomAction();
+        }
+    }
+
+    void AttackCheck()
+    {
+        lastAttackTime = Time.time;
+        diatanceToPlayer = Vector3.Distance(playerUnit.transform.position, transform.position);
+        diatanceToInitial = Vector3.Distance(playerUnit.transform.position,initialPosition);
+        Debug.Log("attack" + diatanceToPlayer);
+        if (diatanceToPlayer < attackRange)
+        {
+            //SceneManager.LoadScene("Battle");
+            SetTrigger("Attack");
+            currentState = MonsterState.ATTACK;
+        }
+        //如果超出追击范围或者敌人的距离超出警戒距离就返回
+        else if (diatanceToInitial > chaseRadius || diatanceToPlayer > alertRadius)
+        {
+            SetTrigger("Run");
+            currentState = MonsterState.RETURN;
+        }
+        else
+        {
+            SetTrigger("Run");
+            currentState = MonsterState.CHASE;
+        }
+    }
+
+    void getPlayer()
+    {
+        GameObject[] playerArray;
+        Vector3 playerPosition = new Vector3(0, 0, 0);
+        float nearest = 0;
+
+        playerArray = GameObject.FindGameObjectsWithTag("Player");
+
+        for (int i = 0; i < playerArray.Length; i++)
+        {
+            float dis = (transform.position - playerArray[i].transform.position).sqrMagnitude;
+            if (i == 0)
             {
-                return;
+                nearest = dis;
+                playerUnit = playerArray[i];
             }
-
-            //如果距离主角小于3米 把攻击动画的Bool值设为true  (激活指向Attack的通道)
-            if (Vector3.Distance(m_transform.position, m_player.transform.position) < 3f)
-            {
-                m_animator.SetBool("isAttack",true);
-                m_animator.SetBool("isIdle",false);
-            }
-            //如果距离主角不小于3米
             else
             {
-                //那么把计时器重置为1
-                m_timer = 1;
-                //重新获取自动寻路的位置
-                m_agent.SetDestination(m_player.transform.position);
-                //激活指向Run的通道
-                m_animator.SetBool("isAttack",false);
-                m_animator.SetBool("isIdle",true);
+                if (nearest > dis)
+                {
+                    nearest = dis;
+                    playerUnit = playerArray[i];
+                }
             }
         }
-
-
-        //walk   如果角色指向奔跑状态条  并且  没有处于转换状态  (0代表的是Base Layer)
-        if (stateInfo.fullPathHash == Animator.StringToHash("Base Layer.walk") && !m_animator.IsInTransition(0))
-        {
-            //关闭指向Run的通道
-            m_animator.SetBool("isWalk", false);
-            //计时器时间随帧减少
-            m_timer -= Time.deltaTime;
-            //计时器时间小于0时 重新获取自动寻路的位置  重置计时器时间为1
-            if (m_timer < 0)
-            {
-                m_agent.SetDestination(m_player.transform.position);
-                m_timer = 1;
-            }
-
-            //调用跟随函数
-            MoveTo();
-
-            //当角色与主角的距离小于等于5米时
-            if (Vector3.Distance(m_transform.position, m_player.transform.position) <= 3f)
-            {
-                //清楚当前路径 当路径被清除  代理不会开始寻找新路径直到SetDestination 被调用
-                m_agent.ResetPath();
-                //激活指向Attack的通道
-                m_animator.SetBool("isAttack", true);
-
-            }
-        }
-
-
-        //Attack 如果角色指向攻击状态条  并且  没有处于转换状态   (0代表的是Base Layer)
-        if (stateInfo.fullPathHash == Animator.StringToHash("Base Layer.attack") && !m_animator.IsInTransition(0))
-        {
-            //调用转向函数
-            RotationTo();
-
-            //关闭指向Attack的通道
-            m_animator.SetBool("isAttack", false);
-
-            //当播放过一次动画后  normalizedTime 实现状态的归1化(1就是整体和全部)  整数部分是时间状态的已循环数  小数部分是当前循环的百分比进程(0-1)
-            if (stateInfo.normalizedTime >= 1.0f)
-            {
-                //激活指向Idle的通道
-                m_animator.SetBool("isIdle", true);
-
-                //计时器时间重置为2
-                m_timer = 2;
-
-
-                //m_player.OnDamage(1);
-
-            }
-        }
-
-
-        //Death  如果角色指向死亡状态条  并且  没有处于转换状态   (0代表的是Base Layer)
-        if (stateInfo.fullPathHash == Animator.StringToHash("Base Layer.Death") && !m_animator.IsInTransition(0))
-        {
-            //摧毁这个物体的碰撞体
-            Destroy(this.GetComponent<Collider>());
-
-            //自动寻路时间被归零  角色不再自动移动
-            m_agent.speed = 0;
-
-            //死亡动画播放一遍后 角色死亡
-            if (stateInfo.normalizedTime >=2.0f)
-            {
-                m_animator.SetBool("die", true);
-                //OnDeath()
-            }
-
-
-        }
-    }
-
-
-    //敌人的自动寻路函数
-    void MoveTo()
-    {
-        //定义敌人的移动量
-        float speed = m_moveSpeed * Time.deltaTime;
-
-        //通过寻路组件的Move()方法实现寻路移动
-        m_agent.Move(m_transform.TransformDirection(new Vector3(0, 0, speed)));
-    }
-
-
-    //敌人转向目标点函数
-    void RotationTo()
-    {
-        //定义当前角度
-        Vector3 oldAngle = m_transform.eulerAngles;
-        //获得面向主角的角度
-        m_transform.LookAt(m_player.transform);
-
-        //定义目标的方向  Y轴方向  也就是敌人左右转动面向玩家
-        float target = m_transform.eulerAngles.y;
-        //转向目标的速度 等于时间乘以旋转角度
-        float speed = m_rotSpeed * Time.deltaTime;
-        //通过MoveTowardsAngle() 函数获得转的角度
-        float angle = Mathf.MoveTowardsAngle(oldAngle.y, target, speed);
-
-        //实现转向
-        m_transform.eulerAngles = new Vector3(0, angle, 0);
     }
 
 }

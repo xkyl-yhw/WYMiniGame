@@ -51,7 +51,7 @@ public class Transfer : MonoBehaviour
             transferToggle.isOn = false;
             transferToggle.enabled = false;
         }
-
+        transferToggle.targetGraphic.color = new Color(255, 255, 255, 255);
         TouchTransferButton(transferToggle.isOn);
 
     }
@@ -69,6 +69,7 @@ public class Transfer : MonoBehaviour
     {
         if(isOn)
         {
+            transferToggle.targetGraphic.color= new Color(255, 255, 255, 0);
             timer += Time.deltaTime;
             if (timer >= 1)
             {

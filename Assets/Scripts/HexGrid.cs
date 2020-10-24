@@ -60,7 +60,7 @@ public class HexGrid : MonoBehaviour
         StreamWriter sw = new StreamWriter(Application.dataPath + "/" + ScenesName + ".txt");
         sw.Write(jsonStr);
         sw.Close();
-        Debug.Log(1);
+        //Debug.Log(1);
     }
 
     HexCellMsgArray CreateCellMsg()
@@ -123,7 +123,7 @@ public class HexGrid : MonoBehaviour
         HexCoordinates coordinates = HexCoordinates.FromPos(pos);
         int index = coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
         HexCell cell = cells[index];
-        Debug.Log(1);
+        //Debug.Log(1);
         if (cell.Color != defaultColor && cell.Color == color) return;
         cell.Color = color;
         //hexMesh.Triangulate(cells);

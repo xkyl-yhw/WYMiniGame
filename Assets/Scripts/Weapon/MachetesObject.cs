@@ -16,25 +16,30 @@ public class MachetesObject : MonoBehaviour
 
     public bool isDamage = false;
 
+    private float lastAttackTime;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        anim = this.transform.GetComponentInParent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (canShoot && !isDamage && Input.GetKeyDown(KeyCode.Mouse0))
+        if (!isDamage && Input.GetKeyDown(KeyCode.Mouse0))
         {
-            isDamage = true;
-            canShoot = false; // 当动画结束的时候设置这个值为true
+            if (Time.time - lastAttackTime > anim.GetCurrentAnimatorStateInfo(0).length)
+            {
+                Using();
+                isDamage = true;
+            }
         }
     }
 
     public void Using()
     {
-        //共计动画
-        anim.SetTrigger("Attack");
+        lastAttackTime = Time.time;
+        anim.SetTrigger("MachetesAttack");
     }
 }
