@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 [RequireComponent(typeof(CharacterController))]
 
-public class PlayController : MonoBehaviour
+public class PlayController : NetworkBehaviour
 {
     private float time = 0;
 
@@ -61,6 +62,7 @@ public class PlayController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isLocalPlayer) return;
         this.Rotating(); //角色旋转-朝向鼠标
 
         thisAnimator.SetBool("isWalking", false);
