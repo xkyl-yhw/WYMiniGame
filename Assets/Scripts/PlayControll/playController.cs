@@ -8,7 +8,8 @@ using Mirror;
 public class PlayController : NetworkBehaviour
 {
     private float time = 0;
-
+    public bool isOpen;//是否点开大地图
+    public Canvas bigMap;
     private Animator thisAnimator;
 
     public float moveSpeed = 0;
@@ -62,6 +63,7 @@ public class PlayController : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        OpenBigMap();
         if (!isLocalPlayer) return;
         this.Rotating(); //角色旋转-朝向鼠标
 
@@ -206,4 +208,13 @@ public class PlayController : NetworkBehaviour
         playerAttribute.endurance = endurance;
     }
 
+    public void OpenBigMap()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            //一直开关背包
+            isOpen = !isOpen;
+           bigMap.gameObject.SetActive(isOpen);
+        }
+    }
 }
