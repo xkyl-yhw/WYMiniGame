@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 [CreateAssetMenu(fileName ="New Item",menuName ="Inventory/Item")]
-public class Item : ScriptableObject,IPunObservable
+public class Item : ScriptableObject
 {
     //名称
      public string itemName;
@@ -22,19 +21,4 @@ public class Item : ScriptableObject,IPunObservable
         //itemCnt = 0;
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            // We own this player: send the others our data
-            stream.SendNext(itemCnt);
-            stream.SendNext(isDefaultItem);
-        }
-        else
-        {
-            // Network player, receive data
-            itemCnt = (int)stream.ReceiveNext();
-            isDefaultItem = (bool)stream.ReceiveNext();
-        }
-    }
 }
