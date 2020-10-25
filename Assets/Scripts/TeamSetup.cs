@@ -11,7 +11,7 @@ public class TeamSetup : MonoBehaviour
 
     private void Start()
     {
-        teamColor = returnColor(teamTag);
+        teamTag = returnTeam(teamColor);
     }
 
     public static Color returnColor(TeamTag tag)

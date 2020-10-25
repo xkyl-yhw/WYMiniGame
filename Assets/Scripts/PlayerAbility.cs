@@ -11,12 +11,12 @@ public class PlayerAbility : MonoBehaviour
 
     private void Start()
     {
-        infectColor = TeamSetup.returnColor(GetComponent<TeamSetup>().teamTag);
         hexGrid = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>();
     }
 
     private void Update()
     {
+        infectColor = GetComponent<TeamSetup>().teamColor;
         RaycastHit hit;
         Vector3 dir = Vector3.forward;
         for (int i = 0; i < 6; i++)

@@ -15,13 +15,36 @@ public class MachetesObject : MonoBehaviour
     public bool isBasy = false; //鼠标左键是否用来点击道具了；是=用了；否=没用，可以开抢
 
     public bool isDamage = false;
-
-    private float lastAttackTime;
-
+    
     // Start is called before the first frame update
     void Start()
     {
         anim = this.transform.GetComponentInParent<Animator>();
+
+        AnimationEvent aniEvt = new AnimationEvent();
+        aniEvt.functionName = "CheckDamage";
+        aniEvt.time = 0.42f;
+        foreach (AnimationClip clip in anim.runtimeAnimatorController.animationClips)
+        {
+            Debug.Log(clip);
+            if (clip.name == "AttackWithSword")
+            {
+                //Debug.Log("Attack长度" + clip.length);
+                clip.AddEvent(aniEvt);
+            }
+        }
+        AnimationEvent aniEvt2 = new AnimationEvent();
+        aniEvt2.functionName = "SetMachetesIsDamage";
+        aniEvt2.time = 1f;
+        foreach (AnimationClip clip in anim.runtimeAnimatorController.animationClips)
+        {
+            Debug.Log(clip);
+            if (clip.name == "AttackWithSword")
+            {
+                //Debug.Log("Attack长度" + clip.length);
+                clip.AddEvent(aniEvt2);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -29,17 +52,17 @@ public class MachetesObject : MonoBehaviour
     {
         if (!isDamage && Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (Time.time - lastAttackTime > anim.GetCurrentAnimatorStateInfo(0).length)
-            {
-                Using();
-                isDamage = true;
-            }
+            Debug.Log("砍刀攻击");
+
+            Using();
+            isDamage = true;
         }
     }
 
     public void Using()
     {
-        lastAttackTime = Time.time;
         anim.SetTrigger("MachetesAttack");
     }
+
+
 }
