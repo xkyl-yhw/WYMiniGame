@@ -7,7 +7,7 @@ using Mirror;
 public class WeaponController : NetworkBehaviour
 {
     public GameObject weapon;
-
+    //public GameObject player;
     public int weaponIndex;
     public string weaponType; //Gun,Machete,Bomb
     //public int gunNum = 10;
@@ -30,6 +30,7 @@ public class WeaponController : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //player = gameObject;
         mSwitchWeapon = 0;
         mSwitchWeapon2 = 0;
         AxisCounts = 0;
@@ -88,23 +89,37 @@ public class WeaponController : NetworkBehaviour
         AxisCounts = 0;
 
         if (MouseScrollWheel > 0)
+        {
+            //weapon.SetActive(false);
             NextWeapon();
-        if (MouseScrollWheel < 0)
-            PreviousWeapon();
+        }
 
+        if (MouseScrollWheel < 0)
+        {
+           // weapon.SetActive(false);
+            PreviousWeapon();
+        }
         CmdWeapon();
+       
+        //weaponType = GetWeaponType(weaponIndex);
+        //weapon = player.transform.Find(weaponType).gameObject;
+        //weapon.transform.parent = this.transform;
+        //weapon.transform.localPosition = weaponPosition;
+        //weapon.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        //weapon.SetActive(true);
     }
 
     [Command]
     private void CmdWeapon()
     {
         weapon = Instantiate(mList[weaponIndex]);
-        NetworkServer.Spawn(weapon);
         weaponType = GetWeaponType(weaponIndex);
 
         weapon.transform.parent = this.transform;
         weapon.transform.localPosition = weaponPosition;
         weapon.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        NetworkServer.Spawn(weapon, gameObject);
+
     }
 
     public void NextWeapon()//下一个武器

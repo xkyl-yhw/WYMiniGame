@@ -11,7 +11,8 @@ public class PlayController : NetworkBehaviour
     public bool isOpen;//是否点开大地图
     public Canvas bigMap;
     private Animator thisAnimator;
-
+    public GameObject player;
+    public GameObject HUDCanvas;
     public float moveSpeed = 0;
     public float roatSpeed = 0;
     public float jumpSpeed = 0;
@@ -45,6 +46,8 @@ public class PlayController : NetworkBehaviour
     private int groundLayerIndex; //地面层
     void Start()
     {
+        player = gameObject;
+        HUDCanvas = player.transform.Find("HUDCanvas").gameObject;
         controller = GetComponent<CharacterController>();
         groundLayerIndex = LayerMask.GetMask(maskName); //初始化地面layer的序列
 
@@ -61,6 +64,7 @@ public class PlayController : NetworkBehaviour
     {
         OpenBigMap();
         if (!isLocalPlayer) return;
+        HUDCanvas.SetActive(true);
         this.Rotating(); //角色旋转-朝向鼠标
 
         thisAnimator.SetBool("isWalking", false);

@@ -35,6 +35,6 @@ public class SecondWeapon : MonoBehaviour
         iconPath = "WeaponIcon/" + second;
         secondWeaponIcon = Resources.Load<Sprite>(iconPath);
         source.sprite = secondWeaponIcon;
-        Debug.Log(secondWeaponIcon.name);
+        //Debug.Log(secondWeaponIcon.name);
     }
 }
