@@ -21,7 +21,20 @@ public class MachetesObject : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        anim = this.transform.GetComponentInParent<Animator>();
+        anim = this.transform.GetComponentInParent<Animator>(); 
+        
+        AnimationEvent aniEvt = new AnimationEvent();
+        aniEvt.functionName = "SwitchWeaponAnim";
+        aniEvt.time = 1f;
+        foreach (AnimationClip clip in anim.runtimeAnimatorController.animationClips)
+        {
+            Debug.Log(clip);
+            if (clip.name == "收武器")
+            {
+                //Debug.Log("Attack长度" + clip.length);
+                clip.AddEvent(aniEvt);
+            }
+        }
     }
 
     // Update is called once per frame
