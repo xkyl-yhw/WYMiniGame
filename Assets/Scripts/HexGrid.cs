@@ -80,7 +80,7 @@ public class HexGrid : MonoBehaviour
         }
         return tempCell;
     }
-    
+
 
     void CreateChunks()
     {
@@ -132,11 +132,20 @@ public class HexGrid : MonoBehaviour
             if (cell.Color != color) grassCastDict.Remove(index);
             //Debug.Log(1);
             CmdCreateGrass(index, pos);
+            if (cell.Color != color)
+            {
+                grassCastDict[index].GetComponent<GrassCell>().tempTeam = TeamSetup.returnTeam(color);
+                return;
+            }
+            Debug.Log(1);
+            CmdCreateGrass(index, pos, color);
         }
     }
-    private void CmdCreateGrass(int index, Vector3 pos)
+    private void CmdCreateGrass(int index, Vector3 pos, Color temp)
     {
         GameObject go = Instantiate(grassCellPrefebs, pos, Quaternion.identity, grassCellTran);
+        go.GetComponent<GrassCell>().tempTeam = TeamSetup.returnTeam(temp);
+        if (grassCastDict.ContainsKey(index)) return;
         grassCastDict.Add(index, go);
     }
 
