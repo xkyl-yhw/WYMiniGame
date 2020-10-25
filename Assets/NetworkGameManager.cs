@@ -7,7 +7,8 @@ using UnityEngine.EventSystems;
 
 public class NetworkGameManager : NetworkBehaviour
 {
-    Dictionary<TeamTag, List<GameObject>> teamDict = new Dictionary<TeamTag, List<GameObject>>();
+    //Dictionary<TeamTag, List<GameObject>> teamDict = new Dictionary<TeamTag, List<GameObject>>();
+    [SyncVar]
     public TeamTag needTeam;
 
     public Toggle[] array;
@@ -17,23 +18,15 @@ public class NetworkGameManager : NetworkBehaviour
     public override void OnStartServer()
     {
         base.OnStartServer();
-        for (TeamTag i = 0; i <= TeamTag.blue; i++)
-        {
-            teamDict.Add(i, new List<GameObject>());
-        }
+        needTeam = TeamTag.red;
     }
 
-    private void Update()
+    public void addTeam()
     {
-        needTeam = TeamTag.red + colorIndex;
+        Debug.Log(TeamSetup.returnColor(needTeam));
+        if (needTeam == TeamTag.blue) needTeam = TeamTag.red;
+        else needTeam++;
     }
-
-    public TeamTag addDict(GameObject player)
-    {
-        teamDict[needTeam].Add(player);
-        return needTeam;
-    }
-
     public void chengeToggleValue()
     {
         int index = 0;

@@ -14,11 +14,25 @@ public class NetPlayerSetUp : NetworkBehaviour
     public Vector3 offset;
     public Vector3 angle;
 
+    [SyncVar(hook = nameof(SetColor))]
+    private Color playerColor;
+
+    private Color[] temp = { Color.red, Color.blue, Color.green };
+
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
         localPosition = transform.position;
         localRotation = transform.rotation;
+    }
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        int playerNum = GameObject.FindGameObjectsWithTag("Player").Length;
+        Debug.Log(playerNum);
+        playerNum %= 3;
+        playerColor = temp[playerNum];
     }
 
     private void Start()
@@ -31,8 +45,13 @@ public class NetPlayerSetUp : NetworkBehaviour
             myCamera.transform.position = offset.x * transform.forward + offset.y * transform.up + offset.z * transform.right;
             myCamera.transform.rotation *= Quaternion.Euler(angle);
             myCamera.GetComponent<CameraController>().Player = transform;
-            
+
         }
+    }
+
+    private void SetColor(Color oldColor, Color newColor)
+    {
+        GetComponent<TeamSetup>().teamColor = newColor;
     }
 }
 
