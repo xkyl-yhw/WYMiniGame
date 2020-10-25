@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 
 public class WeaponController : MonoBehaviour
 {
+    Animator anim;
     public GameObject weapon;
 
     public int weaponIndex;
@@ -23,6 +24,8 @@ public class WeaponController : MonoBehaviour
     private bool isScrollCD;
 
     public Vector3 weaponPosition = new Vector3(1.8f, 0f, 1.0f);
+    public Vector3 weaponRotationGun = new Vector3(1.8f, 0f, 1.0f);
+    public Vector3 weaponRotationMachete = new Vector3(1.8f, 0f, 1.0f);
 
     public List<GameObject> mList = new List<GameObject>(); //武器列表
 
@@ -38,6 +41,32 @@ public class WeaponController : MonoBehaviour
 
         weaponType = "Gun";
         weaponIndex = 0;
+        anim = this.GetComponent<Animator>();
+
+        AnimationEvent aniEvt = new AnimationEvent();
+        aniEvt.functionName = "SwitchWeaponAnim";
+        aniEvt.time = 1f;
+        foreach (AnimationClip clip in anim.runtimeAnimatorController.animationClips)
+        {
+            Debug.Log(clip);
+            if (clip.name == "收武器")
+            {
+                //Debug.Log("Attack长度" + clip.length);
+                clip.AddEvent(aniEvt);
+            }
+        }
+        AnimationEvent aniEvt2 = new AnimationEvent();
+        aniEvt2.functionName = "SwitchWeaponAnim2";
+        aniEvt2.time = 1f;
+        foreach (AnimationClip clip in anim.runtimeAnimatorController.animationClips)
+        {
+            Debug.Log(clip);
+            if (clip.name == "拿武器")
+            {
+                //Debug.Log("Attack长度" + clip.length);
+                clip.AddEvent(aniEvt2);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -55,8 +84,10 @@ public class WeaponController : MonoBehaviour
             {
                 isScroll = false;
                 isScrollCD = true;
-                Destroy(weapon);
-                SwitchWeapon(AxisCounts);
+                anim.SetTrigger("isSwitch2");
+                this.GetComponent<PlayController>().enabled = false;
+                //anim.SetFloat("WalkX", 0.5f);
+                //anim.SetFloat("WalkY", 1f);
             }
         }
         if (isScrollCD)
@@ -76,7 +107,34 @@ public class WeaponController : MonoBehaviour
             if (bombObject.isSwitchWeapon)
             {
                 SwitchWeapon(1);
+                anim.SetTrigger("isSwitch1");
+                this.GetComponent<PlayController>().enabled = false;
             }
+        }
+    }
+
+    void SwitchWeaponAnim()
+    {
+        anim.SetBool("isIdle",true);
+        Destroy(weapon);
+        SwitchWeapon(AxisCounts);
+
+        anim.SetTrigger("isSwitch1");
+        //anim.SetFloat("WalkX", 0.5f);
+        //anim.SetFloat("WalkY", 0.75f);
+    }
+
+    void SwitchWeaponAnim2()
+    {
+        anim.SetBool("isIdle", true);
+        this.GetComponent<PlayController>().enabled = true;
+        if (weaponType == "Gun")
+        {
+            weapon.transform.localRotation = Quaternion.Euler(weaponRotationGun);
+        }
+        if (weaponType == "Machete")
+        {
+            weapon.transform.localRotation = Quaternion.Euler(weaponRotationMachete);
         }
     }
 
@@ -94,7 +152,7 @@ public class WeaponController : MonoBehaviour
         weapon = Instantiate(mList[weaponIndex]);
         weaponType = GetWeaponType(weaponIndex);
 
-        weapon.transform.parent = this.transform;
+        weapon.transform.parent = GetChild(this.transform,"Bip001 R Hand");
         weapon.transform.localPosition = weaponPosition;
         weapon.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
     }
@@ -143,5 +201,27 @@ public class WeaponController : MonoBehaviour
 
         Debug.Log(fixtype);
         return fixtype;
+    }
+
+    public static Transform GetChild(Transform parentTF, string childName)
+    {
+        //在子物体中查找
+        Transform childTF = parentTF.Find(childName);
+
+        if (childTF != null)
+        {
+            return childTF;
+        }
+        //将问题交由子物体
+        int count = parentTF.childCount;
+        for (int i = 0; i < count; i++)
+        {
+            childTF = GetChild(parentTF.GetChild(i), childName);
+            if (childTF != null)
+            {
+                return childTF;
+            }
+        }
+        return null;
     }
 }
