@@ -17,7 +17,7 @@ public class CameraController : MonoBehaviour
     public Transform Player; //player的Transform  
     private float CamerafieldOfView = 60; //相机的锥形视野范围  
     private Camera camera; //相机  
-    private float a= 0.05f ;//倍数
+    private float a = 0.05f;//倍数
 
     //屏幕边缘四个矩形  
     private Rect RectUp;
@@ -35,8 +35,8 @@ public class CameraController : MonoBehaviour
 
         //在场景内查找Tag为Player的物体  
         //Player = GameObject.FindGameObjectWithTag("Player").transform;  
-           
-          
+
+
         camera = this.GetComponent<Camera>();
 
         CameraMoveSpeed = CameraMoveSpeed * a;
@@ -45,87 +45,90 @@ public class CameraController : MonoBehaviour
     }
 
 
-void Update()
-{
-
-    if (!isMove)
+    void Update()
+    {
+        if (Player == null) return;
+        if (!isMove)
         {
             CameraIsLock = true;
         }
-    //如果按下Y键锁定相机再次按下解锁。  
-    else if (Input.GetKeyDown(KeyCode.Y))
+        //如果按下Y键锁定相机再次按下解锁。  
+        else if (Input.GetKeyDown(KeyCode.Y))
+        {
+            CameraIsLock = !CameraIsLock;
+        }
+
+
+        CameraMoveAndLock();//视角移动和锁定  
+                            //SightDistance();//视距的缩放  
+
+    }
+    //视角移动  
+    void CameraMoveAndLock()
     {
-        CameraIsLock = !CameraIsLock;
+        ////空格回到自己  
+        //if (Input.GetKey(KeyCode.Space))
+        //{
+        //    transform.position = new Vector3(Player.position.x, transform.position.y, Player.position.z - 5f);
+        //}
+        //如果没有锁定相机（视野）可以移动  
+        if (CameraIsLock == false)
+        {
+            //如果鼠标在屏幕上的位置包含在这个矩形里  
+            if (RectUp.Contains(Input.mousePosition))
+            {
+                transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + CameraMoveSpeed);
+            }
+            if (RectDown.Contains(Input.mousePosition))
+            {
+                transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - CameraMoveSpeed);
+            }
+            if (RectLeft.Contains(Input.mousePosition))
+            {
+                transform.position = new Vector3(transform.position.x - CameraMoveSpeed, transform.position.y, transform.position.z);
+            }
+            if (RectRight.Contains(Input.mousePosition))
+            {
+                transform.position = new Vector3(transform.position.x + CameraMoveSpeed, transform.position.y, transform.position.z);
+            }
+            //判断相机移动的边缘在哪里，不能 超过设定的最远距离  
+            if (transform.position.z >= Zboundary)
+            {
+                transform.position = new Vector3(transform.position.x, transform.position.y, Zboundary);
+            }
+            if (transform.position.z <= -Zboundary)
+            {
+                transform.position = new Vector3(transform.position.x, transform.position.y, -Zboundary);
+            }
+            if (transform.position.x >= Xboundary)
+            {
+                transform.position = new Vector3(Xboundary, transform.position.y, transform.position.z);
+            }
+            if (transform.position.x <= -Xboundary)
+            {
+                transform.position = new Vector3(-Xboundary, transform.position.y, transform.position.z);
+            }
+        }
+        else if (CameraIsLock == true)
+        {
+            //如果锁定视角，相机视野显示主角  
+            //transform.position = new Vector3(Player.position.x - LockDistanceX, transform.position.y, Player.position.z - LockDistanceZ);
+            float tempY = transform.position.y;
+            transform.position = new Vector3(Player.position.x, transform.position.y, Player.position.z) - Vector3.ProjectOnPlane(transform.right, Vector3.up).normalized * LockDistanceX - Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized * LockDistanceZ;
+
+        }
+
     }
 
 
-    CameraMoveAndLock();//视角移动和锁定  
-    //SightDistance();//视距的缩放  
+    //中键滑轮拉远拉近  
+    void SightDistance()
+    {
+        float MouseScrollWheel = Input.GetAxis("Mouse ScrollWheel");
 
+        CamerafieldOfView += MouseScrollWheel * -SightDistancespeed;
+        CamerafieldOfView = Mathf.Clamp(CamerafieldOfView, 30, 60);
+        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, CamerafieldOfView, Time.deltaTime * SightDistancespeed);
+
+    }
 }
-//视角移动  
-void CameraMoveAndLock()
-{
-    ////空格回到自己  
-    //if (Input.GetKey(KeyCode.Space))
-    //{
-    //    transform.position = new Vector3(Player.position.x, transform.position.y, Player.position.z - 5f);
-    //}
-    //如果没有锁定相机（视野）可以移动  
-    if (CameraIsLock == false)
-    {
-        //如果鼠标在屏幕上的位置包含在这个矩形里  
-        if (RectUp.Contains(Input.mousePosition))
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + CameraMoveSpeed);
-        }
-        if (RectDown.Contains(Input.mousePosition))
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - CameraMoveSpeed);
-        }
-        if (RectLeft.Contains(Input.mousePosition))
-        {
-            transform.position = new Vector3(transform.position.x - CameraMoveSpeed, transform.position.y, transform.position.z);
-        }
-        if (RectRight.Contains(Input.mousePosition))
-        {
-            transform.position = new Vector3(transform.position.x + CameraMoveSpeed, transform.position.y, transform.position.z);
-        }
-        //判断相机移动的边缘在哪里，不能 超过设定的最远距离  
-        if (transform.position.z >= Zboundary)
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, Zboundary);
-        }
-        if (transform.position.z <= -Zboundary)
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, -Zboundary);
-        }
-        if (transform.position.x >= Xboundary)
-        {
-            transform.position = new Vector3(Xboundary, transform.position.y, transform.position.z);
-        }
-        if (transform.position.x <= -Xboundary)
-        {
-            transform.position = new Vector3(-Xboundary, transform.position.y, transform.position.z);
-        }
-    }
-    else if (CameraIsLock == true)
-    {
-        //如果锁定视角，相机视野显示主角  
-        transform.position = new Vector3(Player.position.x - LockDistanceX, transform.position.y, Player.position.z - LockDistanceZ);
-    }
-
-}
-
-
-//中键滑轮拉远拉近  
-void SightDistance()
-{
-    float MouseScrollWheel = Input.GetAxis("Mouse ScrollWheel");
-
-    CamerafieldOfView += MouseScrollWheel * -SightDistancespeed;
-    CamerafieldOfView = Mathf.Clamp(CamerafieldOfView, 30, 60);
-    camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, CamerafieldOfView, Time.deltaTime * SightDistancespeed);
-
-}  
-} 

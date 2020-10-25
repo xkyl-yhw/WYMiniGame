@@ -43,10 +43,6 @@ public class PlayController : NetworkBehaviour
     private Vector3 moveDirection = Vector3.zero;//角色移动
 
     private int groundLayerIndex; //地面层
-
-    // Start is called before the first frame update
-
-    public Camera player_Camera;
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -135,9 +131,11 @@ public class PlayController : NetworkBehaviour
 
         //移动
 
-        moveDirection.x = Input.GetAxis("Horizontal") * speed;
-        moveDirection.z = Input.GetAxis("Vertical") * speed;
-        moveDirection.y -= gravity * Time.deltaTime;
+        //moveDirection.x = Input.GetAxis("Horizontal") * speed;
+        //moveDirection.z = Input.GetAxis("Vertical") * speed;
+        //moveDirection.y -= gravity * Time.deltaTime;
+        moveDirection = Input.GetAxis("Horizontal") * Vector3.ProjectOnPlane(Camera.main.transform.right, Vector3.up).normalized * speed + Input.GetAxis("Vertical") * Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up).normalized * speed - Vector3.up * gravity * Time.deltaTime;
+
         controller.Move(moveDirection * Time.deltaTime);
 
     }
@@ -145,7 +143,7 @@ public class PlayController : NetworkBehaviour
     //旋转
     void Rotating()
     {
-        Ray ray = player_Camera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;//存储射线信息
         if (Physics.Raycast(ray, out hitInfo, 200, groundLayerIndex))//生成射线
         {
