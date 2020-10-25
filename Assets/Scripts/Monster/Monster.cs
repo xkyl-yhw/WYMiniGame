@@ -92,8 +92,7 @@ public abstract class Monster : MonoBehaviour
             Vector2 p = Random.insideUnitCircle * 0.5f;
             Vector2 pos = p.normalized * (0.5f + p.magnitude);
             Vector3 pos2 = new Vector3(pos.x, 0, pos.y);
-            GameObject a = Instantiate(essenceType, dropRange.TransformPoint(pos2), Quaternion.identity);
-            a.transform.position = new Vector3(a.transform.position.x, this.transform.position.y, a.transform.position.z);
+            Instantiate(essenceType, dropRange.TransformPoint(pos2), Quaternion.identity);
         }
     }
 
