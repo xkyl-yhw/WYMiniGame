@@ -27,6 +27,11 @@ public abstract class Monster : MonoBehaviour
 
     public float radius;//测试离玩家半径
 
+    private bool isDead = false;
+    public float deathTime = 3f;
+
+    public GameObject player;
+
     public void Start()
     {
         if (dropRange == null)
@@ -34,24 +39,28 @@ public abstract class Monster : MonoBehaviour
             dropRange = transform;
         }
         m_animator = GetComponent<Animator>();
-        playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
 
+        isDead = false;
     }
 
     // Update is called once per frame
     public void Update()
     {
-        if (health <= 0)
+        if (health <= 0 && !isDead)
         {
             Drop(dropNum);
             m_animator.SetTrigger("die");
-            //Destroy(gameObject);
+            isDead = true;
+            
+            StartCoroutine(Countdown());//deathTime时间后删除物体
         }
         attachedMachine = objectMachine.GetComponent<RecoveryMachine>();
         if (attachedMachine.canRecovery)
         {
             health = 0;
         }
+        getPlayer();// 获取地图上离自己最近的player
+        playerHealth = player.GetComponent<PlayerHealth>();
 
     }
     //精华掉落
@@ -99,15 +108,15 @@ public abstract class Monster : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
         //碰撞并且类型是胶囊体碰撞，因为player可能存在多个Collider
-        if (other.gameObject.CompareTag("Player") && other.GetType().ToString() == "UnityEngine.CapsuleCollider")
-        {
-            if (playerHealth != null)
-            {
-                //Debug.Log(playerHealth.health);
-                playerHealth.DamagePlayer(damage);
-            }
+        //if (other.gameObject.CompareTag("Player") && other.GetType().ToString() == "UnityEngine.CapsuleCollider")
+        //{
+        //    if (playerHealth != null)
+        //    {
+        //        //Debug.Log(playerHealth.health);
+        //        playerHealth.DamagePlayer(damage);
+        //    }
 
-        }
+        //}
         if (other.gameObject.CompareTag("Bullet") || other.gameObject.CompareTag("Machete"))
         {
             if (this.health > 0)
@@ -137,6 +146,52 @@ public abstract class Monster : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, radius);
 
+    }
+    
+    IEnumerator Countdown()
+    {
+        for (float timer = deathTime; timer >= 0; timer -= Time.deltaTime)
+            yield return 0;
+        Debug.Log("This message appears after " + deathTime + " seconds!");
+        Destroy(gameObject);
+    }
+
+    void getPlayer()
+    {
+        GameObject[] playerArray;
+        Vector3 playerPosition = new Vector3(0, 0, 0);
+        float nearest = 0;
+
+        playerArray = GameObject.FindGameObjectsWithTag("Player");
+
+        for (int i=0;i<playerArray.Length;i++)
+        {
+            float dis = (transform.position - playerArray[i].transform.position).sqrMagnitude;
+            if(i==0)
+            {
+                nearest = dis;
+                player = playerArray[i];
+            }
+            else
+            {
+                if(nearest>dis)
+                {
+                    nearest = dis;
+                    player = playerArray[i];
+                }
+            }
+        }
+    }
+
+    // 对玩家造成伤害
+    public void hitPlayer(GameObject mplayer)
+    {
+        playerHealth = mplayer.GetComponent<PlayerHealth>();
+        if (playerHealth != null)
+        {
+            Debug.Log("正在造成伤害");
+            playerHealth.DamagePlayer(damage);
+        }
     }
 
 }

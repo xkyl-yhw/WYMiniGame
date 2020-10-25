@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text.RegularExpressions;
+using Mirror;
 
-
-public class WeaponController : MonoBehaviour
+public class WeaponController : NetworkBehaviour
 {
     public GameObject weapon;
 
@@ -43,6 +43,7 @@ public class WeaponController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isLocalPlayer) return;
         float MouseScrollWheel = Input.GetAxis("Mouse ScrollWheel"); // 滚轮角度
         if (Input.GetAxis("Mouse ScrollWheel") != 0 && !isScroll && !isScrollCD)
         {
@@ -91,7 +92,14 @@ public class WeaponController : MonoBehaviour
         if (MouseScrollWheel < 0)
             PreviousWeapon();
 
+        CmdWeapon();
+    }
+
+    [Command]
+    private void CmdWeapon()
+    {
         weapon = Instantiate(mList[weaponIndex]);
+        NetworkServer.Spawn(weapon);
         weaponType = GetWeaponType(weaponIndex);
 
         weapon.transform.parent = this.transform;

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Prefebs/Essence/test.prefab.meta
+guid: 2f32e9b9ce4ed9c4386b5a9cf1c39ef0
+=======
 guid: 3b727d6d15876a441a33f6a0c16f7ce8
+>>>>>>> 2050d18ac734f75e68742dc10642987c5bf374cb:Assets/Prefebs/BigMapCamera.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 

@@ -60,7 +60,7 @@ public class HexGrid : MonoBehaviour
         StreamWriter sw = new StreamWriter(Application.dataPath + "/" + ScenesName + ".txt");
         sw.Write(jsonStr);
         sw.Close();
-        Debug.Log(1);
+        //Debug.Log(1);
     }
 
     HexCellMsgArray CreateCellMsg()
@@ -123,19 +123,20 @@ public class HexGrid : MonoBehaviour
         HexCoordinates coordinates = HexCoordinates.FromPos(pos);
         int index = coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
         HexCell cell = cells[index];
+        //Debug.Log(1);
         if (cell.Color != defaultColor && cell.Color == color) return;
         cell.Color = color;
         //hexMesh.Triangulate(cells);
         if (color != defaultColor)
         {
             if (cell.Color != color) grassCastDict.Remove(index);
-            //CreateGrass(index, pos);
+            Debug.Log(1);
+            CmdCreateGrass(index, pos);
         }
     }
-
-    public void CreateGrass(int index, Vector3 pos)
+    private void CmdCreateGrass(int index, Vector3 pos)
     {
-        GameObject go = GameObject.Instantiate(grassCellPrefebs, pos, Quaternion.identity, grassCellTran);
+        GameObject go = Instantiate(grassCellPrefebs, pos, Quaternion.identity, grassCellTran);
         grassCastDict.Add(index, go);
     }
 
