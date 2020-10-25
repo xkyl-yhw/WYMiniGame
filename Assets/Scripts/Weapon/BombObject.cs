@@ -25,6 +25,8 @@ public class BombObject : MonoBehaviour
     public float switchWeaponTime = 0.2f;
     public bool isSwitchWeapon = false;
 
+    public TeamSetup playerTeam;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -97,6 +99,19 @@ public class BombObject : MonoBehaviour
 
             destination = hitInfo.point;
             destination.y = 0;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponentInParent<HexGrid>() != null)
+        {
+            HexCell temp = other.GetComponentInParent<HexGrid>().GetCell(transform.position);
+            for (HexDirection i = HexDirection.NE; i < HexDirection.NW; i++)
+            {
+                other.GetComponentInParent<HexGrid>().InfectCell(temp.GetNeighbor(i).transform.position, playerTeam.teamColor);
+            }
+            other.GetComponentInParent<HexGrid>().InfectCell(temp.transform.position, playerTeam.teamColor);
         }
     }
 }

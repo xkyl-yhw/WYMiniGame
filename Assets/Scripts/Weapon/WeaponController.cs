@@ -157,6 +157,7 @@ public class WeaponController : NetworkBehaviour
     private void CmdWeapon()
     {
         weapon = Instantiate(mList[weaponIndex]);
+        if (weaponIndex == 2) weapon.GetComponent<BombObject>().playerTeam = GetComponentInParent<TeamSetup>();
         NetworkServer.Spawn(weapon);
         weaponType = GetWeaponType(weaponIndex);
 
