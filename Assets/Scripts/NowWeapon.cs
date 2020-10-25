@@ -23,6 +23,6 @@ public class NowWeapon : MonoBehaviour
         iconPath = "WeaponIcon/"+now;
         nowWeapon = Resources.Load<Sprite>(iconPath);
         source.sprite = nowWeapon;
-        Debug.Log(nowWeapon.name);
+        //Debug.Log(nowWeapon.name);
     }
 }

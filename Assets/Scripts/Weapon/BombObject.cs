@@ -11,6 +11,8 @@ public class BombObject : MonoBehaviour
     private bool canShoot = true; //是否可以开火
     public bool isShoot = true; //是否正在开火
     public bool isBasy = false; //鼠标左键是否用来点击道具了；是=用了；否=没用，可以开抢
+    public int bombRadius = 5; //爆炸范围
+    public float deathTime = 0.8f;//爆炸延迟
 
 
     private Vector3 destination;
@@ -73,7 +75,11 @@ public class BombObject : MonoBehaviour
             {
                 isShoot = false;
                 canShoot = false;
-                GameObject.Destroy(gameObject);
+                this.GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezePositionY;
+                //GameObject.Destroy(gameObject);
+                CheckDamage();
+                Rough();
+                StartCoroutine(Countdown());//deathTime时间后删除物体
             }
         }
     }
@@ -98,5 +104,44 @@ public class BombObject : MonoBehaviour
             destination = hitInfo.point;
             destination.y = 0;
         }
+    }
+
+    public void CheckDamage()
+    {
+        Vector3 a = this.transform.position;
+        foreach (Collider b in Physics.OverlapSphere(a, bombRadius))
+        {
+            if (b.gameObject.tag == "Player" && b.gameObject != this.gameObject) // 对玩家造成伤害
+            {
+                PlayerHealth playerHealth = b.gameObject.GetComponent<PlayerHealth>();
+                if (playerHealth != null)
+                {
+                    Debug.Log("爆炸正在对玩家造成伤害");
+                    playerHealth.DamagePlayer(this.damage);
+                }
+            }
+            else if (b.gameObject.tag == "Monster") // 对怪物造成伤害
+            {
+                if (b.gameObject.GetComponent<Monster>().health > 0)
+                {
+                    Debug.Log("爆炸正在对怪物造成伤害");
+                    b.gameObject.GetComponent<Monster>().TakeDamage(this.damage);
+                }
+            }
+        }
+
+    }
+
+    IEnumerator Countdown()
+    {
+        for (float timer = deathTime; timer >= 0; timer -= Time.deltaTime)
+            yield return 0;
+        Debug.Log("This message appears after " + deathTime + " seconds!");
+        Destroy(gameObject);
+    }
+
+    void Rough()
+    {
+        //请在这里加上长草需要的代码
     }
 }

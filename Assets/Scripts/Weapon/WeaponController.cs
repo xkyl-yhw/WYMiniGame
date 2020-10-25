@@ -29,7 +29,6 @@ public class WeaponController : NetworkBehaviour
 
     public List<GameObject> mList = new List<GameObject>(); //武器列表
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -45,7 +44,7 @@ public class WeaponController : NetworkBehaviour
 
         AnimationEvent aniEvt = new AnimationEvent();
         aniEvt.functionName = "SwitchWeaponAnim";
-        aniEvt.time = 1f;
+        aniEvt.time = 0.8f;
         foreach (AnimationClip clip in anim.runtimeAnimatorController.animationClips)
         {
             Debug.Log(clip);
@@ -57,7 +56,7 @@ public class WeaponController : NetworkBehaviour
         }
         AnimationEvent aniEvt2 = new AnimationEvent();
         aniEvt2.functionName = "SwitchWeaponAnim2";
-        aniEvt2.time = 1f;
+        aniEvt2.time = 0.7f;
         foreach (AnimationClip clip in anim.runtimeAnimatorController.animationClips)
         {
             Debug.Log(clip);
@@ -104,6 +103,7 @@ public class WeaponController : NetworkBehaviour
         //当炸弹投出去的时候切换武器
         if (weaponType == "Bomb")
         {
+            anim.SetFloat("RunX", 1);
             BombObject bombObject = weapon.GetComponent<BombObject>();
             if (bombObject.isSwitchWeapon)
             {
@@ -111,6 +111,14 @@ public class WeaponController : NetworkBehaviour
                 anim.SetTrigger("isSwitch1");
                 this.GetComponent<PlayController>().enabled = false;
             }
+        }
+        else if (weaponType == "Gun")
+        {
+            anim.SetFloat("RunX", 0);
+        }
+        else if (weaponType == "Machete")
+        {
+            anim.SetFloat("RunX", 0.5f);
         }
     }
 
@@ -207,7 +215,7 @@ public class WeaponController : NetworkBehaviour
         Match m = re.Match(name);
         string fixtype = m.Value;
 
-        Debug.Log(fixtype);
+        //Debug.Log(fixtype);
         return fixtype;
     }
 
@@ -231,5 +239,39 @@ public class WeaponController : NetworkBehaviour
             }
         }
         return null;
+    }
+
+    //检测是否完成了一次砍刀攻击
+    public void SetMachetesIsDamage()
+    {
+        weapon.GetComponent<MachetesObject>().isDamage = false;
+        anim.SetBool("isIdle", true);
+    }
+
+    //检测砍刀动画中途是否打中人
+    public void CheckDamage()
+    {
+        Vector3 a = weapon.transform.GetChild(0).transform.position;
+        foreach (Collider b in Physics.OverlapSphere(a,weapon.GetComponent<MachetesObject>().strikingDistance))
+        {
+            if(b.gameObject.tag == "Player" && b.gameObject != this.gameObject) // 对玩家造成伤害
+            {
+                PlayerHealth playerHealth = b.gameObject.GetComponent<PlayerHealth>();
+                if (playerHealth != null)
+                {
+                    Debug.Log("砍刀正在对玩家造成伤害");
+                    playerHealth.DamagePlayer(weapon.GetComponent<MachetesObject>().damage);
+                }
+            }
+            else if (b.gameObject.tag == "Monster") // 对怪物造成伤害
+            {
+                if (b.gameObject.GetComponent<Monster>().health > 0)
+                {
+                    Debug.Log("砍刀正在对怪物造成伤害");
+                    b.gameObject.GetComponent<Monster>().TakeDamage(weapon.GetComponent<MachetesObject>().damage);
+                }
+            }
+        }
+
     }
 }

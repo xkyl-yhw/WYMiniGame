@@ -130,7 +130,7 @@ public class HexGrid : MonoBehaviour
         if (color != defaultColor)
         {
             if (cell.Color != color) grassCastDict.Remove(index);
-            Debug.Log(1);
+            //Debug.Log(1);
             CmdCreateGrass(index, pos);
         }
     }
