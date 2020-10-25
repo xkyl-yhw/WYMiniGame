@@ -130,14 +130,13 @@ public class HexGrid : MonoBehaviour
         if (color != defaultColor)
         {
             if (cell.Color != color) grassCastDict.Remove(index);
-            if (cell.Color == color) return;
-            CreateGrass(index, pos);
+            Debug.Log(1);
+            CmdCreateGrass(index, pos);
         }
     }
-
-    public void CreateGrass(int index, Vector3 pos)
+    private void CmdCreateGrass(int index, Vector3 pos)
     {
-        GameObject go = GameObject.Instantiate(grassCellPrefebs, pos, Quaternion.identity, grassCellTran);
+        GameObject go = Instantiate(grassCellPrefebs, pos, Quaternion.identity, grassCellTran);
         grassCastDict.Add(index, go);
     }
 

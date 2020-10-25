@@ -31,9 +31,8 @@ public class NetPlayerSetUp : NetworkBehaviour
             myCamera.transform.position = offset.x * transform.forward + offset.y * transform.up + offset.z * transform.right;
             myCamera.transform.rotation *= Quaternion.Euler(angle);
             myCamera.GetComponent<CameraController>().Player = transform;
-
+            
         }
     }
-
 }
 

@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class WeaponObject : MonoBehaviour
+public class WeaponObject : NetworkBehaviour
 {
     private Animator anim;
 
@@ -58,7 +59,8 @@ public class WeaponObject : MonoBehaviour
             Debug.Log(weaponName + "子弹数" + currentAmmo);
             isShoot = true;
 
-            GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity) as GameObject;
+            CmdFire();
+            
             hitGround();
         }
         else
@@ -100,5 +102,12 @@ public class WeaponObject : MonoBehaviour
                 hit.collider.gameObject.GetComponentInParent<HexGrid>().GetCell(hit.point).Color = transform.parent.GetComponent<TeamSetup>().teamColor;
             }
         }
+    }
+
+    [Command]
+    private void CmdFire()
+    {
+        GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        NetworkServer.Spawn(grenade);
     }
 }
