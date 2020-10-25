@@ -9,7 +9,7 @@ public class PlayController : NetworkBehaviour
 {
     private float time = 0;
     public bool isOpen;//是否点开大地图
-    public Canvas bigMap;
+    public GameObject bigMap;
     private Animator thisAnimator;
     public GameObject player;
     public GameObject HUDCanvas;
@@ -48,6 +48,7 @@ public class PlayController : NetworkBehaviour
     {
         player = gameObject;
         HUDCanvas = player.transform.Find("HUDCanvas").gameObject;
+        bigMap = player.transform.Find("bigMap").gameObject;
         controller = GetComponent<CharacterController>();
         groundLayerIndex = LayerMask.GetMask(maskName); //初始化地面layer的序列
 
@@ -62,9 +63,9 @@ public class PlayController : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        OpenBigMap();
         if (!isLocalPlayer) return;
-        HUDCanvas.SetActive(true);
+        OpenBigMap();
+        //HUDCanvas.SetActive(true);
         this.Rotating(); //角色旋转-朝向鼠标
 
         thisAnimator.SetBool("isWalking", false);
@@ -212,11 +213,13 @@ public class PlayController : NetworkBehaviour
 
     public void OpenBigMap()
     {
+        HUDCanvas.SetActive(!isOpen);
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             //一直开关背包
             isOpen = !isOpen;
-           bigMap.gameObject.SetActive(isOpen);
+           bigMap.SetActive(isOpen);
+           HUDCanvas.SetActive(!isOpen);
         }
     }
 }
