@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 public class NetPlayerSetUp : MonoBehaviour
 {
@@ -14,5 +15,10 @@ public class NetPlayerSetUp : MonoBehaviour
         GetComponent<PlayController>().player_Camera = go.GetComponent<Camera>();
         go.GetComponent<Transform>().position = GetComponent<Transform>().position + offset;
         go.GetComponent<Transform>().rotation = Quaternion.Euler(camera_rotate);
+       
+    }
+    public virtual void OnClientEnterRoom(NetworkIdentity newPlayer)
+    {
+        Debug.Log(newPlayer.assetId);
     }
 }
