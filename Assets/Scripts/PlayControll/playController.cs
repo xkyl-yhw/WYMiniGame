@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 [RequireComponent(typeof(CharacterController))]
 
-public class PlayController : MonoBehaviour
+public class PlayController : NetworkBehaviour
 {
     private float time = 0;
-
+    public bool isOpen;//是否点开大地图
+    public Canvas bigMap;
     private Animator thisAnimator;
 
     public float moveSpeed = 0;
@@ -43,6 +45,8 @@ public class PlayController : MonoBehaviour
     private int groundLayerIndex; //地面层
 
     // Start is called before the first frame update
+
+    public Camera player_Camera;
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -54,12 +58,13 @@ public class PlayController : MonoBehaviour
         enduranceMAX = playerAttribute.enduranceMax; //初始化耐力值
         endurance = enduranceMAX;
         thisAnimator = GetComponent<Animator>();
-        
     }
 
     // Update is called once per frame
     void Update()
     {
+        OpenBigMap();
+        if (!isLocalPlayer) return;
         this.Rotating(); //角色旋转-朝向鼠标
 
         thisAnimator.SetBool("isWalking", false);
@@ -140,7 +145,7 @@ public class PlayController : MonoBehaviour
     //旋转
     void Rotating()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = player_Camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;//存储射线信息
         if (Physics.Raycast(ray, out hitInfo, 200, groundLayerIndex))//生成射线
         {
@@ -203,4 +208,13 @@ public class PlayController : MonoBehaviour
         playerAttribute.endurance = endurance;
     }
 
+    public void OpenBigMap()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            //一直开关背包
+            isOpen = !isOpen;
+           bigMap.gameObject.SetActive(isOpen);
+        }
+    }
 }

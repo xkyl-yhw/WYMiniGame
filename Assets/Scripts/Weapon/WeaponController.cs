@@ -8,8 +8,8 @@ public class WeaponController : MonoBehaviour
 {
     public GameObject weapon;
 
-    private int weaponIndex;
-    private string weaponType; //Gun,Machete,Bomb
+    public int weaponIndex;
+    public string weaponType; //Gun,Machete,Bomb
     //public int gunNum = 10;
     //public int macheteNum = 10;
     //public int bombNum = 10;

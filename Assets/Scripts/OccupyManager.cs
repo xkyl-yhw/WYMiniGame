@@ -19,7 +19,7 @@ public class OccupyManager : MonoBehaviour
             if (item.GetComponent<OccupationPos>().occupyMode == OccupyMode.Time)
                 poss.Add(item.GetComponent<OccupationPos>());
         }
-        player = GameObject.Find("Player");
+        player = GameObject.FindWithTag("Player");
     }
 
     private void Update()

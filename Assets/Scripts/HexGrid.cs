@@ -123,15 +123,17 @@ public class HexGrid : MonoBehaviour
         HexCoordinates coordinates = HexCoordinates.FromPos(pos);
         int index = coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
         HexCell cell = cells[index];
+<<<<<<< HEAD
         //Debug.Log(1);
+=======
+>>>>>>> 2050d18ac734f75e68742dc10642987c5bf374cb
         if (cell.Color != defaultColor && cell.Color == color) return;
         cell.Color = color;
         //hexMesh.Triangulate(cells);
         if (color != defaultColor)
         {
             if (cell.Color != color) grassCastDict.Remove(index);
-            if (cell.Color == color) return;
-            CreateGrass(index, pos);
+            //CreateGrass(index, pos);
         }
     }
 
