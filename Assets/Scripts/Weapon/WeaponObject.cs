@@ -61,7 +61,7 @@ public class WeaponObject : NetworkBehaviour
 
             CmdFire();
             
-            HitGround();
+            hitGround();
         }
         else
         {
@@ -75,12 +75,12 @@ public class WeaponObject : NetworkBehaviour
         }
     }
 
-    public bool GetIsShoot()
+    public bool getIsShoot()
     {
         return canShoot;
     }
 
-    public int GetCurrentAmmo()
+    public int getCurrentAmmo()
     {
         return currentAmmo;
     }
@@ -91,7 +91,7 @@ public class WeaponObject : NetworkBehaviour
         return timeUse;
     }
 
-    public void HitGround()
+    public void hitGround()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -99,7 +99,7 @@ public class WeaponObject : NetworkBehaviour
         {
             if (Vector3.Distance(hit.point, transform.parent.transform.position) < strikingDistance)
             {
-                hit.collider.gameObject.GetComponentInParent<HexGrid>().InfectCell(hit.point, GetComponentInParent<TeamSetup>().teamColor);
+                hit.collider.gameObject.GetComponentInParent<HexGrid>().GetCell(hit.point).Color = transform.parent.GetComponent<TeamSetup>().teamColor;
             }
         }
     }
@@ -108,6 +108,6 @@ public class WeaponObject : NetworkBehaviour
     private void CmdFire()
     {
         GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-        NetworkServer.Spawn(grenade,gameObject);
+        NetworkServer.Spawn(grenade);
     }
 }

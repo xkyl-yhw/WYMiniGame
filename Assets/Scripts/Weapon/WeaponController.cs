@@ -23,7 +23,9 @@ public class WeaponController : NetworkBehaviour
     private bool isScroll;
     private bool isScrollCD;
 
-    public Vector3 weaponPosition = new Vector3(1.8f, 0f, 1.0f);
+    public Vector3 weaponPositionBomb = new Vector3(1.8f, 0f, 1.0f);
+    public Vector3 weaponPositionGun = new Vector3(1.8f, 0f, 1.0f);
+    public Vector3 weaponPositionMachete = new Vector3(1.8f, 0f, 1.0f);
     public Vector3 weaponRotationGun = new Vector3(1.8f, 0f, 1.0f);
     public Vector3 weaponRotationMachete = new Vector3(1.8f, 0f, 1.0f);
 
@@ -40,6 +42,9 @@ public class WeaponController : NetworkBehaviour
 
         weaponType = "Gun";
         weaponIndex = 0;
+        CmdWeapon(); 
+        weapon.transform.localRotation = Quaternion.Euler(weaponRotationGun);
+        weapon.transform.localPosition = weaponPositionGun;
         anim = this.GetComponent<Animator>();
 
         AnimationEvent aniEvt = new AnimationEvent();
@@ -124,7 +129,7 @@ public class WeaponController : NetworkBehaviour
 
     void SwitchWeaponAnim()
     {
-        anim.SetBool("isIdle", true);
+        anim.SetBool("isIdle",true);
         Destroy(weapon);
         SwitchWeapon(AxisCounts);
 
@@ -140,10 +145,16 @@ public class WeaponController : NetworkBehaviour
         if (weaponType == "Gun")
         {
             weapon.transform.localRotation = Quaternion.Euler(weaponRotationGun);
+            weapon.transform.localPosition = weaponPositionGun;
         }
         if (weaponType == "Machete")
         {
             weapon.transform.localRotation = Quaternion.Euler(weaponRotationMachete);
+            weapon.transform.localPosition = weaponPositionMachete;
+        }
+        if (weaponType == "Bomb")
+        {
+            weapon.transform.localPosition = weaponPositionBomb;
         }
     }
 
@@ -168,8 +179,8 @@ public class WeaponController : NetworkBehaviour
         NetworkServer.Spawn(weapon);
         weaponType = GetWeaponType(weaponIndex);
 
-        weapon.transform.parent = GetChild(this.transform, "Bip001 R Hand");
-        weapon.transform.localPosition = weaponPosition;
+        weapon.transform.parent = GetChild(this.transform,"Bip001 R Hand");
+        //weapon.transform.localPosition = weaponPosition;
         weapon.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
     }
 
@@ -252,9 +263,9 @@ public class WeaponController : NetworkBehaviour
     public void CheckDamage()
     {
         Vector3 a = weapon.transform.GetChild(0).transform.position;
-        foreach (Collider b in Physics.OverlapSphere(a, weapon.GetComponent<MachetesObject>().strikingDistance))
+        foreach (Collider b in Physics.OverlapSphere(a,weapon.GetComponent<MachetesObject>().strikingDistance))
         {
-            if (b.gameObject.tag == "Player" && b.gameObject != this.gameObject) // 对玩家造成伤害
+            if(b.gameObject.tag == "Player" && b.gameObject != this.gameObject) // 对玩家造成伤害
             {
                 PlayerHealth playerHealth = b.gameObject.GetComponent<PlayerHealth>();
                 if (playerHealth != null)
@@ -274,4 +285,5 @@ public class WeaponController : NetworkBehaviour
         }
 
     }
+
 }
