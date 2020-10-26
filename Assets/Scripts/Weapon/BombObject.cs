@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BombObject : MonoBehaviour
 {
+    private Animator anim;
+
     public string weaponName; //名字
     public int damage; //伤害值
     //public bool isRanged = false; //是否是远程，是=远程，否=近战
@@ -24,51 +26,64 @@ public class BombObject : MonoBehaviour
     public float exitTime = 5.0f;
     public float angle = 60;
     public float angle2 = 500;
-    public float switchWeaponTime = 0.2f;
+    public float switchWeaponTime = 1f;
     public bool isSwitchWeapon = false;
+    private bool isSwitchWeaponA = false;
 
     // Start is called before the first frame update
     void Start()
     {
         isShoot = false;
         canShoot = true;
+        this.GetComponent<SphereCollider>().enabled = false;
+        anim = this.transform.GetComponentInParent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (canShoot && !isShoot && Input.GetKeyDown(KeyCode.Mouse0))
+        if (canShoot && !isShoot && Input.GetKeyDown(KeyCode.Mouse0)) //当丢炸弹的时候
         {
+            anim.SetTrigger("isThrow");
+
             isShoot = true;
 
-            transform.transform.parent = null;
-
-            this.GetComponent<Rigidbody>().useGravity = true;
-
-            GetRayPosition();
-
-            distance = Vector3.Distance(destination, this.transform.position);
-            if (distance >= strikingDistance)
-            {
-                distance = strikingDistance;
-                destination = strikingDistance * this.transform.forward;
-            }
-            force = distance / time;
-            //this.transform.Rotate(this.transform.right, angle);
-            forceDirection = /*Quaternion.Euler(new Vector3(-angle, 0, 0)) **/ this.transform.forward * force * 0.1f;
-            GetComponent<Rigidbody>().velocity = forceDirection;
-            GetComponent<Rigidbody>().AddForce(new Vector3(0, 1, 0) * angle2);
+            
         }
 
-        if (isShoot)
+        if (isShoot) //当炸弹正在天上飞的时候
         {
             //distance -= Time.deltaTime * speed;
             //this.transform.position += (moveDirection * Time.deltaTime * speed);
             exitTime -= Time.deltaTime;
             switchWeaponTime -= Time.deltaTime;
-            if (switchWeaponTime < 0)
+            if (switchWeaponTime <= 0.35f && !isSwitchWeaponA)
+            {
+                isSwitchWeaponA = true;
+                transform.transform.parent = null; //取消炸弹的父物体
+
+                this.GetComponent<Rigidbody>().useGravity = true; //当丢出去的时候让炸弹有重力
+                this.GetComponent<SphereCollider>().enabled = true; //当丢出去的时候给炸弹加上碰撞体
+
+                GetRayPosition(); //获取地面射线
+
+                distance = Vector3.Distance(destination, this.transform.position);
+                if (distance >= strikingDistance)
+                {
+                    distance = strikingDistance;
+                    destination = strikingDistance * this.transform.forward;
+                }
+                force = distance / time;
+                //this.transform.Rotate(this.transform.right, angle);
+                forceDirection = /*Quaternion.Euler(new Vector3(-angle, 0, 0)) **/ this.transform.forward * force * 0.1f;
+                GetComponent<Rigidbody>().velocity = forceDirection;
+                GetComponent<Rigidbody>().AddForce(new Vector3(0, 1, 0) * angle2);
+
+            }
+            if (switchWeaponTime < 0 && !isSwitchWeapon)
             {
                 isSwitchWeapon = true;
+                anim.SetBool("isIdle", true);                
             }
 
             if (/*Vector3.Distance(destination, this.transform.position)*/ exitTime <= 0)
@@ -106,7 +121,7 @@ public class BombObject : MonoBehaviour
         }
     }
 
-    public void CheckDamage()
+    public void CheckDamage() //炸弹造成伤害
     {
         Vector3 a = this.transform.position;
         foreach (Collider b in Physics.OverlapSphere(a, bombRadius))
@@ -132,7 +147,7 @@ public class BombObject : MonoBehaviour
 
     }
 
-    IEnumerator Countdown()
+    IEnumerator Countdown() //炸弹落地deathTime后再消失，延迟消失
     {
         for (float timer = deathTime; timer >= 0; timer -= Time.deltaTime)
             yield return 0;
