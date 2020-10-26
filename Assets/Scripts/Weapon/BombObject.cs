@@ -34,7 +34,7 @@ public class BombObject : MonoBehaviour
     private AudioSource audioSource;
     private bool isBombAudioPlay = false;
 
-    // Start is called before the first frame update
+    public TeamSetup playerTeam;
     void Start()
     {
         isShoot = false;
@@ -173,5 +173,11 @@ public class BombObject : MonoBehaviour
     void Rough()
     {
         //请在这里加上长草需要的代码
+        HexCell temp = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>().GetCell(new Vector3(transform.position.x, 0, transform.position.z));
+        for (HexDirection i = HexDirection.NE; i <= HexDirection.NW; i++)
+        {
+            GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>().InfectCell(temp.GetNeighbor(i).transform.position, playerTeam.teamColor);
+        }
+        GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>().InfectCell(temp.transform.position, playerTeam.teamColor);
     }
 }
