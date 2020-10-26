@@ -10,7 +10,7 @@ public class MonsterWander : MonoBehaviour
     private Animator thisAnimator;          //自身动画组件
     private Vector3 initialPosition;            //初始位置
 
-    private float wanderRadius;          //游走半径，移动状态下，如果超出游走半径会返回出生位置
+    public float wanderRadius;          //游走半径，移动状态下，如果超出游走半径会返回出生位置
     public float alertRadius;         //警戒半径，玩家进入后怪物会发出警告，并一直面朝玩家
     public float defendRadius;          //自卫半径，玩家进入后怪物会追击玩家，当距离<攻击距离则会发动攻击（或者触发战斗）
     public float chaseRadius;            //追击半径，当怪物超出追击半径后会放弃追击，返回追击起始位置
@@ -20,7 +20,7 @@ public class MonsterWander : MonoBehaviour
     public float runSpeed;          //跑动速度
     public float turnSpeed;         //转身速度，建议0.1
     
-    private RecoveryMachine attachedMachine;//所属复苏机器
+    //private RecoveryMachine attachedMachine;//所属复苏机器
     private enum MonsterState
     {
         STAND,      //原地呼吸
@@ -47,6 +47,9 @@ public class MonsterWander : MonoBehaviour
 
     private float lastAttackTime;          //最近一次攻击时间
     private string lastTrigger;
+    private bool hasAttack;
+    public bool hasPlayerDie;
+    private bool hasDie;
 
     //在setTrigger前重置上个trigger
     void SetTrigger(string trigger)
@@ -88,14 +91,22 @@ public class MonsterWander : MonoBehaviour
                 clip.AddEvent(aniEvt);
             }
         }
-        attachedMachine = GetComponent<Monster>().attachedMachine;
-        wanderRadius = attachedMachine.recoveryRadius;
+        //attachedMachine = GetComponent<Monster>().attachedMachine;
+        //wanderRadius = attachedMachine.recoveryRadius;
+        hasPlayerDie = false;
+        hasDie = false;
     }
 
     void AttackOver()
     {
-        Debug.Log("怪物造成了伤害");
-        this.GetComponent<Monster>().hitPlayer(playerUnit);
+        if(!hasAttack)
+        {
+            hasAttack = true;
+
+            Debug.Log("怪物造成了伤害" + this.name);
+            this.GetComponent<Monster>().hitPlayer(playerUnit);
+        }
+        
         //造成伤害的代码
     }
 
@@ -129,88 +140,95 @@ public class MonsterWander : MonoBehaviour
 
     void Update()
     {
+        if(this.GetComponent<Monster>().health<=0)
+        {
+            hasDie = true;
+        }
         getPlayer();
         //Debug.Log(currentState.ToString());
-        switch (currentState)
+        if(!hasDie)
         {
+            switch (currentState)
+            {
 
-            //待机状态，等待actRestTme后重新随机指令
-            case MonsterState.STAND:
-                if (Time.time - lastActTime > actRestTme)
-                {
-                    RandomAction();         //随机切换指令
-                }
-                //该状态下的检测指令
-                EnemyDistanceCheck();
-                break;
+                //待机状态，等待actRestTme后重新随机指令
+                case MonsterState.STAND:
+                    if (Time.time - lastActTime > actRestTme)
+                    {
+                        RandomAction();         //随机切换指令
+                    }
+                    //该状态下的检测指令
+                    EnemyDistanceCheck();
+                    break;
 
-            //待机状态，由于观察动画时间较长，并希望动画完整播放，故等待时间是根据一个完整动画的播放长度，而不是指令间隔时间
-            case MonsterState.CHECK:
-                if (Time.time - lastActTime > thisAnimator.GetCurrentAnimatorStateInfo(0).length)
-                {
-                    RandomAction();         //随机切换指令
-                }
-                //该状态下的检测指令
-                EnemyDistanceCheck();
-                break;
+                //待机状态，由于观察动画时间较长，并希望动画完整播放，故等待时间是根据一个完整动画的播放长度，而不是指令间隔时间
+                case MonsterState.CHECK:
+                    if (Time.time - lastActTime > thisAnimator.GetCurrentAnimatorStateInfo(0).length)
+                    {
+                        RandomAction();         //随机切换指令
+                    }
+                    //该状态下的检测指令
+                    EnemyDistanceCheck();
+                    break;
 
-            //游走，根据状态随机时生成的目标位置修改朝向，并向前移动
-            case MonsterState.WALK:
-                transform.Translate(Vector3.forward * Time.deltaTime * walkSpeed);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
+                //游走，根据状态随机时生成的目标位置修改朝向，并向前移动
+                case MonsterState.WALK:
+                    transform.Translate(Vector3.forward * Time.deltaTime * walkSpeed);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
 
-                if (Time.time - lastActTime > actRestTme)
-                {
-                    RandomAction();         //随机切换指令
-                }
-                //该状态下的检测指令
-                WanderRadiusCheck();
-                break;
+                    if (Time.time - lastActTime > actRestTme)
+                    {
+                        RandomAction();         //随机切换指令
+                    }
+                    //该状态下的检测指令
+                    WanderRadiusCheck();
+                    break;
 
-            //警戒状态，播放一次警告动画和声音，并持续朝向玩家位置
-            case MonsterState.WARN:
-                if (!is_Warned)
-                {
-                    SetTrigger("Warn");
-                    //gameObject.GetComponent<AudioSource>().Play();
-                    is_Warned = true;
-                }
-                //持续朝向玩家位置
-                targetRotation = Quaternion.LookRotation(playerUnit.transform.position - transform.position, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
-                //该状态下的检测指令
-                WarningCheck();
-                break;
+                //警戒状态，播放一次警告动画和声音，并持续朝向玩家位置
+                case MonsterState.WARN:
+                    if (!is_Warned)
+                    {
+                        SetTrigger("Warn");
+                        //gameObject.GetComponent<AudioSource>().Play();
+                        is_Warned = true;
+                    }
+                    //持续朝向玩家位置
+                    targetRotation = Quaternion.LookRotation(playerUnit.transform.position - transform.position, Vector3.up);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
+                    //该状态下的检测指令
+                    WarningCheck();
+                    break;
 
-            //追击状态，朝着玩家跑去
-            case MonsterState.CHASE:
-                if (!is_Running)
-                {
-                    SetTrigger("Run");
-                    is_Running = true;
-                }
-                transform.Translate(Vector3.forward * Time.deltaTime * runSpeed);
-                //朝向玩家位置
-                targetRotation = Quaternion.LookRotation(playerUnit.transform.position - transform.position, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
-                //该状态下的检测指令
-                ChaseRadiusCheck();
-                break;
+                //追击状态，朝着玩家跑去
+                case MonsterState.CHASE:
+                    if (!is_Running)
+                    {
+                        SetTrigger("Run");
+                        is_Running = true;
+                    }
+                    transform.Translate(Vector3.forward * Time.deltaTime * runSpeed);
+                    //朝向玩家位置
+                    targetRotation = Quaternion.LookRotation(playerUnit.transform.position - transform.position, Vector3.up);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
+                    //该状态下的检测指令
+                    ChaseRadiusCheck();
+                    break;
 
-            //返回状态，超出追击范围后返回出生位置
-            case MonsterState.RETURN:
-                //朝向初始位置移动
-                targetRotation = Quaternion.LookRotation(initialPosition - transform.position, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
-                transform.Translate(Vector3.forward * Time.deltaTime * runSpeed);
-                //该状态下的检测指令
-                ReturnCheck();
-                break;
+                //返回状态，超出追击范围后返回出生位置
+                case MonsterState.RETURN:
+                    //朝向初始位置移动
+                    targetRotation = Quaternion.LookRotation(initialPosition - transform.position, Vector3.up);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
+                    transform.Translate(Vector3.forward * Time.deltaTime * runSpeed);
+                    //该状态下的检测指令
+                    ReturnCheck();
+                    break;
 
-            //怪物攻击状态
-            case MonsterState.ATTACK:
-                AttackCheck();
-                break;
+                //怪物攻击状态
+                case MonsterState.ATTACK:
+                    AttackCheck();
+                    break;
+            }
         }
     }
 
@@ -220,10 +238,11 @@ public class MonsterWander : MonoBehaviour
     void EnemyDistanceCheck()
     {
         diatanceToPlayer = Vector3.Distance(playerUnit.transform.position, transform.position);
-        if (diatanceToPlayer < attackRange)
+        if (diatanceToPlayer < attackRange && !hasPlayerDie)
         {
             //SceneManager.LoadScene("Battle");
             SetTrigger("Attack");
+            hasAttack = false;
             lastAttackTime = Time.time;
             currentState = MonsterState.ATTACK;
         }
@@ -262,12 +281,13 @@ public class MonsterWander : MonoBehaviour
     void WanderRadiusCheck()
     {
         diatanceToPlayer = Vector3.Distance(playerUnit.transform.position, transform.position);
-        diatanceToInitial = Vector3.Distance(playerUnit.transform.position, attachedMachine.transform.position);
+        diatanceToInitial = Vector3.Distance(transform.position, initialPosition);
 
-        if (diatanceToPlayer < attackRange)
+        if (diatanceToPlayer < attackRange && !hasPlayerDie)
         {
             //SceneManager.LoadScene("Battle");
             SetTrigger("Attack");
+            hasAttack = false;
             lastAttackTime = Time.time;
             currentState = MonsterState.ATTACK;
         }
@@ -295,10 +315,11 @@ public class MonsterWander : MonoBehaviour
         diatanceToPlayer = Vector3.Distance(playerUnit.transform.position, transform.position);
         diatanceToInitial = Vector3.Distance(transform.position, initialPosition);
 
-        if (diatanceToPlayer < attackRange)
+        if (diatanceToPlayer < attackRange && !hasPlayerDie)
         {
             //SceneManager.LoadScene("Battle");
             SetTrigger("Attack");
+            hasAttack = false;
             lastAttackTime = Time.time;
             currentState = MonsterState.ATTACK;
         }
@@ -329,10 +350,11 @@ public class MonsterWander : MonoBehaviour
         diatanceToPlayer = Vector3.Distance(playerUnit.transform.position, transform.position);
         diatanceToInitial = Vector3.Distance(playerUnit.transform.position,initialPosition);
         Debug.Log("attack" + diatanceToPlayer);
-        if (diatanceToPlayer < attackRange)
+        if (diatanceToPlayer < attackRange && !hasPlayerDie)
         {
             //SceneManager.LoadScene("Battle");
             SetTrigger("Attack");
+            hasAttack = false;
             currentState = MonsterState.ATTACK;
         }
         //如果超出追击范围或者敌人的距离超出警戒距离就返回
