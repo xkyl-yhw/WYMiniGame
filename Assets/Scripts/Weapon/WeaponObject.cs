@@ -127,15 +127,31 @@ public class WeaponObject : NetworkBehaviour
         {
             if (Vector3.Distance(hit.point, transform.parent.transform.position) < strikingDistance)
             {
-                hit.collider.gameObject.GetComponentInParent<HexGrid>().InfectCell(hit.point,GetComponentInParent<TeamSetup>().teamColor);
+                StartCoroutine(waitGrass(hit));
             }
         }
     }
 
+<<<<<<< HEAD
     [Command]
     private void CmdFire()
     {
         GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
         NetworkServer.Spawn(grenade);
     }
+=======
+    private IEnumerator waitGrass(RaycastHit hit)
+    {
+        yield return new WaitForSeconds(0.5f);
+        hit.collider.gameObject.GetComponentInParent<HexGrid>().InfectCell(hit.point, GetComponentInParent<TeamSetup>().teamColor);
+
+    }
+
+    //[Command]
+    //private void CmdFire()
+    //{
+    //    GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+    //    NetworkServer.Spawn(grenade);
+    //}
+>>>>>>> 8d31d474ab8a8e187d422e351822e7d2fa6546a8
 }

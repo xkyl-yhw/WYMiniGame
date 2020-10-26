@@ -15,18 +15,24 @@ public class PlayerAttribute : MonoBehaviour
     public int essencePickNum;
     public int essenceMax;
     public float essenceRate;
+    public string playerName;
+    public Text textName;
+    public StoragePlayerMsg storagePlayerMsg;
 
-    
+
 
     void Start()
     {
         team = GetComponent<TeamSetup>();
         teamTag = team.teamTag.ToString();
+        storagePlayerMsg = GameObject.Find("StoragePlayerMsg").GetComponent<StoragePlayerMsg>();
+        head = storagePlayerMsg.head;
+        playerName = storagePlayerMsg.playerName;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        textName.text = playerName;
     }
 }
