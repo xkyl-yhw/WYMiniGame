@@ -30,6 +30,10 @@ public class BombObject : MonoBehaviour
     public bool isSwitchWeapon = false;
     private bool isSwitchWeaponA = false;
 
+    public AudioClip bombAudio; //爆炸音效
+    private AudioSource audioSource;
+    private bool isBombAudioPlay = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +41,8 @@ public class BombObject : MonoBehaviour
         canShoot = true;
         this.GetComponent<SphereCollider>().enabled = false;
         anim = this.transform.GetComponentInParent<Animator>();
+
+        isBombAudioPlay = false;
     }
 
     // Update is called once per frame
@@ -95,6 +101,15 @@ public class BombObject : MonoBehaviour
                 CheckDamage();
                 Rough();
                 StartCoroutine(Countdown());//deathTime时间后删除物体
+
+                if(!isBombAudioPlay)
+                {
+                    //爆炸声
+                    audioSource = GetComponent<AudioSource>();
+                    audioSource.clip = bombAudio;
+                    audioSource.Play();
+                    isBombAudioPlay = true;
+                }
             }
         }
     }

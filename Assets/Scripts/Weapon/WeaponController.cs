@@ -257,6 +257,7 @@ public class WeaponController : NetworkBehaviour
     {
         Debug.Log("完成一次砍刀");
         weapon.GetComponent<MachetesObject>().isDamage = false;
+        weapon.GetComponent<MachetesObject>().isAttackAudioPlay = false;
         anim.SetBool("isIdle", true);
     }
 
