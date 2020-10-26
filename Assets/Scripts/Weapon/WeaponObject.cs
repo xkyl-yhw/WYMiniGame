@@ -125,7 +125,7 @@ public class WeaponObject : NetworkBehaviour
         {
             if (Vector3.Distance(hit.point, transform.parent.transform.position) < strikingDistance)
             {
-                hit.collider.gameObject.GetComponentInParent<HexGrid>().GetCell(hit.point).Color = transform.parent.GetComponent<TeamSetup>().teamColor;
+                hit.collider.gameObject.GetComponentInParent<HexGrid>().InfectCell(hit.point,GetComponentInParent<TeamSetup>().teamColor);
             }
         }
     }
