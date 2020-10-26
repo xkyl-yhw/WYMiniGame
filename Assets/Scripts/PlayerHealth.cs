@@ -16,11 +16,17 @@ public class PlayerHealth : MonoBehaviour
 
     //是否无敌
     public static bool isDefended = false;
+
+    public AudioClip deathAudio; //倒地音效
+    private AudioSource audioSource;
+    private bool isDeathAudioPlay = false;
+
     void Start()
     {
         anim = GetComponent<Animator>();
         playerAttribute = GetComponent<PlayerAttribute>();
         isDie = false;
+        isDeathAudioPlay = false;
     }
 
     // Update is called once per frame
@@ -33,6 +39,15 @@ public class PlayerHealth : MonoBehaviour
             isDie = true;
             anim.SetTrigger("isDie");
             Invoke("KillPlayer", dieTime);
+
+            if (!isDeathAudioPlay)
+            {
+                //爆炸声
+                audioSource = GetComponent<AudioSource>();
+                audioSource.clip = deathAudio;
+                audioSource.Play();
+                isDeathAudioPlay = true;
+            }
         }
     }
     
@@ -57,5 +72,6 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("人物死亡");
         //Destroy(gameObject);
         this.gameObject.SetActive(false);
+        isDeathAudioPlay = false;
     }
 }
