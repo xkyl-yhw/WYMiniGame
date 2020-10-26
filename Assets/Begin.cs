@@ -13,10 +13,10 @@ public class Begin : MonoBehaviour
     }
 
 
-    public void OnStartGame(int SceneNumber)
+    public void OnStartGame(string sceneName)
     {
         //Application.LoadLevel(SceneNumber); //Unity4.6及之前版本的写法
-        SceneManager.LoadScene(SceneNumber);
+        SceneManager.LoadScene(sceneName);
     }
 
 
