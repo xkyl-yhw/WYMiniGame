@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+
 public class Login : NetworkBehaviour
 {
     public GameObject loginCanvas;
