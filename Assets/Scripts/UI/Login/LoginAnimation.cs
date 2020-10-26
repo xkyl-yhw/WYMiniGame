@@ -12,6 +12,8 @@ public class LoginAnimation : MonoBehaviour
     public GameObject canvasSecond;
     public Button clickToEnter;
 
+    public AudioClip clickClip;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +39,8 @@ public class LoginAnimation : MonoBehaviour
 
     void ChangeToSelection()
     {
+        this.GetComponent<AudioSource>().clip = clickClip;
+        this.GetComponent<AudioSource>().Play();
         canvasFirst.SetActive(false);
         canvasSecond.SetActive(true);
     }

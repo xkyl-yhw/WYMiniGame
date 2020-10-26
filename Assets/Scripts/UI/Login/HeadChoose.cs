@@ -16,6 +16,8 @@ public class HeadChoose : MonoBehaviour
 
     public StoragePlayerMsg storagePlayerMsg;
 
+    public AudioClip clickClip; 
+
     void Start()
     {
         toggles = toggleGroup.ActiveToggles();
@@ -30,6 +32,11 @@ public class HeadChoose : MonoBehaviour
             tmp = toggle;
             if  (tmp.isOn)
             {
+                if (tmp != headNum)
+                {
+                    this.GetComponent<AudioSource>().clip = clickClip;
+                    this.GetComponent<AudioSource>().Play();
+                }
                 headNum = tmp;
                 background = headNum.transform.Find("Background").gameObject;
                 head = background.GetComponent<Image>().sprite;
@@ -39,6 +46,5 @@ public class HeadChoose : MonoBehaviour
         }
 
     }
-
 
 }
