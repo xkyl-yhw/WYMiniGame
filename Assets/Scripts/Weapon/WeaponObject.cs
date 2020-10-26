@@ -59,7 +59,7 @@ public class WeaponObject : NetworkBehaviour
             Debug.Log(weaponName + "子弹数" + currentAmmo);
             isShoot = true;
             GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-            //CmdFire();
+            CmdFire();
 
             hitGround();
         }
@@ -95,19 +95,19 @@ public class WeaponObject : NetworkBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if(Physics.Raycast(ray,out hit,200, 1 << LayerMask.NameToLayer("Ground")))
-        {
-            if (Vector3.Distance(hit.point, transform.parent.transform.position) < strikingDistance)
-            {
-                hit.collider.gameObject.GetComponentInParent<HexGrid>().GetCell(hit.point).Color = transform.parent.GetComponent<TeamSetup>().teamColor;
-            }
-        }
+        //if(Physics.Raycast(ray,out hit,200, 1 << LayerMask.NameToLayer("Ground")))
+        //{
+        //    if (Vector3.Distance(hit.point, transform.parent.transform.position) < strikingDistance)
+        //    {
+        //        hit.collider.gameObject.GetComponentInParent<HexGrid>().GetCell(hit.point).Color = transform.parent.GetComponent<TeamSetup>().teamColor;
+        //    }
+        //}
     }
 
-    //[Command]
-    //private void CmdFire()
-    //{
-    //    GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-    //    NetworkServer.Spawn(grenade);
-    //}
+    [Command]
+    private void CmdFire()
+    {
+        GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        NetworkServer.Spawn(grenade);
+    }
 }

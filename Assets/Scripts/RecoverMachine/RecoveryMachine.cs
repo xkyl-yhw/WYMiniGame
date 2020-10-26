@@ -21,6 +21,21 @@ public class RecoveryMachine : MonoBehaviour
     {
         machine = gameObject;
         machine.name = teamTag.ToString() + "RecoveryMachine";
+        monsters = (Monster[])GameObject.FindObjectsOfType(typeof(Monster));
+
+        for (int i = 0; i < monsters.Length; i++)
+        {
+            isInSphere = InRecoverySphere(monsters[i].transform, machine.transform, recoveryRadius);
+            monsters[i].inRecoverySphere = isInSphere;
+            if (isInSphere)
+            {
+                monsters[i].objectMachine = machine;
+            }
+            else
+            {
+                monsters[i].objectMachine = null;
+            }
+        }
 
     }
 
@@ -39,21 +54,7 @@ public class RecoveryMachine : MonoBehaviour
         }
         canTransfer = true;
 
-        monsters = (Monster[])GameObject.FindObjectsOfType(typeof(Monster));
-
-        for (int i = 0; i < monsters.Length; i++)
-        {
-            isInSphere = InRecoverySphere(monsters[i].transform, machine.transform, recoveryRadius);
-            monsters[i].inRecoverySphere = isInSphere;
-            if (isInSphere)
-            {
-                monsters[i].objectMachine = machine;
-            }
-            else
-            {
-                monsters[i].objectMachine = null;
-            }
-        }
+      
 
     }
 
