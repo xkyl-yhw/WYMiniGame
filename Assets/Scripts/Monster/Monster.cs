@@ -8,8 +8,8 @@ public abstract class Monster : MonoBehaviour
     public int damage;
     public bool inRecoverySphere;
     private PlayerHealth playerHealth;
-    public GameObject objectMachine;//所属复苏机器体
-    public RecoveryMachine attachedMachine;//所属复苏机器
+    //public GameObject objectMachine;//所属复苏机器体
+    //public RecoveryMachine attachedMachine;//所属复苏机器
 
     public GameObject dropSingleEssence;  //掉落精华
 
@@ -54,11 +54,12 @@ public abstract class Monster : MonoBehaviour
             
             StartCoroutine(Countdown());//deathTime时间后删除物体
         }
-        attachedMachine = objectMachine.GetComponent<RecoveryMachine>();
-        if (attachedMachine.canRecovery)
-        {
-            health = 0;
-        }
+        //机器复苏功能
+        //attachedMachine = objectMachine.GetComponent<RecoveryMachine>();
+        //if (attachedMachine.canRecovery)
+        //{
+        //    health = 0;
+        //}
         getPlayer();// 获取地图上离自己最近的player
         playerHealth = player.GetComponent<PlayerHealth>();
 
@@ -93,7 +94,7 @@ public abstract class Monster : MonoBehaviour
             Vector2 pos = p.normalized * (0.5f + p.magnitude);
             Vector3 pos2 = new Vector3(pos.x, 0, pos.y);
             GameObject a = Instantiate(essenceType, dropRange.TransformPoint(pos2), Quaternion.identity);
-            //a.transform.position = new Vector3(a.transform.position.x, transform.position.y, a.transform.position.x);
+            a.transform.position = a.transform.position + new Vector3(0, 0.5f, 0);
         }
     }
 
@@ -190,8 +191,12 @@ public abstract class Monster : MonoBehaviour
         playerHealth = mplayer.GetComponent<PlayerHealth>();
         if (playerHealth != null)
         {
-            Debug.Log("正在造成伤害");
+            Debug.Log("正在造成伤害" + damage);
             playerHealth.DamagePlayer(damage);
+            if(playerHealth.playerAttribute.health<=0)
+            {
+                this.GetComponent<MonsterWander>().hasPlayerDie = true;
+            }
         }
     }
 
