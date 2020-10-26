@@ -172,11 +172,11 @@ public class WeaponController : NetworkBehaviour
         CmdWeapon();
     }
 
-    [Command]
     private void CmdWeapon()
     {
         weapon = Instantiate(mList[weaponIndex]);
-        NetworkServer.Spawn(weapon);
+        if (weaponIndex == 2) weapon.GetComponent<BombObject>().playerTeam = GetComponentInParent<TeamSetup>();
+        //NetworkServer.Spawn(weapon,GetComponentInParent<TeamSetup>().gameObject);
         weaponType = GetWeaponType(weaponIndex);
 
         weapon.transform.parent = GetChild(this.transform,"Bip001 R Hand");

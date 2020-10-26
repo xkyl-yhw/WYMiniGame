@@ -30,7 +30,7 @@ public class BombObject : MonoBehaviour
     public bool isSwitchWeapon = false;
     private bool isSwitchWeaponA = false;
 
-    // Start is called before the first frame update
+    public TeamSetup playerTeam;
     void Start()
     {
         isShoot = false;
@@ -158,5 +158,12 @@ public class BombObject : MonoBehaviour
     void Rough()
     {
         //请在这里加上长草需要的代码
+        GameObject hexgrid = GameObject.FindGameObjectWithTag("HexGrid");
+        HexCell temp = hexgrid.GetComponent<HexGrid>().GetCell(new Vector3(transform.position.x, 0, transform.position.z));
+        for(HexDirection i = HexDirection.NE; i <= HexDirection.NW; i++)
+        {
+            hexgrid.GetComponent<HexGrid>().InfectCell(temp.GetNeighbor(i).transform.position, playerTeam.teamColor);
+        }
+        hexgrid.GetComponent<HexGrid>().InfectCell(temp.transform.position, playerTeam.teamColor);
     }
 }
