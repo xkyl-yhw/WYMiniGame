@@ -9,6 +9,7 @@ public class Transfer : MonoBehaviour
     public Transform player;
     public PlayerAttribute playerAttribute;
     public GameObject occupyMachine;//己方复苏机器
+    public String machineName;
     public RecoveryMachine recoveryMachine;
     public float timer;
     public bool canTransfer;
@@ -21,6 +22,8 @@ public class Transfer : MonoBehaviour
     {
         transferToggle.enabled = false;
         canTransfer = false;
+        machineName=playerAttribute.teamTag + "RecoveryMachine";
+        occupyMachine = GameObject.Find(machineName);
         recoveryMachine = occupyMachine.GetComponent<RecoveryMachine>();
 
         transferRadius = recoveryMachine.transferRadius;
@@ -29,7 +32,7 @@ public class Transfer : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(transferToggle.enabled);
+        //Debug.Log(transferToggle.enabled);
         //recoveryMachine = occupyMachine.GetComponent<RecoveryMachine>();
         transferRadius = recoveryMachine.transferRadius;
         if (playerAttribute.essencePickNum <= 0)

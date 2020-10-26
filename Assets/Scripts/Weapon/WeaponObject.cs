@@ -58,9 +58,9 @@ public class WeaponObject : NetworkBehaviour
             currentAmmo -= 1;
             Debug.Log(weaponName + "子弹数" + currentAmmo);
             isShoot = true;
+            GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            //CmdFire();
 
-            CmdFire();
-            
             hitGround();
         }
         else
@@ -104,10 +104,10 @@ public class WeaponObject : NetworkBehaviour
         }
     }
 
-    [Command]
-    private void CmdFire()
-    {
-        GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-        NetworkServer.Spawn(grenade);
-    }
+    //[Command]
+    //private void CmdFire()
+    //{
+    //    GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+    //    NetworkServer.Spawn(grenade);
+    //}
 }
