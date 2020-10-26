@@ -47,9 +47,9 @@ public class NetPlayerSetUp : NetworkBehaviour
             myCamera.transform.position = offset.x * transform.forward + offset.y * transform.up + offset.z * transform.right;
             myCamera.transform.rotation *= Quaternion.Euler(angle);
             myCamera.GetComponent<CameraController>().Player = transform;
-            transform.Find("body").GetComponent<SkinnedMeshRenderer>().material = bodyMatArr[(int)TeamSetup.returnTeam(playerColor)];
-            transform.Find("clother").GetComponent<SkinnedMeshRenderer>().material = clotherMatArr[(int)TeamSetup.returnTeam(playerColor)];
         }
+        transform.Find("body").GetComponent<SkinnedMeshRenderer>().material = bodyMatArr[(int)TeamSetup.returnTeam(playerColor)];
+        transform.Find("clother").GetComponent<SkinnedMeshRenderer>().material = clotherMatArr[(int)TeamSetup.returnTeam(playerColor)];
     }
 
     private void SetColor(Color oldColor, Color newColor)
