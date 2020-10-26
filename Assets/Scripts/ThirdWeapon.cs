@@ -28,10 +28,5 @@ public class ThirdWeapon : MonoBehaviour
         iconPath = "WeaponIcon/" + third;
         thirdWeaponIcon = Resources.Load<Sprite>(iconPath);
         source.sprite = thirdWeaponIcon;
-<<<<<<< HEAD
-       // Debug.Log(thirdWeaponIcon.name);
-=======
-        //Debug.Log(thirdWeaponIcon.name);
->>>>>>> origin/master
     }
 }

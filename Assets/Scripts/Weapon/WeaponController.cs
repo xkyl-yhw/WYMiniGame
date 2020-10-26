@@ -8,7 +8,7 @@ public class WeaponController : NetworkBehaviour
 {
     Animator anim;
     public GameObject weapon;
-    //public GameObject player;
+
     public int weaponIndex;
     public string weaponType; //Gun,Machete,Bomb
     //public int gunNum = 10;
@@ -32,7 +32,6 @@ public class WeaponController : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //player = gameObject;
         mSwitchWeapon = 0;
         mSwitchWeapon2 = 0;
         AxisCounts = 0;
@@ -125,7 +124,7 @@ public class WeaponController : NetworkBehaviour
 
     void SwitchWeaponAnim()
     {
-        anim.SetBool("isIdle",true);
+        anim.SetBool("isIdle", true);
         Destroy(weapon);
         SwitchWeapon(AxisCounts);
 
@@ -155,42 +154,23 @@ public class WeaponController : NetworkBehaviour
         AxisCounts = 0;
 
         if (MouseScrollWheel > 0)
-        {
-            //weapon.SetActive(false);
             NextWeapon();
-        }
-
         if (MouseScrollWheel < 0)
-        {
-           // weapon.SetActive(false);
             PreviousWeapon();
-        }
+
         CmdWeapon();
-       
-        //weaponType = GetWeaponType(weaponIndex);
-        //weapon = player.transform.Find(weaponType).gameObject;
-        //weapon.transform.parent = this.transform;
-        //weapon.transform.localPosition = weaponPosition;
-        //weapon.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
-        //weapon.SetActive(true);
     }
 
     [Command]
     private void CmdWeapon()
     {
         weapon = Instantiate(mList[weaponIndex]);
-<<<<<<< HEAD
-=======
-        if (weaponIndex == 2) weapon.GetComponent<BombObject>().playerTeam = GetComponentInParent<TeamSetup>();
         NetworkServer.Spawn(weapon);
->>>>>>> origin/master
         weaponType = GetWeaponType(weaponIndex);
 
-        weapon.transform.parent = GetChild(this.transform,"Bip001 R Hand");
+        weapon.transform.parent = GetChild(this.transform, "Bip001 R Hand");
         weapon.transform.localPosition = weaponPosition;
         weapon.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
-        NetworkServer.Spawn(weapon, gameObject);
-
     }
 
     public void NextWeapon()//下一个武器
@@ -272,9 +252,9 @@ public class WeaponController : NetworkBehaviour
     public void CheckDamage()
     {
         Vector3 a = weapon.transform.GetChild(0).transform.position;
-        foreach (Collider b in Physics.OverlapSphere(a,weapon.GetComponent<MachetesObject>().strikingDistance))
+        foreach (Collider b in Physics.OverlapSphere(a, weapon.GetComponent<MachetesObject>().strikingDistance))
         {
-            if(b.gameObject.tag == "Player" && b.gameObject != this.gameObject) // 对玩家造成伤害
+            if (b.gameObject.tag == "Player" && b.gameObject != this.gameObject) // 对玩家造成伤害
             {
                 PlayerHealth playerHealth = b.gameObject.GetComponent<PlayerHealth>();
                 if (playerHealth != null)

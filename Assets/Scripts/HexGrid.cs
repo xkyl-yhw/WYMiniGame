@@ -129,9 +129,9 @@ public class HexGrid : MonoBehaviour
         //hexMesh.Triangulate(cells);
         if (color != defaultColor)
         {
-            if (cell.Color != color) grassCastDict.Remove(index);
-            //Debug.Log(1);
-            CmdCreateGrass(index, pos);
+            //if (cell.Color != color) grassCastDict.Remove(index);
+            ////Debug.Log(1);
+            //CmdCreateGrass(index, pos,color);
             if (cell.Color != color)
             {
                 grassCastDict[index].GetComponent<GrassCell>().tempTeam = TeamSetup.returnTeam(color);
