@@ -18,6 +18,7 @@ public class NetPlayerSetUp : NetworkBehaviour
     private Color playerColor;
 
     private Color[] temp = { Color.red, Color.blue, Color.green };
+    public Material[] mat;
 
     public override void OnStartLocalPlayer()
     {
