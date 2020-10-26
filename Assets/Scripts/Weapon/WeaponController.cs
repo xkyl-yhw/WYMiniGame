@@ -255,6 +255,7 @@ public class WeaponController : NetworkBehaviour
     //检测是否完成了一次砍刀攻击
     public void SetMachetesIsDamage()
     {
+        Debug.Log("完成一次砍刀");
         weapon.GetComponent<MachetesObject>().isDamage = false;
         anim.SetBool("isIdle", true);
     }

@@ -6,7 +6,8 @@ public class PlayerHealth : MonoBehaviour
 {
     //public float health;
     //死亡多久消失
-    public float dieTime;
+    public float dieTime = 1f;
+    public bool isDie = false;
 
     // Start is called before the first frame update
     private Animator anim;
@@ -19,12 +20,20 @@ public class PlayerHealth : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         playerAttribute = GetComponent<PlayerAttribute>();
+        isDie = false;
     }
 
     // Update is called once per frame
     void Update()
     {
         //Health.currentHealth = playerAttribute.health;
+        if (playerAttribute.health <= 0 && !isDie)
+        {
+            this.GetComponent<PlayController>().enabled = false;
+            isDie = true;
+            anim.SetTrigger("isDie");
+            Invoke("KillPlayer", dieTime);
+        }
     }
     
     public void DamagePlayer(int damage)
@@ -37,11 +46,6 @@ public class PlayerHealth : MonoBehaviour
         {
             playerAttribute.health = 0;
         }
-        if (playerAttribute.health <= 0)
-        {
-            anim.SetTrigger("Die");
-            Invoke("KillPlayer", dieTime);
-        }
     }
     public void Defended()
     {
@@ -50,6 +54,8 @@ public class PlayerHealth : MonoBehaviour
 
     void KillPlayer()
     {
-        Destroy(gameObject);
+        Debug.Log("人物死亡");
+        //Destroy(gameObject);
+        this.gameObject.SetActive(false);
     }
 }
