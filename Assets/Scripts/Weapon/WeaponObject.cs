@@ -132,14 +132,14 @@ public class WeaponObject : NetworkBehaviour
         }
     }
 
-<<<<<<< HEAD
+
     [Command]
     private void CmdFire()
     {
         GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
         NetworkServer.Spawn(grenade);
     }
-=======
+
     private IEnumerator waitGrass(RaycastHit hit)
     {
         yield return new WaitForSeconds(0.5f);
@@ -153,5 +153,5 @@ public class WeaponObject : NetworkBehaviour
     //    GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
     //    NetworkServer.Spawn(grenade);
     //}
->>>>>>> 8d31d474ab8a8e187d422e351822e7d2fa6546a8
+
 }
