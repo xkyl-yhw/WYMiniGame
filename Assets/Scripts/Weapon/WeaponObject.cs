@@ -125,9 +125,16 @@ public class WeaponObject : NetworkBehaviour
         {
             if (Vector3.Distance(hit.point, transform.parent.transform.position) < strikingDistance)
             {
-                hit.collider.gameObject.GetComponentInParent<HexGrid>().InfectCell(hit.point,GetComponentInParent<TeamSetup>().teamColor);
+                StartCoroutine(waitGrass(hit));
             }
         }
+    }
+
+    private IEnumerator waitGrass(RaycastHit hit)
+    {
+        yield return new WaitForSeconds(0.5f);
+        hit.collider.gameObject.GetComponentInParent<HexGrid>().InfectCell(hit.point, GetComponentInParent<TeamSetup>().teamColor);
+
     }
 
     //[Command]
