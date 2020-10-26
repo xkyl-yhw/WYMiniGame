@@ -8,7 +8,8 @@ public class PlayerAttribute : MonoBehaviour
     public float health;
     public float healthMax;
     public float endurance;
-
+    public TeamSetup team;
+    public string  teamTag;
     public int enduranceMax;
     public Sprite head;
     public int essencePickNum;
@@ -19,7 +20,8 @@ public class PlayerAttribute : MonoBehaviour
 
     void Start()
     {
-
+        team = GetComponent<TeamSetup>();
+        teamTag = team.teamTag.ToString();
     }
 
     // Update is called once per frame
