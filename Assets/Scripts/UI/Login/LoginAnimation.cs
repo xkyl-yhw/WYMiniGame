@@ -9,12 +9,15 @@ public class LoginAnimation : MonoBehaviour
     private int c = 1;
 
     public GameObject canvasFirst;
+    public GameObject canvasSecond;
     public Button clickToEnter;
 
     // Start is called before the first frame update
     void Start()
     {
         clickToEnter.onClick.AddListener(ChangeToSelection);
+        canvasFirst.SetActive(true);
+        canvasSecond.SetActive(false);
     }
 
     // Update is called once per frame
@@ -34,6 +37,7 @@ public class LoginAnimation : MonoBehaviour
 
     void ChangeToSelection()
     {
-        Destroy(canvasFirst);
+        canvasFirst.SetActive(false);
+        canvasSecond.SetActive(true);
     }
 }
