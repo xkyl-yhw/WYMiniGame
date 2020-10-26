@@ -14,7 +14,6 @@ public class RecoveryMachine : MonoBehaviour
     public float timer;
     public float recoveryTimer;//复苏需要时间
     public bool isInSphere; //是否在范围
-    public Transform player;//检测玩家
     public GameObject machine;//复苏机器本身位置
     public Monster[] monsters;//被杀死的怪物
     void Start()
@@ -35,7 +34,17 @@ public class RecoveryMachine : MonoBehaviour
                 canRecovery = true;
                 timer = 0;
                 currentEssence = 0;
+                GameObject hexgrid = GameObject.FindGameObjectWithTag("HexGrid");
+                for (int i = 0; i < hexgrid.GetComponent<HexGrid>().cells.Length; i++)
+                {
+                    if (Vector3.Distance(hexgrid.GetComponent<HexGrid>().cells[i].transform.position, machine.transform.position) < recoveryRadius)
+                    {
+                        hexgrid.GetComponent<HexGrid>().InfectCell(hexgrid.GetComponent<HexGrid>().cells[i].transform.position, TeamSetup.returnColor(teamTag));
+                    }
+                }
+                canRecovery = false;
             }
+            return;
         }
         canTransfer = true;
 

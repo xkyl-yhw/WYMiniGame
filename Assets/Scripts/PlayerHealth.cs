@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -21,12 +22,18 @@ public class PlayerHealth : MonoBehaviour
     private AudioSource audioSource;
     private bool isDeathAudioPlay = false;
 
+    public int ReStartTime = 10;
+    public Vector3 spawnPos;
+    public GameObject CountDown;
+
     void Start()
     {
         anim = GetComponent<Animator>();
         playerAttribute = GetComponent<PlayerAttribute>();
         isDie = false;
         isDeathAudioPlay = false;
+        spawnPos = transform.position;
+        CountDown = GameObject.Find("CountDown");
     }
 
     // Update is called once per frame
@@ -71,7 +78,26 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log("人物死亡");
         //Destroy(gameObject);
-        this.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false);
         isDeathAudioPlay = false;
+        StartCoroutine(player_ReStart());
+    }
+
+    private IEnumerator player_ReStart()
+    {
+        int temp = ReStartTime;
+        CountDown.gameObject.GetComponent<Text>().enabled=true;
+        while (temp > 0)
+        {
+            CountDown.GetComponent<Text>().text = temp.ToString();
+            yield return new WaitForSeconds(1);
+            temp--;
+        }
+        CountDown.gameObject.GetComponent<Text>().enabled = false;
+        transform.position = spawnPos;
+        playerAttribute.health = 100;
+        this.GetComponent<PlayController>().enabled = true;
+        isDie = false;
+        anim.SetTrigger("isReborn");
     }
 }
