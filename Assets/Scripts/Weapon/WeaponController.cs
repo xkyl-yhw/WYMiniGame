@@ -42,6 +42,7 @@ public class WeaponController : NetworkBehaviour
 
         weaponType = "Gun";
         weaponIndex = 0;
+        //weapon.GetComponent<NetworkIdentity>().AssignClientAuthority(this.GetComponent<NetworkIdentity>().connectionToClient);
         CmdWeapon(); 
         weapon.transform.localRotation = Quaternion.Euler(weaponRotationGun);
         weapon.transform.localPosition = weaponPositionGun;
@@ -176,6 +177,8 @@ public class WeaponController : NetworkBehaviour
     private void CmdWeapon()
     {
         weapon = Instantiate(mList[weaponIndex]);
+        //NetworkServer.SpawnWithClientAuthority(theObject, connectionToClient);
+        //weapon.GetComponent<NetworkIdentity>().AssignClientAuthority(connectionToClient);
         NetworkServer.Spawn(weapon);
         weaponType = GetWeaponType(weaponIndex);
 

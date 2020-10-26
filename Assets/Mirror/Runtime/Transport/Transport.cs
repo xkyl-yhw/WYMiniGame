@@ -1,5 +1,3 @@
-// abstract transport layer component
-// note: not all transports need a port, so add it to yours if needed.
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +12,12 @@ namespace Mirror
     [Serializable] public class ServerDataReceivedEvent : UnityEvent<int, ArraySegment<byte>, int> { }
     [Serializable] public class UnityEventIntException : UnityEvent<int, Exception> { }
 
+    /// <summary>
+    /// Abstract transport layer component
+    /// </summary>
+    /// <remarks>
+    /// note: Not all transports need a port, so add it to yours if needed.
+    /// </remarks>
     public abstract class Transport : MonoBehaviour
     {
         /// <summary>
@@ -39,10 +43,11 @@ namespace Mirror
         /// <summary>
         /// Notify subscribers when this client receive data from the server
         /// </summary>
+        // Note: we provide channelId for NetworkDiagnostics.
         [HideInInspector] public ClientDataReceivedEvent OnClientDataReceived = new ClientDataReceivedEvent();
 
         /// <summary>
-        /// Notify subscribers when this clianet encounters an error communicating with the server
+        /// Notify subscribers when this client encounters an error communicating with the server
         /// </summary>
         [HideInInspector] public UnityEventException OnClientError = new UnityEventException();
 
@@ -109,6 +114,7 @@ namespace Mirror
         /// <summary>
         /// Notify subscribers when this server receives data from the client
         /// </summary>
+        // Note: we provide channelId for NetworkDiagnostics.
         [HideInInspector] public ServerDataReceivedEvent OnServerDataReceived = new ServerDataReceivedEvent();
 
         /// <summary>
