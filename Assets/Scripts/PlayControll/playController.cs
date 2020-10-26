@@ -170,6 +170,8 @@ public class PlayController : NetworkBehaviour
     //冲刺
     private void Dash()
     {
+        thisAnimator.SetBool("isDashing", true);
+        Debug.Log(thisAnimator.GetBool("isDashing"));
         if (dashTime < 0)// reset
         {
             isDash = false;
@@ -180,7 +182,6 @@ public class PlayController : NetworkBehaviour
         {
             dashTime -= Time.deltaTime;
             controller.Move(moveDirection * dashSpeed * Time.deltaTime * dashCoefficient);
-            thisAnimator.SetBool("isDashing", true);
         }
 
     }

@@ -6,10 +6,11 @@ using Mirror;
 public class WeaponObject : NetworkBehaviour
 {
     private Animator anim;
-
+    [SyncVar]
     public string weaponName; //名字
     public int damage; //伤害值
     //public bool isRanged = false; //是否是远程，是=远程，否=近战
+    [SyncVar]
     public int strikingDistance; //攻击距离
     public int maxNumOfAmmo; //弹药数量上限
     private int currentAmmo; //现存弹药数量
@@ -19,6 +20,13 @@ public class WeaponObject : NetworkBehaviour
     private bool canShoot = true; //是否可以开火
     public bool isShoot = true; //是否正在开火
     public bool isBasy = false; //鼠标左键是否用来点击道具了；是=用了；否=没用，可以开抢
+    public float shootCD = 0.2f;// 开火的间隔
+    private float lastShootTime;
+
+    public AudioClip reloadAudio; //换弹音效
+    public AudioClip fireAudio; //开枪音效
+    private AudioSource audioSource;
+    private bool isReloadAudioPlay = false;
 
     public GameObject bulletPrefab;
 
@@ -27,17 +35,28 @@ public class WeaponObject : NetworkBehaviour
     {
         currentAmmo = maxNumOfAmmo;
         reloadTime = reloadCD;
+        lastShootTime = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!isLocalPlayer) return;
         //是否在换弹
         if (isReload)
         {
             canShoot = false;
             reloadTime = TimeCount(reloadTime);
             Debug.Log("换弹中");
+
+            if (!isReloadAudioPlay)
+            {
+                audioSource = GetComponent<AudioSource>();
+                audioSource.clip = reloadAudio;
+                audioSource.volume = 0.8f;
+                audioSource.Play();
+                isReloadAudioPlay = true;
+            }
 
             //当换弹时间结束后结束换弹装填，重置cd
             if (reloadTime<=0)
@@ -46,6 +65,8 @@ public class WeaponObject : NetworkBehaviour
                 isReload = false;
                 reloadTime = reloadCD;
                 Debug.Log("换弹结束" + weaponName + "子弹数" + currentAmmo);
+                isReloadAudioPlay = false;
+                audioSource.volume = 0.4f;
             }
         }
         else
@@ -53,13 +74,20 @@ public class WeaponObject : NetworkBehaviour
             canShoot = true;
         }
 
-        if (canShoot && !isBasy && Input.GetKeyDown(KeyCode.Mouse0))
+        if (canShoot && !isBasy && Input.GetKeyDown(KeyCode.Mouse0) && Time.time - lastShootTime> shootCD)
         {
-            currentAmmo -= 1;
+            lastShootTime = Time.time;
+               currentAmmo -= 1;
             Debug.Log(weaponName + "子弹数" + currentAmmo);
             isShoot = true;
             GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
             CmdFire();
+
+            //开枪声
+            audioSource = GetComponent<AudioSource>();
+            audioSource.clip = fireAudio;
+            audioSource.Play();
+
 
             hitGround();
         }
@@ -95,13 +123,13 @@ public class WeaponObject : NetworkBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        //if(Physics.Raycast(ray,out hit,200, 1 << LayerMask.NameToLayer("Ground")))
-        //{
-        //    if (Vector3.Distance(hit.point, transform.parent.transform.position) < strikingDistance)
-        //    {
-        //        hit.collider.gameObject.GetComponentInParent<HexGrid>().GetCell(hit.point).Color = transform.parent.GetComponent<TeamSetup>().teamColor;
-        //    }
-        //}
+        if(Physics.Raycast(ray,out hit,200, 1 << LayerMask.NameToLayer("Ground")))
+        {
+            if (Vector3.Distance(hit.point, transform.parent.transform.position) < strikingDistance)
+            {
+                hit.collider.gameObject.GetComponentInParent<HexGrid>().InfectCell(hit.point,GetComponentInParent<TeamSetup>().teamColor);
+            }
+        }
     }
 
     [Command]

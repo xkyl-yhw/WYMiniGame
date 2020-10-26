@@ -30,13 +30,19 @@ public class BombObject : MonoBehaviour
     public bool isSwitchWeapon = false;
     private bool isSwitchWeaponA = false;
 
-    // Start is called before the first frame update
+    public AudioClip bombAudio; //爆炸音效
+    private AudioSource audioSource;
+    private bool isBombAudioPlay = false;
+
+    public TeamSetup playerTeam;
     void Start()
     {
         isShoot = false;
         canShoot = true;
         this.GetComponent<SphereCollider>().enabled = false;
         anim = this.transform.GetComponentInParent<Animator>();
+
+        isBombAudioPlay = false;
     }
 
     // Update is called once per frame
@@ -95,6 +101,15 @@ public class BombObject : MonoBehaviour
                 CheckDamage();
                 Rough();
                 StartCoroutine(Countdown());//deathTime时间后删除物体
+
+                if(!isBombAudioPlay)
+                {
+                    //爆炸声
+                    audioSource = GetComponent<AudioSource>();
+                    audioSource.clip = bombAudio;
+                    audioSource.Play();
+                    isBombAudioPlay = true;
+                }
             }
         }
     }
@@ -158,5 +173,11 @@ public class BombObject : MonoBehaviour
     void Rough()
     {
         //请在这里加上长草需要的代码
+        HexCell temp = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>().GetCell(new Vector3(transform.position.x, 0, transform.position.z));
+        for (HexDirection i = HexDirection.NE; i <= HexDirection.NW; i++)
+        {
+            GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>().InfectCell(temp.GetNeighbor(i).transform.position, playerTeam.teamColor);
+        }
+        GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>().InfectCell(temp.transform.position, playerTeam.teamColor);
     }
 }

@@ -18,6 +18,8 @@ public class NetPlayerSetUp : NetworkBehaviour
     private Color playerColor;
 
     private Color[] temp = { Color.red, Color.blue, Color.green };
+    public Material[] clotherMatArr;
+    public Material[] bodyMatArr;
 
     public override void OnStartLocalPlayer()
     {
@@ -45,13 +47,15 @@ public class NetPlayerSetUp : NetworkBehaviour
             myCamera.transform.position = offset.x * transform.forward + offset.y * transform.up + offset.z * transform.right;
             myCamera.transform.rotation *= Quaternion.Euler(angle);
             myCamera.GetComponent<CameraController>().Player = transform;
-
         }
+        transform.Find("body").GetComponent<SkinnedMeshRenderer>().material = bodyMatArr[(int)TeamSetup.returnTeam(playerColor)];
+        transform.Find("clother").GetComponent<SkinnedMeshRenderer>().material = clotherMatArr[(int)TeamSetup.returnTeam(playerColor)];
     }
 
     private void SetColor(Color oldColor, Color newColor)
     {
         GetComponent<TeamSetup>().teamColor = newColor;
     }
+
 }
 

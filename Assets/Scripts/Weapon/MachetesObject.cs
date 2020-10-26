@@ -15,7 +15,11 @@ public class MachetesObject : MonoBehaviour
     public bool isBasy = false; //鼠标左键是否用来点击道具了；是=用了；否=没用，可以开抢
 
     public bool isDamage = false;
-    
+
+    public AudioClip attackAudio; //挥动音效
+    private AudioSource audioSource;
+    public bool isAttackAudioPlay = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +49,8 @@ public class MachetesObject : MonoBehaviour
                 clip.AddEvent(aniEvt2);
             }
         }
+
+        isAttackAudioPlay = false;
     }
 
     // Update is called once per frame
@@ -54,6 +60,13 @@ public class MachetesObject : MonoBehaviour
         {
             Debug.Log("砍刀攻击");
 
+            if(!isAttackAudioPlay)
+            {
+                audioSource = GetComponent<AudioSource>();
+                audioSource.clip = attackAudio;
+                audioSource.Play();
+                isAttackAudioPlay = true;
+            }
             Using();
             isDamage = true;
         }
