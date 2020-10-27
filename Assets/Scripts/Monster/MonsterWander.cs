@@ -237,6 +237,7 @@ public class MonsterWander : MonoBehaviour
     /// </summary>
     void EnemyDistanceCheck()
     {
+        if (playerUnit == null) return;
         diatanceToPlayer = Vector3.Distance(playerUnit.transform.position, transform.position);
         if (diatanceToPlayer < attackRange && !hasPlayerDie)
         {
@@ -280,6 +281,7 @@ public class MonsterWander : MonoBehaviour
     /// </summary>
     void WanderRadiusCheck()
     {
+        if (playerUnit == null) return;
         diatanceToPlayer = Vector3.Distance(playerUnit.transform.position, transform.position);
         diatanceToInitial = Vector3.Distance(transform.position, initialPosition);
 
@@ -312,6 +314,7 @@ public class MonsterWander : MonoBehaviour
     /// </summary>
     void ChaseRadiusCheck()
     {
+        if (playerUnit == null) return;
         diatanceToPlayer = Vector3.Distance(playerUnit.transform.position, transform.position);
         diatanceToInitial = Vector3.Distance(transform.position, initialPosition);
 

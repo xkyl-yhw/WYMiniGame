@@ -9,7 +9,7 @@ public class PlayerAttribute : MonoBehaviour
     public float healthMax;
     public float endurance;
     public TeamSetup team;
-    public string  teamTag;
+    public string teamTag;
     public int enduranceMax;
     public Sprite head;
     public int essencePickNum;
@@ -28,11 +28,17 @@ public class PlayerAttribute : MonoBehaviour
         storagePlayerMsg = GameObject.Find("StoragePlayerMsg").GetComponent<StoragePlayerMsg>();
         head = storagePlayerMsg.head;
         playerName = storagePlayerMsg.playerName;
+        if (transform.Find("Name") != null)
+            textName = transform.Find("Name").GetComponent<Text>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        textName.text = playerName;
+        if (transform.Find("Name") != null && textName == null)
+        {
+            textName = transform.Find("Name").GetComponent<Text>();
+            textName.text = playerName;
+        }
     }
 }
