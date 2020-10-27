@@ -61,6 +61,7 @@ public abstract class Monster : MonoBehaviour
         //    health = 0;
         //}
         getPlayer();// 获取地图上离自己最近的player
+        if (player == null) return;
         playerHealth = player.GetComponent<PlayerHealth>();
 
     }
