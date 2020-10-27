@@ -34,6 +34,7 @@ public class PlayerHealth : MonoBehaviour
         isDeathAudioPlay = false;
         spawnPos = transform.position;
         CountDown = GameObject.Find("CountDown");
+        CountDown.SetActive(false);
     }
 
     // Update is called once per frame
@@ -86,14 +87,14 @@ public class PlayerHealth : MonoBehaviour
     private IEnumerator player_ReStart()
     {
         int temp = ReStartTime;
-        CountDown.gameObject.GetComponent<Text>().enabled=true;
+        CountDown.SetActive(true);
         while (temp > 0)
         {
-            CountDown.GetComponent<Text>().text = temp.ToString();
+            CountDown.GetComponentInChildren<Text>().text = temp.ToString();
             yield return new WaitForSeconds(1);
             temp--;
         }
-        CountDown.gameObject.GetComponent<Text>().enabled = false;
+        CountDown.SetActive(false);
         transform.position = spawnPos;
         playerAttribute.health = 100;
         this.GetComponent<PlayController>().enabled = true;

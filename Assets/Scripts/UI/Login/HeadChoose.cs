@@ -16,8 +16,12 @@ public class HeadChoose : MonoBehaviour
 
     public StoragePlayerMsg storagePlayerMsg;
 
+<<<<<<< HEAD
     private bool hasPlayAudio = false;
     public AudioClip clickClip;
+=======
+    public AudioClip clickClip; 
+>>>>>>> 902aa0361303ee26f4b50f9b3158f5a56a9f6b99
 
     void Start()
     {
@@ -35,9 +39,14 @@ public class HeadChoose : MonoBehaviour
             tmp = toggle;
             if  (tmp.isOn)
             {
+<<<<<<< HEAD
                 if(headNum != tmp && !hasPlayAudio)
                 {
                     hasPlayAudio = true;
+=======
+                if (tmp != headNum)
+                {
+>>>>>>> 902aa0361303ee26f4b50f9b3158f5a56a9f6b99
                     this.GetComponent<AudioSource>().clip = clickClip;
                     this.GetComponent<AudioSource>().Play();
                 }
@@ -51,6 +60,5 @@ public class HeadChoose : MonoBehaviour
         }
 
     }
-
 
 }
