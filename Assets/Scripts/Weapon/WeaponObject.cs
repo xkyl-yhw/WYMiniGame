@@ -6,11 +6,10 @@ using Mirror;
 public class WeaponObject : NetworkBehaviour
 {
     private Animator anim;
-    [SyncVar]
+
     public string weaponName; //名字
     public int damage; //伤害值
     //public bool isRanged = false; //是否是远程，是=远程，否=近战
-    [SyncVar]
     public int strikingDistance; //攻击距离
     public int maxNumOfAmmo; //弹药数量上限
     private int currentAmmo; //现存弹药数量
@@ -41,7 +40,6 @@ public class WeaponObject : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isLocalPlayer) return;
         //是否在换弹
         if (isReload)
         {
@@ -81,13 +79,13 @@ public class WeaponObject : NetworkBehaviour
             Debug.Log(weaponName + "子弹数" + currentAmmo);
             isShoot = true;
             GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-            CmdFire();
 
             //开枪声
             audioSource = GetComponent<AudioSource>();
             audioSource.clip = fireAudio;
             audioSource.Play();
 
+            //CmdFire();
 
             hitGround();
         }
@@ -132,14 +130,6 @@ public class WeaponObject : NetworkBehaviour
         }
     }
 
-
-    [Command]
-    private void CmdFire()
-    {
-        GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-        NetworkServer.Spawn(grenade);
-    }
-
     private IEnumerator waitGrass(RaycastHit hit)
     {
         yield return new WaitForSeconds(0.5f);
@@ -153,5 +143,4 @@ public class WeaponObject : NetworkBehaviour
     //    GameObject grenade = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
     //    NetworkServer.Spawn(grenade);
     //}
-
 }

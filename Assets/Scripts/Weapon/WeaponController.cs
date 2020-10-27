@@ -7,15 +7,14 @@ using Mirror;
 public class WeaponController : NetworkBehaviour
 {
     Animator anim;
-    
     public GameObject weapon;
-    [SyncVar]
+
     public int weaponIndex;
-    [SyncVar]
     public string weaponType; //Gun,Machete,Bomb
     //public int gunNum = 10;
     //public int macheteNum = 10;
     //public int bombNum = 10;
+
     public float SwitchWeaponCD = 1f;
     public float SwitchWeaponCD2 = 0.5f;
     private float mSwitchWeapon;
@@ -23,11 +22,13 @@ public class WeaponController : NetworkBehaviour
     private float AxisCounts;
     private bool isScroll;
     private bool isScrollCD;
+
     public Vector3 weaponPositionBomb = new Vector3(1.8f, 0f, 1.0f);
     public Vector3 weaponPositionGun = new Vector3(1.8f, 0f, 1.0f);
     public Vector3 weaponPositionMachete = new Vector3(1.8f, 0f, 1.0f);
     public Vector3 weaponRotationGun = new Vector3(1.8f, 0f, 1.0f);
     public Vector3 weaponRotationMachete = new Vector3(1.8f, 0f, 1.0f);
+
     public List<GameObject> mList = new List<GameObject>(); //武器列表
 
     // Start is called before the first frame update
@@ -41,7 +42,6 @@ public class WeaponController : NetworkBehaviour
 
         weaponType = "Gun";
         weaponIndex = 0;
-        //weapon.GetComponent<NetworkIdentity>().AssignClientAuthority(this.GetComponent<NetworkIdentity>().connectionToClient);
         CmdWeapon(); 
         weapon.transform.localRotation = Quaternion.Euler(weaponRotationGun);
         weapon.transform.localPosition = weaponPositionGun;
@@ -171,13 +171,10 @@ public class WeaponController : NetworkBehaviour
 
         CmdWeapon();
     }
-    //[Command]
+
     private void CmdWeapon()
     {
         weapon = Instantiate(mList[weaponIndex]);
-        //NetworkServer.SpawnWithClientAuthority(theObject, connectionToClient);
-        //weapon.GetComponent<NetworkIdentity>().AssignClientAuthority(connectionToClient);
-        NetworkServer.Spawn(weapon);
         if (weaponIndex == 2) weapon.GetComponent<BombObject>().playerTeam = GetComponentInParent<TeamSetup>();
         //NetworkServer.Spawn(weapon,GetComponentInParent<TeamSetup>().gameObject);
         weaponType = GetWeaponType(weaponIndex);

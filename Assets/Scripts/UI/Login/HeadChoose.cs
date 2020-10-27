@@ -16,10 +16,15 @@ public class HeadChoose : MonoBehaviour
 
     public StoragePlayerMsg storagePlayerMsg;
 
+    private bool hasPlayAudio = false;
+    public AudioClip clickClip;
+
     void Start()
     {
         toggles = toggleGroup.ActiveToggles();
         //playerAttribute = player.GetComponent<PlayerAttribute>();
+
+        hasPlayAudio = false;
     }
 
     // Update is called once per frame
@@ -30,7 +35,14 @@ public class HeadChoose : MonoBehaviour
             tmp = toggle;
             if  (tmp.isOn)
             {
+                if(headNum != tmp && !hasPlayAudio)
+                {
+                    hasPlayAudio = true;
+                    this.GetComponent<AudioSource>().clip = clickClip;
+                    this.GetComponent<AudioSource>().Play();
+                }
                 headNum = tmp;
+                hasPlayAudio = true;
                 background = headNum.transform.Find("Background").gameObject;
                 head = background.GetComponent<Image>().sprite;
                 //playerAttribute.head = head;

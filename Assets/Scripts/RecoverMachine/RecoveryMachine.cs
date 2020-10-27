@@ -16,25 +16,11 @@ public class RecoveryMachine : MonoBehaviour
     public bool isInSphere; //是否在范围
     public GameObject machine;//复苏机器本身位置
     public Monster[] monsters;//被杀死的怪物
+    public Material M1, M2;
     void Start()
     {
         machine = gameObject;
         machine.name = teamTag.ToString() + "RecoveryMachine";
-        monsters = (Monster[])GameObject.FindObjectsOfType(typeof(Monster));
-
-        for (int i = 0; i < monsters.Length; i++)
-        {
-            isInSphere = InRecoverySphere(monsters[i].transform, machine.transform, recoveryRadius);
-            monsters[i].inRecoverySphere = isInSphere;
-            if (isInSphere)
-            {
-                monsters[i].objectMachine = machine;
-            }
-            else
-            {
-                monsters[i].objectMachine = null;
-            }
-        }
 
     }
 
@@ -44,6 +30,7 @@ public class RecoveryMachine : MonoBehaviour
         {
             canTransfer = false;
             timer += Time.deltaTime;
+            this.transform.GetComponent<Renderer>().material = M1;
             if (timer >= recoveryTimer)
             {
                 canRecovery = true;
