@@ -255,6 +255,7 @@ public class MonsterWander : MonoBehaviour
         {
             currentState = MonsterState.WARN;
         }
+        hasPlayerDie = false;
     }
 
     /// <summary>
@@ -274,6 +275,7 @@ public class MonsterWander : MonoBehaviour
             is_Warned = false;
             RandomAction();
         }
+        hasPlayerDie = false;
     }
 
     /// <summary>
@@ -301,6 +303,7 @@ public class MonsterWander : MonoBehaviour
         {
             currentState = MonsterState.WARN;
         }
+        hasPlayerDie = false;
 
         if (diatanceToInitial > wanderRadius)
         {
@@ -364,6 +367,7 @@ public class MonsterWander : MonoBehaviour
         else if (diatanceToInitial > chaseRadius || diatanceToPlayer > alertRadius)
         {
             SetTrigger("Run");
+            hasPlayerDie = false;
             currentState = MonsterState.RETURN;
         }
         else
