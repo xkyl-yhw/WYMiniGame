@@ -35,10 +35,10 @@ public class PlayerAttribute : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.Find("Name") != null && textName == null)
+        if (transform.Find("Name") != null && textName != null)
         {
-            textName = transform.Find("Name").GetComponent<Text>();
-            textName.text = playerName;
+            //textName = transform.Find("Name").GetComponent<Text>();
         }
+        textName.text = playerName;
     }
 }
