@@ -7,8 +7,6 @@ using UnityEngine.Serialization;
 
 namespace Mirror
 {
-
-
     /// <summary>
     /// Enumeration of methods of where to spawn player objects in multiplayer games.
     /// </summary>

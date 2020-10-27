@@ -16,7 +16,6 @@ public class RecoveryMachine : MonoBehaviour
     public bool isInSphere; //是否在范围
     public GameObject machine;//复苏机器本身位置
     public Monster[] monsters;//被杀死的怪物
-    public Material M1, M2;
     void Start()
     {
         machine = gameObject;
@@ -30,7 +29,6 @@ public class RecoveryMachine : MonoBehaviour
         {
             canTransfer = false;
             timer += Time.deltaTime;
-            this.transform.GetComponent<Renderer>().material = M1;
             if (timer >= recoveryTimer)
             {
                 canRecovery = true;
