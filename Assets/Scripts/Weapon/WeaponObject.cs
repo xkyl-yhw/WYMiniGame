@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.EventSystems;
 
 public class WeaponObject : NetworkBehaviour
 {
@@ -72,7 +73,7 @@ public class WeaponObject : NetworkBehaviour
             canShoot = true;
         }
 
-        if (canShoot && !isBasy && Input.GetKeyDown(KeyCode.Mouse0) && Time.time - lastShootTime> shootCD)
+        if (canShoot && !isBasy && Input.GetKeyDown(KeyCode.Mouse0) && Time.time - lastShootTime> shootCD && !EventSystem.current.IsPointerOverGameObject())
         {
             lastShootTime = Time.time;
                currentAmmo -= 1;

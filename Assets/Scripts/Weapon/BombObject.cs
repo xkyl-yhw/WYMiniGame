@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BombObject : MonoBehaviour
 {
@@ -48,7 +49,7 @@ public class BombObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (canShoot && !isShoot && Input.GetKeyDown(KeyCode.Mouse0)) //当丢炸弹的时候
+        if (canShoot && !isShoot && Input.GetKeyDown(KeyCode.Mouse0) && !EventSystem.current.IsPointerOverGameObject()) //当丢炸弹的时候
         {
             anim.SetTrigger("isThrow");
 

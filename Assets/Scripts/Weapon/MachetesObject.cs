@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MachetesObject : MonoBehaviour
 {
@@ -56,7 +57,7 @@ public class MachetesObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isDamage && Input.GetKeyDown(KeyCode.Mouse0))
+        if (!isDamage && Input.GetKeyDown(KeyCode.Mouse0) && !EventSystem.current.IsPointerOverGameObject())
         {
             Debug.Log("砍刀攻击");
 
