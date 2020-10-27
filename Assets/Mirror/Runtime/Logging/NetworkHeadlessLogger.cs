@@ -10,9 +10,7 @@ namespace Mirror.Logging
     [HelpURL("https://mirror-networking.com/docs/Components/NetworkHeadlessLogger.html")]
     public class NetworkHeadlessLogger : MonoBehaviour
     {
-#pragma warning disable CS0414 // unused private members
         [SerializeField] bool showExceptionStackTrace = false;
-#pragma warning restore CS0414 // unused private members
 
         void Awake()
         {

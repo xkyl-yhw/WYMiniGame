@@ -3,18 +3,24 @@ using UnityEngine;
 
 namespace Mirror
 {
-    // Deprecated 10/06/2020
-    [Obsolete("Implement NetworkMessage instead. Use extension methods instead of Serialize/Deserialize, see https://github.com/vis2k/Mirror/pull/2317", true)]
-    public interface IMessageBase { }
+    public interface IMessageBase
+    {
+        void Deserialize(NetworkReader reader);
 
-    // Deprecated 10/06/2020
-    [Obsolete("Implement NetworkMessage instead. Use extension methods instead of Serialize/Deserialize, see https://github.com/vis2k/Mirror/pull/2317", true)]
-    public class MessageBase : IMessageBase { }
+        void Serialize(NetworkWriter writer);
+    }
 
-    public interface NetworkMessage { }
+    public abstract class MessageBase : IMessageBase
+    {
+        // De-serialize the contents of the reader into this message
+        public virtual void Deserialize(NetworkReader reader) { }
+
+        // Serialize the contents of this message into the writer
+        public virtual void Serialize(NetworkWriter writer) { }
+    }
 
     #region Public System Messages
-    public struct ErrorMessage : NetworkMessage
+    public struct ErrorMessage : IMessageBase
     {
         public byte value;
 
@@ -22,24 +28,85 @@ namespace Mirror
         {
             value = v;
         }
+
+        public void Deserialize(NetworkReader reader)
+        {
+            value = reader.ReadByte();
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.WriteByte(value);
+        }
     }
 
-    public struct ReadyMessage : NetworkMessage { }
+    public struct ReadyMessage : IMessageBase
+    {
+        public void Deserialize(NetworkReader reader) { }
 
-    public struct NotReadyMessage : NetworkMessage { }
+        public void Serialize(NetworkWriter writer) { }
+    }
 
-    public struct AddPlayerMessage : NetworkMessage { }
+    public struct NotReadyMessage : IMessageBase
+    {
+        public void Deserialize(NetworkReader reader) { }
 
-    public struct DisconnectMessage : NetworkMessage { }
+        public void Serialize(NetworkWriter writer) { }
+    }
 
-    public struct ConnectMessage : NetworkMessage { }
+    public struct AddPlayerMessage : IMessageBase
+    {
+        public void Deserialize(NetworkReader reader) { }
 
-    public struct SceneMessage : NetworkMessage
+        public void Serialize(NetworkWriter writer) { }
+    }
+
+    // Deprecated 5/2/2020
+    /// <summary>
+    /// Obsolete: Removed as a security risk. Use <see cref="NetworkServer.RemovePlayerForConnection(NetworkConnection, bool)">NetworkServer.RemovePlayerForConnection</see> instead.
+    /// </summary>
+    [Obsolete("Removed as a security risk. Use NetworkServer.RemovePlayerForConnection(NetworkConnection conn, bool keepAuthority = false) instead")]
+    public struct RemovePlayerMessage : IMessageBase
+    {
+        public void Deserialize(NetworkReader reader) { }
+
+        public void Serialize(NetworkWriter writer) { }
+    }
+
+    public struct DisconnectMessage : IMessageBase
+    {
+        public void Deserialize(NetworkReader reader) { }
+
+        public void Serialize(NetworkWriter writer) { }
+    }
+
+    public struct ConnectMessage : IMessageBase
+    {
+        public void Deserialize(NetworkReader reader) { }
+
+        public void Serialize(NetworkWriter writer) { }
+    }
+
+    public struct SceneMessage : IMessageBase
     {
         public string sceneName;
         // Normal = 0, LoadAdditive = 1, UnloadAdditive = 2
         public SceneOperation sceneOperation;
         public bool customHandling;
+
+        public void Deserialize(NetworkReader reader)
+        {
+            sceneName = reader.ReadString();
+            sceneOperation = (SceneOperation)reader.ReadByte();
+            customHandling = reader.ReadBoolean();
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.WriteString(sceneName);
+            writer.WriteByte((byte)sceneOperation);
+            writer.WriteBoolean(customHandling);
+        }
     }
 
     public enum SceneOperation : byte
@@ -52,7 +119,7 @@ namespace Mirror
     #endregion
 
     #region System Messages requried for code gen path
-    public struct CommandMessage : NetworkMessage
+    public struct CommandMessage : IMessageBase
     {
         public uint netId;
         public int componentIndex;
@@ -60,9 +127,26 @@ namespace Mirror
         // the parameters for the Cmd function
         // -> ArraySegment to avoid unnecessary allocations
         public ArraySegment<byte> payload;
+
+        public void Deserialize(NetworkReader reader)
+        {
+            netId = reader.ReadPackedUInt32();
+            componentIndex = (int)reader.ReadPackedUInt32();
+            // hash is always 4 full bytes, WritePackedInt would send 1 extra byte here
+            functionHash = reader.ReadInt32();
+            payload = reader.ReadBytesAndSizeSegment();
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.WritePackedUInt32(netId);
+            writer.WritePackedUInt32((uint)componentIndex);
+            writer.WriteInt32(functionHash);
+            writer.WriteBytesAndSizeSegment(payload);
+        }
     }
 
-    public struct RpcMessage : NetworkMessage
+    public struct RpcMessage : IMessageBase
     {
         public uint netId;
         public int componentIndex;
@@ -70,11 +154,55 @@ namespace Mirror
         // the parameters for the Cmd function
         // -> ArraySegment to avoid unnecessary allocations
         public ArraySegment<byte> payload;
+
+        public void Deserialize(NetworkReader reader)
+        {
+            netId = reader.ReadPackedUInt32();
+            componentIndex = (int)reader.ReadPackedUInt32();
+            // hash is always 4 full bytes, WritePackedInt would send 1 extra byte here
+            functionHash = reader.ReadInt32();
+            payload = reader.ReadBytesAndSizeSegment();
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.WritePackedUInt32(netId);
+            writer.WritePackedUInt32((uint)componentIndex);
+            writer.WriteInt32(functionHash);
+            writer.WriteBytesAndSizeSegment(payload);
+        }
+    }
+
+    public struct SyncEventMessage : IMessageBase
+    {
+        public uint netId;
+        public int componentIndex;
+        public int functionHash;
+        // the parameters for the Cmd function
+        // -> ArraySegment to avoid unnecessary allocations
+        public ArraySegment<byte> payload;
+
+        public void Deserialize(NetworkReader reader)
+        {
+            netId = reader.ReadPackedUInt32();
+            componentIndex = (int)reader.ReadPackedUInt32();
+            // hash is always 4 full bytes, WritePackedInt would send 1 extra byte here
+            functionHash = reader.ReadInt32();
+            payload = reader.ReadBytesAndSizeSegment();
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.WritePackedUInt32(netId);
+            writer.WritePackedUInt32((uint)componentIndex);
+            writer.WriteInt32(functionHash);
+            writer.WriteBytesAndSizeSegment(payload);
+        }
     }
     #endregion
 
     #region Internal System Messages
-    public struct SpawnMessage : NetworkMessage
+    public struct SpawnMessage : IMessageBase
     {
         /// <summary>
         /// netId of new or existing object
@@ -114,33 +242,107 @@ namespace Mirror
         /// <remark>ArraySegment to avoid unnecessary allocations</remark>
         /// </summary>
         public ArraySegment<byte> payload;
+
+        public void Deserialize(NetworkReader reader)
+        {
+            netId = reader.ReadPackedUInt32();
+            isLocalPlayer = reader.ReadBoolean();
+            isOwner = reader.ReadBoolean();
+            sceneId = reader.ReadPackedUInt64();
+            if (sceneId == 0)
+            {
+                assetId = reader.ReadGuid();
+            }
+            position = reader.ReadVector3();
+            rotation = reader.ReadQuaternion();
+            scale = reader.ReadVector3();
+            payload = reader.ReadBytesAndSizeSegment();
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.WritePackedUInt32(netId);
+            writer.WriteBoolean(isLocalPlayer);
+            writer.WriteBoolean(isOwner);
+            writer.WritePackedUInt64(sceneId);
+            if (sceneId == 0)
+            {
+                writer.WriteGuid(assetId);
+            }
+            writer.WriteVector3(position);
+            writer.WriteQuaternion(rotation);
+            writer.WriteVector3(scale);
+            writer.WriteBytesAndSizeSegment(payload);
+        }
     }
 
-    public struct ObjectSpawnStartedMessage : NetworkMessage { }
+    public struct ObjectSpawnStartedMessage : IMessageBase
+    {
+        public void Deserialize(NetworkReader reader) { }
 
-    public struct ObjectSpawnFinishedMessage : NetworkMessage { }
+        public void Serialize(NetworkWriter writer) { }
+    }
 
-    public struct ObjectDestroyMessage : NetworkMessage
+    public struct ObjectSpawnFinishedMessage : IMessageBase
+    {
+        public void Deserialize(NetworkReader reader) { }
+
+        public void Serialize(NetworkWriter writer) { }
+    }
+
+    public struct ObjectDestroyMessage : IMessageBase
     {
         public uint netId;
+
+        public void Deserialize(NetworkReader reader)
+        {
+            netId = reader.ReadPackedUInt32();
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.WritePackedUInt32(netId);
+        }
     }
 
-    public struct ObjectHideMessage : NetworkMessage
+    public struct ObjectHideMessage : IMessageBase
     {
         public uint netId;
+
+        public void Deserialize(NetworkReader reader)
+        {
+            netId = reader.ReadPackedUInt32();
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.WritePackedUInt32(netId);
+        }
     }
 
-    public struct UpdateVarsMessage : NetworkMessage
+    public struct UpdateVarsMessage : IMessageBase
     {
         public uint netId;
         // the serialized component data
         // -> ArraySegment to avoid unnecessary allocations
         public ArraySegment<byte> payload;
+
+        public void Deserialize(NetworkReader reader)
+        {
+            netId = reader.ReadPackedUInt32();
+            payload = reader.ReadBytesAndSizeSegment();
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.WritePackedUInt32(netId);
+            writer.WriteBytesAndSizeSegment(payload);
+        }
     }
 
     // A client sends this message to the server
     // to calculate RTT and synchronize time
-    public struct NetworkPingMessage : NetworkMessage
+    public struct NetworkPingMessage : IMessageBase
     {
         public double clientTime;
 
@@ -148,14 +350,36 @@ namespace Mirror
         {
             clientTime = value;
         }
+
+        public void Deserialize(NetworkReader reader)
+        {
+            clientTime = reader.ReadDouble();
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.WriteDouble(clientTime);
+        }
     }
 
     // The server responds with this message
     // The client can use this to calculate RTT and sync time
-    public struct NetworkPongMessage : NetworkMessage
+    public struct NetworkPongMessage : IMessageBase
     {
         public double clientTime;
         public double serverTime;
+
+        public void Deserialize(NetworkReader reader)
+        {
+            clientTime = reader.ReadDouble();
+            serverTime = reader.ReadDouble();
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.WriteDouble(clientTime);
+            writer.WriteDouble(serverTime);
+        }
     }
     #endregion
 }

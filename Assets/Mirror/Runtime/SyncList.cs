@@ -1,40 +1,42 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Mirror
 {
-    // Deprecated 10/02/2020
-    [Obsolete("Use SyncList<string> instead")]
     public class SyncListString : SyncList<string>
     {
+        protected override void SerializeItem(NetworkWriter writer, string item) => writer.WriteString(item);
+        protected override string DeserializeItem(NetworkReader reader) => reader.ReadString();
     }
 
-    // Deprecated 10/02/2020
-    [Obsolete("Use SyncList<float> instead")]
     public class SyncListFloat : SyncList<float>
     {
+        protected override void SerializeItem(NetworkWriter writer, float item) => writer.WriteSingle(item);
+        protected override float DeserializeItem(NetworkReader reader) => reader.ReadSingle();
     }
 
-    // Deprecated 10/02/2020
-    [Obsolete("Use SyncList<int> instead")]
     public class SyncListInt : SyncList<int>
     {
+        protected override void SerializeItem(NetworkWriter writer, int item) => writer.WritePackedInt32(item);
+        protected override int DeserializeItem(NetworkReader reader) => reader.ReadPackedInt32();
     }
 
-    // Deprecated 10/02/2020
-    [Obsolete("Use SyncList<uint> instead")]
     public class SyncListUInt : SyncList<uint>
     {
+        protected override void SerializeItem(NetworkWriter writer, uint item) => writer.WritePackedUInt32(item);
+        protected override uint DeserializeItem(NetworkReader reader) => reader.ReadPackedUInt32();
     }
 
-    // Deprecated 10/02/2020
-    [Obsolete("Use SyncList<bool> instead")]
     public class SyncListBool : SyncList<bool>
     {
+        protected override void SerializeItem(NetworkWriter writer, bool item) => writer.WriteBoolean(item);
+        protected override bool DeserializeItem(NetworkReader reader) => reader.ReadBoolean();
     }
 
-    public class SyncList<T> : IList<T>, IReadOnlyList<T>, SyncObject
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public abstract class SyncList<T> : IList<T>, IReadOnlyList<T>, SyncObject
     {
         public delegate void SyncListChanged(Operation op, int itemIndex, T oldItem, T newItem);
 
@@ -68,17 +70,16 @@ namespace Mirror
         // so we need to skip them
         int changesAhead;
 
-        public SyncList() : this(EqualityComparer<T>.Default)
-        {
-        }
+        protected virtual void SerializeItem(NetworkWriter writer, T item) { }
+        protected virtual T DeserializeItem(NetworkReader reader) => default;
 
-        public SyncList(IEqualityComparer<T> comparer)
+        protected SyncList(IEqualityComparer<T> comparer = null)
         {
             this.comparer = comparer ?? EqualityComparer<T>.Default;
             objects = new List<T>();
         }
 
-        public SyncList(IList<T> objects, IEqualityComparer<T> comparer = null)
+        protected SyncList(IList<T> objects, IEqualityComparer<T> comparer = null)
         {
             this.comparer = comparer ?? EqualityComparer<T>.Default;
             this.objects = objects;
@@ -125,7 +126,7 @@ namespace Mirror
             for (int i = 0; i < objects.Count; i++)
             {
                 T obj = objects[i];
-                writer.Write(obj);
+                SerializeItem(writer, obj);
             }
 
             // all changes have been applied already
@@ -148,7 +149,7 @@ namespace Mirror
                 switch (change.operation)
                 {
                     case Operation.OP_ADD:
-                        writer.Write(change.item);
+                        SerializeItem(writer, change.item);
                         break;
 
                     case Operation.OP_CLEAR:
@@ -161,7 +162,7 @@ namespace Mirror
                     case Operation.OP_INSERT:
                     case Operation.OP_SET:
                         writer.WritePackedUInt32((uint)change.index);
-                        writer.Write(change.item);
+                        SerializeItem(writer, change.item);
                         break;
                 }
             }
@@ -180,7 +181,7 @@ namespace Mirror
 
             for (int i = 0; i < count; i++)
             {
-                T obj = reader.Read<T>();
+                T obj = DeserializeItem(reader);
                 objects.Add(obj);
             }
 
@@ -211,7 +212,7 @@ namespace Mirror
                 switch (operation)
                 {
                     case Operation.OP_ADD:
-                        newItem = reader.Read<T>();
+                        newItem = DeserializeItem(reader);
                         if (apply)
                         {
                             index = objects.Count;
@@ -228,7 +229,7 @@ namespace Mirror
 
                     case Operation.OP_INSERT:
                         index = (int)reader.ReadPackedUInt32();
-                        newItem = reader.Read<T>();
+                        newItem = DeserializeItem(reader);
                         if (apply)
                         {
                             objects.Insert(index, newItem);
@@ -246,7 +247,7 @@ namespace Mirror
 
                     case Operation.OP_SET:
                         index = (int)reader.ReadPackedUInt32();
-                        newItem = reader.Read<T>();
+                        newItem = DeserializeItem(reader);
                         if (apply)
                         {
                             oldItem = objects[index];

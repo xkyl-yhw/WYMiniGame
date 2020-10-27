@@ -1,3 +1,5 @@
+using System;
+using System.ComponentModel;
 using UnityEngine;
 
 namespace Mirror
@@ -54,9 +56,7 @@ namespace Mirror
                     DontDestroyOnLoad(gameObject);
 
                 room.roomSlots.Add(this);
-
-                if (NetworkServer.active)
-                    room.RecalculateRoomPlayerIndices();
+                room.RecalculateRoomPlayerIndices();
 
                 if (NetworkClient.active)
                     room.CallOnClientEnterRoom();
@@ -69,10 +69,8 @@ namespace Mirror
         {
             if (NetworkClient.active && NetworkManager.singleton is NetworkRoomManager room)
             {
-                // only need to call this on client as server removes it before object is destroyed
                 room.roomSlots.Remove(this);
-
-                room.CallOnClientExitRoom();
+                room.RecalculateRoomPlayerIndices();
             }
         }
 
@@ -107,7 +105,12 @@ namespace Mirror
         /// <para>This function is called when the a client player calls CmdChangeReadyState.</para>
         /// </summary>
         /// <param name="newReadyState">New Ready State</param>
-        public virtual void ReadyStateChanged(bool oldReadyState, bool newReadyState) { }
+        public virtual void ReadyStateChanged(bool _, bool newReadyState)
+        {
+#pragma warning disable CS0618 // Type or member is obsolete
+            OnClientReady(newReadyState);
+#pragma warning restore CS0618 // Type or member is obsolete
+        }
 
         #endregion
 
@@ -123,6 +126,13 @@ namespace Mirror
         /// This is a hook that is invoked on clients for all room player objects when exiting the room.
         /// </summary>
         public virtual void OnClientExitRoom() { }
+
+        // Deprecated 05/18/2020
+        /// <summary>
+        /// Obsolete: Override <see cref="ReadyStateChanged(bool, bool)">ReadyStateChanged(bool, bool)</see> instead.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Override ReadyStateChanged(bool, bool) instead")]
+        public virtual void OnClientReady(bool readyState) { }
 
         #endregion
 

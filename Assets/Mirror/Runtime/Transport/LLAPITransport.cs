@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Net;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -15,7 +16,7 @@ using UnityEngine.Networking.Types;
 
 namespace Mirror
 {
-    [Obsolete("LLAPI is obsolete and will be removed from future versions of Unity")]
+    [EditorBrowsable(EditorBrowsableState.Never), Obsolete("LLAPI is obsolete and will be removed from future versions of Unity")]
     public class LLAPITransport : Transport
     {
         public const string Scheme = "unet";

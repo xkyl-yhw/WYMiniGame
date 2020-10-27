@@ -124,7 +124,7 @@ public abstract class Monster : MonoBehaviour
             if (this.health > 0)
             {
                 BulletObject bulletObject = other.gameObject.GetComponent<BulletObject>();
-                //Debug.Log(playerHealth.health);
+                Debug.Log(this.health);
                 this.TakeDamage((int)Mathf.Floor(bulletObject.damage));
                 GameObject.Destroy(other.gameObject);
             }

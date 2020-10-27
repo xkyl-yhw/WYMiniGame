@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Mirror
 {
-    public class SyncSet<T> : ISet<T>, SyncObject
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public abstract class SyncSet<T> : ISet<T>, SyncObject
     {
         public delegate void SyncSetChanged(Operation op, T item);
 
@@ -34,7 +36,7 @@ namespace Mirror
         // so we need to skip them
         int changesAhead;
 
-        public SyncSet(ISet<T> objects)
+        protected SyncSet(ISet<T> objects)
         {
             this.objects = objects;
         }
@@ -46,6 +48,9 @@ namespace Mirror
             changesAhead = 0;
             objects.Clear();
         }
+
+        protected virtual void SerializeItem(NetworkWriter writer, T item) { }
+        protected virtual T DeserializeItem(NetworkReader reader) => default;
 
         public bool IsDirty => changes.Count > 0;
 
@@ -80,7 +85,7 @@ namespace Mirror
 
             foreach (T obj in objects)
             {
-                writer.Write(obj);
+                SerializeItem(writer, obj);
             }
 
             // all changes have been applied already
@@ -103,14 +108,14 @@ namespace Mirror
                 switch (change.operation)
                 {
                     case Operation.OP_ADD:
-                        writer.Write(change.item);
+                        SerializeItem(writer, change.item);
                         break;
 
                     case Operation.OP_CLEAR:
                         break;
 
                     case Operation.OP_REMOVE:
-                        writer.Write(change.item);
+                        SerializeItem(writer, change.item);
                         break;
                 }
             }
@@ -129,7 +134,7 @@ namespace Mirror
 
             for (int i = 0; i < count; i++)
             {
-                T obj = reader.Read<T>();
+                T obj = DeserializeItem(reader);
                 objects.Add(obj);
             }
 
@@ -158,7 +163,7 @@ namespace Mirror
                 switch (operation)
                 {
                     case Operation.OP_ADD:
-                        item = reader.Read<T>();
+                        item = DeserializeItem(reader);
                         if (apply)
                         {
                             objects.Add(item);
@@ -173,7 +178,7 @@ namespace Mirror
                         break;
 
                     case Operation.OP_REMOVE:
-                        item = reader.Read<T>();
+                        item = DeserializeItem(reader);
                         if (apply)
                         {
                             objects.Remove(item);
@@ -318,21 +323,17 @@ namespace Mirror
         }
     }
 
-    public class SyncHashSet<T> : SyncSet<T>
+    public abstract class SyncHashSet<T> : SyncSet<T>
     {
-        public SyncHashSet() : this(EqualityComparer<T>.Default) { }
-
-        public SyncHashSet(IEqualityComparer<T> comparer) : base(new HashSet<T>(comparer ?? EqualityComparer<T>.Default)) { }
+        protected SyncHashSet(IEqualityComparer<T> comparer = null) : base(new HashSet<T>(comparer ?? EqualityComparer<T>.Default)) { }
 
         // allocation free enumerator
         public new HashSet<T>.Enumerator GetEnumerator() => ((HashSet<T>)objects).GetEnumerator();
     }
 
-    public class SyncSortedSet<T> : SyncSet<T>
+    public abstract class SyncSortedSet<T> : SyncSet<T>
     {
-        public SyncSortedSet() : this(Comparer<T>.Default) { }
-
-        public SyncSortedSet(IComparer<T> comparer) : base(new SortedSet<T>(comparer ?? Comparer<T>.Default)) { }
+        protected SyncSortedSet(IComparer<T> comparer = null) : base(new SortedSet<T>(comparer ?? Comparer<T>.Default)) { }
 
         // allocation free enumerator
         public new SortedSet<T>.Enumerator GetEnumerator() => ((SortedSet<T>)objects).GetEnumerator();

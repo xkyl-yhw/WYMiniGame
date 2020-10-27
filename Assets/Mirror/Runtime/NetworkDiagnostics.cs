@@ -17,7 +17,7 @@ namespace Mirror
             /// <summary>
             /// The message being sent
             /// </summary>
-            public readonly NetworkMessage message;
+            public readonly IMessageBase message;
             /// <summary>
             /// channel through which the message was sent
             /// </summary>
@@ -32,7 +32,7 @@ namespace Mirror
             /// </summary>
             public readonly int count;
 
-            internal MessageInfo(NetworkMessage message, int channel, int bytes, int count)
+            internal MessageInfo(IMessageBase message, int channel, int bytes, int count)
             {
                 this.message = message;
                 this.channel = channel;
@@ -48,7 +48,7 @@ namespace Mirror
         /// </summary>
         public static event Action<MessageInfo> OutMessageEvent;
 
-        internal static void OnSend<T>(T message, int channel, int bytes, int count) where T : NetworkMessage
+        internal static void OnSend<T>(T message, int channel, int bytes, int count) where T : IMessageBase
         {
             if (count > 0 && OutMessageEvent != null)
             {
@@ -66,7 +66,7 @@ namespace Mirror
         /// </summary>
         public static event Action<MessageInfo> InMessageEvent;
 
-        internal static void OnReceive<T>(T message, int channel, int bytes) where T : NetworkMessage
+        internal static void OnReceive<T>(T message, int channel, int bytes) where T : IMessageBase
         {
             if (InMessageEvent != null)
             {
